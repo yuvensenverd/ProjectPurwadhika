@@ -1,0 +1,274 @@
+@font-face {
+  font-family: Montserrat-Bold;
+  src: url('./assets/Fonts/Montserrat/Montserrat-Bold.ttf'); 
+}
+
+@font-face {
+  font-family: Montserrat-Black;
+  src: url('./assets/Fonts/Montserrat/Montserrat-Black.ttf'); 
+}
+
+@font-face {
+  font-family: Montserrat-ExtraBold;
+  src: url('./assets/Fonts/Montserrat/Montserrat-ExtraBold.ttf'); 
+}
+
+@font-face {
+  font-family: Montserrat-Medium;
+  src: url('./assets/Fonts/Montserrat/Montserrat-Medium.ttf'); 
+}
+
+@font-face {
+  font-family: Montserrat-Regular;
+  src: url('./assets/Fonts/Montserrat/Montserrat-Regular.ttf'); 
+}
+
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* NAVBAR */
+.navbartext {
+  font-family: Montserrat-Bold;
+  text-transform: uppercase;
+  font-size: 14px;
+
+  color: white;
+  font-weight: bolder;
+}
+
+.navbartext:hover {
+  cursor: pointer;
+}
+.navbartext .cartnum{
+  position: absolute;
+  top: 1%;
+  left: 98.5%;
+
+  background-color: yellow;
+  color: black;
+
+  border: none;
+  padding: 2px 5px 2px 5px;
+
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+ 
+  border-radius: 50%;
+}
+
+/* TESTING  */
+
+div{
+  border: 1px solid red;
+}
+
+/* Product List  */
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+ 
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+  font-family: Montserrat-Bold;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+
+
+/* GENRE PAGE PRODUCT */
+
+.cardpr {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 180px;
+
+  margin: auto;
+  text-align: center;
+  font-family: Montserrat-Bold;
+ 
+}
+
+.pricepr {
+  color: grey;
+  font-size: 15px;
+}
+
+.cardpr button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.cardprtext {
+  font-size: 15px;
+  font-family: Montserrat-Bold;
+  text-align : center;
+  color: black;
+}
+
+.cardpr button:hover {
+  opacity: 0.7;
+}
+
+
+/* Coupon Card  */
+
+.cardcp {
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+
+  margin: auto;
+  text-align: center;
+  font-family: Montserrat-Bold;
+ 
+}
+
+.cardcp button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.cardcptext {
+  font-size: 15px;
+  font-family: Montserrat-Bold;
+  text-align : center;
+  color: black;
+  padding: 10px;
+}
+
+/* GENRE LIST  */
+
+.item {
+  vertical-align: top;
+
+  text-align: center;
+
+}
+
+.item img{
+
+}
+
+.caption {
+  font-family: Montserrat-Bold;
+  text-transform: uppercase;
+  font-size: 14px;
+
+  color: black;
+  font-weight: bolder;
+}
+
+.test {
+  overflow: hidden;
+}
+
+.mycontainer {
+  padding-left: 150px;
+  padding-right: 150px;
+}
+
+.dv-star-rating i{
+ font-size: 20px !important;
+}
+
+.subtitletext {
+  font-family: Montserrat-Bold;
+  text-transform: uppercase;
+  font-size: 20px;
+
+  color: black;
+  font-weight: bolder;
+}
+
+/*  USERSTORE CSS  */
+
+.storecontainer {
+  margin-left: 140px;
+  margin-top: 60px;
+  margin-right: 140px;
+}
+
+.storecard { 
+  height: 150px;
+  box-shadow: 12px 12px 12px 12px rgba(0, 0, 0, 0.2); 
+  background-color: #f1f1f1;
+}
+
+.storeimage{
+  border-radius: 50%;
+  width: 120px;
+  height: 130px;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}

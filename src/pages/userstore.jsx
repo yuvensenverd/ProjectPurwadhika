@@ -1,8 +1,9 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt, faStoreAlt, faLuggageCart } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {Link} from 'react-router-dom'
 
 
 
@@ -50,7 +51,7 @@ class userStore extends React.Component{
 
     printInputFile = () => {
 
-        console.log(this.state.imagenum)
+       
      
 
         
@@ -146,14 +147,20 @@ class userStore extends React.Component{
                     </Modal>
                     <div className="storecard p-3 mb-5">
                         <div className="row">
-                            <div className="col-md-1" >
+                            <div className="col-md-1 p-0" >
                                 <img src='https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png' alt="userprofile" className="storeimage"/>
                             </div>
                             <div className="col-md-2 subtitletext text-center" style={{paddingTop : "28px"}}>
                                 <div className="mb-2">Store Name</div>
                                 <div style={{fontSize : "14px"}}><FontAwesomeIcon size="1x"  icon={faMapMarkerAlt} ></FontAwesomeIcon>&nbsp;&nbsp; Makassar, Indonesia</div>
                             </div>
-                            <div className="col-md-5 subtitletext  p-3">
+                            <div className="col-md-2 subtitletext  p-3 text-center">
+                                <div className="mb-2"> <FontAwesomeIcon size="2x"  icon={faHourglassHalf} ></FontAwesomeIcon></div>
+                                <Link to="/userhistory">
+                                <input type="button" className="btn form-control btn-primary navbartext" value="$ Transaction "/>
+                                </Link>
+                            </div>
+                            <div className="col-md-3 subtitletext  p-3">
                           
                             </div>
                             <div className="col-md-2 subtitletext  text-center p-3"style={{fontSize : "17px"}}>

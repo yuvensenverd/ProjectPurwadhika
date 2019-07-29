@@ -77,25 +77,56 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
               <div>
               <UncontrolledDropdown   nav inNavbar>
                 <DropdownToggle className="navbartext pt-1 mr-3" style={{fontWeight : "bolder", fontSize : '15px'}} nav caret>
-                {"Welcome, "+ this.props.username}
+                {"Welcome, "+ this.props.username }
                 </DropdownToggle>
                 
-                <DropdownMenu className="navbartext pt-1 mr-3" style={{backgroundColor : "white", color : "black"}} right>
-                  <DropdownItem>
-                    <Link to="/">
-                          <div className="navbartext" style={{color : "black"}}onClick={()=>this.props.logoutUser()}>Logout</div>
-                      </Link>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link to="/promo">
-                          <div className="navbartext" style={{color : "black"}} >Check Coupon / Promo</div>
-                      </Link>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link to="/createstore">
-                          <div className="navbartext" style={{color : "black"}} >Create your own Store</div>
-                      </Link>
-                  </DropdownItem>
+                <DropdownMenu className="navbartext pt-1 mr-3" style={{backgroundColor : "white", color : "black", width : "750px"}} right>
+                  <div className="row"> 
+                    
+                    <div className="col-md-8">
+                        {/* <DropdownItem> */}
+                        <DropdownItem  style={{padding : "0px"}}>
+                              <div className="navbartext form-control bg-danger text-center mb-2"  >   <Link to="/createstore" style={{color : "white"}}>Create your own Store        </Link></div>
+                       </DropdownItem>
+                        {/* </DropdownItem> */}
+                        {/* <DropdownItem> */}
+                              <div className="row">
+                                  <div className="col-md-4">
+                                      <img className="storeimage" src="https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png" height="100px"></img>
+                                  </div>
+                                  <div className="col-md-8 subtitletext" style={{fontSize : "15px"}}>
+                                      <div className="mb-2">{this.props.username}</div>
+                                      <div  className="mb-2"> Balance : Rp 0,00</div>
+                                      <Link to="/editprofile" className="subtitletext">
+                                      <DropdownItem  style={{padding : "0px"}}>
+                                      <div className="text-light"><input type="button" className="btn btn-success form-control mb-1" value="Edit Profile"/></div>
+                                      </DropdownItem>
+                                      </Link>
+                                      <DropdownItem  style={{padding : "0px"}}>
+                                      <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><Link to="/" className="navbartext" style={{color : "white"}}>Logout </Link></div>
+                                      </DropdownItem>
+                                  </div>
+                              </div>
+
+                        {/* </DropdownItem> */}
+                    </div>
+                    <div className="col-md-4">
+                      {/* <DropdownItem className="mt-3 mb-3"> */}
+                        <div className="d-flex flex-column justify-content-center align-items-center">
+                            {/* <div  onClick={()=>this.props.logoutUser()} className="mt-5 mb-2 btn bg-secondary " ><Link to="/" className="navbartext" style={{color : "white"}}>Logout        </Link></div> */}
+                
+                      {/* </DropdownItem> */}
+                      {/* <DropdownItem> */}
+                            <DropdownItem  style={{padding : "0px"}}>
+                                <div className="btn bg-primary"><Link to="/promo" className="navbartext " style={{color : "white"}}>Check Coupon / Promo   </Link></div>
+                            </DropdownItem>
+                         </div>
+                     
+                      {/* </DropdownItem> */}
+                    </div>
+                  
+                  
+                  </div>
                 </DropdownMenu>
                 </UncontrolledDropdown>
               </div>

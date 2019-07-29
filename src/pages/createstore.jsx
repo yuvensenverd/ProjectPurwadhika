@@ -17,9 +17,9 @@ class CreateStore extends React.Component{
     }
 
      previewFile = () => {
-        var preview = document.querySelector('img');
+        var preview = document.getElementById('blah')
         var file    = document.getElementById('inputfile').files[0];
-        console.log(document.querySelector('input[type=file]').files)
+
        
         var reader  = new FileReader();
       

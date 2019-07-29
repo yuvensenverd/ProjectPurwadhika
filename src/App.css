@@ -61,12 +61,12 @@
 
 /* NAVBAR */
 .navbartext {
-  font-family: Montserrat-Bold;
-  text-transform: uppercase;
-  font-size: 14px;
+  font-family: Montserrat-Bold ;
+  text-transform: uppercase ;
+  font-size: 14px ;
 
   color: white;
-  font-weight: bolder;
+  font-weight: bolder ;
 }
 
 .navbartext:hover {
@@ -96,6 +96,7 @@
 div{
   border: 1px solid red;
 }
+
 
 /* Product List  */
 
@@ -240,6 +241,15 @@ div{
  font-size: 20px !important;
 }
 
+.star{
+  font-size: 20px !important;
+}
+
+.widget-svg{
+  width: 20px !important;
+  height: 20px !important;
+}
+
 .subtitletext {
   font-family: Montserrat-Bold;
   text-transform: uppercase;
@@ -272,3 +282,7 @@ div{
   margin-right: auto;
   display: block;
 }
+
+
+/*  USER HISTORY  */
+

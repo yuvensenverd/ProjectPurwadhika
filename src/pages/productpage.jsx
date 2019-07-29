@@ -3,7 +3,8 @@ import Carousel from './../components/carousel'
 import Axios from 'axios'
 
 // Star 
-import StarRatingComponent from 'react-star-rating-component';
+// import StarRatingComponent from 'react-star-rating-component';
+import StarRatings from 'react-star-ratings';
 
 class productPage extends React.Component{
     state = {
@@ -45,16 +46,23 @@ class productPage extends React.Component{
             <div className="cardpr d-inline-block mr-3 mb-4" >
                 <img  src={val.productimageurl} alt={val.productname} width="100%" height="100%"/>
                 <div className="cardprtext" style={{height : "67px"}}>{val.productname}</div>
-                <div className="pricepr mt-1 mb-1">Rp. 50.000,00</div>
-                <StarRatingComponent 
+                <div className="pricepr mt-1 mb-3">Rp. 50.000,00</div>
+                {/* <StarRatingComponent 
                    
                     name="rate1" // INGAT KASIH ID BERBEDA 
                     starCount={5}
                     value={this.state.rating}
                     onStarClick={()=> this.onStarClick()}
                     
-                />
-                <p><button><a href={val.producturl} className="navbartext">Add to Cart</a></button></p>
+                /> */}
+                 <StarRatings
+                    rating={this.state.rating}
+                    starRatedColor="orange"
+                    // changeRating={this.changeRating}
+                    numberOfStars={5}
+                    name='rating'
+                    />
+                <p className="mt-3"><button><a href={val.producturl} className="navbartext">Add to Cart</a></button></p>
 
             
             </div>

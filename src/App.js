@@ -2,6 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Header from './components/header';
+import Footer from './components/footer';
 import { Route , Link, Switch } from 'react-router-dom'
 import Homepage from './pages/homepage'
 import LoginPage from './pages/loginpage'
@@ -10,6 +11,9 @@ import productPage from './pages/productpage'
 import promoDetails from './pages/promoDetails'
 import createStore from './pages/createstore'
 import userStore from './pages/userstore'
+import userHistory from './pages/userhistory'
+import editProfile from './pages/editprofile'
+import productDetails from './pages/productDetails'
 import Axios from 'axios';
 
 
@@ -29,7 +33,12 @@ class App extends React.Component{
         <Route path='/product' component={productPage}></Route>
         <Route path='/createstore' component={createStore}></Route>
         <Route path='/userstore' component={userStore}></Route>
+        <Route path='/userhistory' component={userHistory}></Route>
+        <Route path='/editprofile' component={editProfile}></Route>
+        <Route path= '/productdetails' component={productDetails}></Route>
 
+        <Footer></Footer>
+        
 
         {/* </Switch> */}
       </div>

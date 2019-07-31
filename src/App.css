@@ -59,16 +59,30 @@
   }
 }
 
-/* NAVBAR */
+/* NAVBAR AND FOOTER */
 .navbartext {
-  font-family: Montserrat-Bold;
-  text-transform: uppercase;
-  font-size: 14px;
+  font-family: Montserrat-Bold ;
+  text-transform: uppercase ;
+  font-size: 14px ;
 
   color: white;
-  font-weight: bolder;
+  font-weight: bolder ;
+}
+.navbarheader{
+  background-color: rgba(52, 52, 52, 0.5);
+  position : fixed;
+  width : 100%;
+  z-index: 5;
 }
 
+.footertext {
+  font-family: Montserrat-Bold ;
+  text-transform: uppercase ;
+  font-size: 12px ;
+
+  color: gray;
+  font-weight: bolder ;
+}
 .navbartext:hover {
   cursor: pointer;
 }
@@ -91,10 +105,38 @@
   border-radius: 50%;
 }
 
+.fixednav {
+  position: fixed;
+  top : 50;
+  background-color: #3A3D42;
+  left:60%;
+  width: 300px;
+
+  background-color: transparent;
+  z-index: 10;
+  
+}
+
+.boxshadow {
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+}
+
+/* .fixedfooter {
+  
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin-bottom: 0px;
+} */
 /* TESTING  */
 
-div{
+/* div{
   border: 1px solid red;
+} */
+
+.carousel-caption{
+  z-index: 0 !important;
 }
 
 /* Product List  */
@@ -240,6 +282,15 @@ div{
  font-size: 20px !important;
 }
 
+.star{
+  font-size: 20px !important;
+}
+
+.widget-svg{
+  width: 20px !important;
+  height: 20px !important;
+}
+
 .subtitletext {
   font-family: Montserrat-Bold;
   text-transform: uppercase;
@@ -253,7 +304,7 @@ div{
 
 .storecontainer {
   margin-left: 140px;
-  margin-top: 60px;
+  /* margin-top: 60px; */
   margin-right: 140px;
 }
 
@@ -272,3 +323,8 @@ div{
   margin-right: auto;
   display: block;
 }
+
+
+
+/*  USER HISTORY  */
+

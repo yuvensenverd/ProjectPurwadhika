@@ -17,9 +17,9 @@ class CreateStore extends React.Component{
     }
 
      previewFile = () => {
-        var preview = document.querySelector('img');
+        var preview = document.getElementById('blah')
         var file    = document.getElementById('inputfile').files[0];
-        console.log(document.querySelector('input[type=file]').files)
+
        
         var reader  = new FileReader();
       
@@ -42,9 +42,9 @@ class CreateStore extends React.Component{
             )
         }
         return(
-            <div>
-                <div className="container mt-5">
-                    <div className="d-flex justify-content-center mt-5 mb-5 navbartext bg-secondary" style={{height : "100px",alignItems:"center", fontSize : "40px"}}>
+            <div className="mycontainer">
+                <div className="p-t-100">
+                    <div className="d-flex justify-content-center navbartext bg-secondary" style={{height : "100px",alignItems:"center", fontSize : "40px"}}>
                         Create Your Store 
                     </div>
                     <div className="subtitletext mb-1">

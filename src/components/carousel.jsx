@@ -80,16 +80,18 @@ class Slider extends Component {
     });
 
     return (
-      <Carousel
+      <div style={{zIndex : '0'}}>
+      <Carousel style={{zIndex : '0'}}
         activeIndex={activeIndex}
         next={this.next}
         previous={this.previous}
       >
-        <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
+        <CarouselIndicators style={{zIndex : '0'}} items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
         {slides}
         <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
         <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
       </Carousel>
+      </div>
     );
   }
 }

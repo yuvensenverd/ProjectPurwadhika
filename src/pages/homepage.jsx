@@ -14,7 +14,8 @@ import { connect } from 'react-redux'
 import { loginUser } from './../redux/actions/index'
 
 // Star 
-import StarRatingComponent from 'react-star-rating-component';
+// import StarRatingComponent from 'react-star-rating-component';
+import StarRatings from 'react-star-ratings';
 
 class Homepage extends React.Component{
     state = {
@@ -44,6 +45,12 @@ class Homepage extends React.Component{
         this.setState({rating: nextValue});
       }
 
+    changeRating( newRating, name ) {
+    this.setState({
+        rating: newRating
+    });
+    }
+
 
 
   
@@ -51,7 +58,7 @@ class Homepage extends React.Component{
     renderProduct = () => {
   
 
-    var output = this.state.productlist.map((val )=>{
+    var output = this.state.productlist.map((val, index )=>{
         // console.log(index)
         // console.log(arr)
         return( 
@@ -61,15 +68,26 @@ class Homepage extends React.Component{
             <h5 style={{height : "50px"}}>{val.productname}</h5>
             <p className="price">Rp. 50.000,00</p>
             <p>Some text about the Product.</p>
-            <StarRatingComponent 
+            {/* <StarRatingComponent 
                    
-                    name="rate1" 
+                    name="rate1"  // RATING INDEX / PRODUCT ID
                     starCount={5}
-                    value={this.state.rating}
-                    onStarClick={()=> this.onStarClick()}
+                    value={2} // PRODUCT RATING
+                    // onStarClick={()=> this.onStarClick()}
                     
+                /> */}
+            <StarRatings
+                rating={this.state.rating} // GAK PAKE STATE NANTI
+                starRatedColor="orange"
+                changeRating={this.changeRating.bind(this)}
+                numberOfStars={5}
+                name='rating' // BERBEDA NANTI
                 />
-            <p><button><a href={val.producturl} className="navbartext">Add to Cart</a></button></p>
+            <p className="mt-4">
+                <Link to="/productdetails">
+                <button className="navbartext">Add to Cart </button>
+                </Link>
+            </p>
       
         </div>
 
@@ -87,16 +105,13 @@ class Homepage extends React.Component{
         const { rating } = this.state;
         return(
             <div className="col p-0">
-                <div className="row-md-3">
+                <div className="row-md-3 mb-5">
                     <Carousel ></Carousel>
                     {/* <Centered></Centered> */}
                 </div>
 
                 {/* FILTER TEXT BOX */}
-                <div className="d-flex flex-row justify-content-center p-5" >
-                    <input type="text" className="form-control form-control-lg text-center" placeholder="Search Items.." style={{ alignSelf: "center", borderRadius : "3px"}}></input>
-                    <input type="button" className="btn btn-secondary" value="FILTER" style={{height : "50px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder"}}></input>
-                </div>
+                
 
                
                 {/* GENRE LIST PRINT */}
@@ -139,6 +154,10 @@ class Homepage extends React.Component{
                     <div className="mt-5 mb-4">
                         <input type="button" style={{height : "100px", fontWeight: "bolder", fontSize : "18px", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
                     </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center p-5" >
+                    <input type="text" className="form-control form-control-lg text-center" placeholder="Search Items.." style={{ alignSelf: "center", borderRadius : "3px"}}></input>
+                    <input type="button" className="btn" value="FILTER" style={{height : "50px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder", color : "white"}}></input>
                 </div>
                 <div className="row">
                     <div className="col-md-1">

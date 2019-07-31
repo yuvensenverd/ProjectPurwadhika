@@ -18,24 +18,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 
 
+
  class Header extends React.Component {
   constructor(props) {
     super(props);
-
+    this.closeNav = this.closeNav.bind(this);
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false
     };
   }
   toggle() {
+    console.log("Masuk")
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
+  closeNav = () =>{
+  
+    this.setState({
+      isOpen : false
+    })
+  }
   render() {
     return (
-      <div>
-        <Navbar  style={{backgroundColor : "#1f2533"}}fixed dark expand="md">
+      <div className="navbarheader">
+        <Navbar  style={{backgroundColor : "#1f2533"}}  fixed dark expand="md">
           <Link to="/" className="navbartext">
           <NavbarBrand  className="navbartext">
             home
@@ -74,29 +82,64 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
               ?
               null
             :
-              <div>
-              <UncontrolledDropdown   nav inNavbar>
+              <div className="p-0">
+              <UncontrolledDropdown   nav inNavbar >
                 <DropdownToggle className="navbartext pt-1 mr-3" style={{fontWeight : "bolder", fontSize : '15px'}} nav caret>
-                {"Welcome, "+ this.props.username}
+                {"Welcome, "+ this.props.username }
                 </DropdownToggle>
-                
-                <DropdownMenu className="navbartext pt-1 mr-3" style={{backgroundColor : "white", color : "black"}} right>
-                  <DropdownItem>
-                    <Link to="/">
-                          <div className="navbartext" style={{color : "black"}}onClick={()=>this.props.logoutUser()}>Logout</div>
-                      </Link>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link to="/promo">
-                          <div className="navbartext" style={{color : "black"}} >Check Coupon / Promo</div>
-                      </Link>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link to="/createstore">
-                          <div className="navbartext" style={{color : "black"}} >Create your own Store</div>
-                      </Link>
-                  </DropdownItem>
+
+                <div className="fixednav p-0">
+                <DropdownMenu className="navbartext pt-1 "  style={{backgroundColor : "transparent", color : "black", width : "600px", border:"none"}} right> 
+                {/* CODE DIATAS MASIH KACAU  */}
+                  <div className="row p-3 boxshadow" style={{backgroundColor : "#3A3D42", height : "100%", width : "100%"}}> 
+                    
+                  
+                        {/* <DropdownItem> */}
+                        <DropdownItem  style={{padding : "0px", border : "none", background : "transparent"}}>
+                             <Link  to="/createstore" style={{color : "white", border : "none"}}   onClick={()=>this.closeNav()} className="navbartext form-control bg-danger text-center mb-2">
+                               
+                               Create your Store
+                              
+                              </Link>
+                              </DropdownItem>
+                         
+                         
+                   
+                        {/* </DropdownItem> */}
+                        {/* <DropdownItem> */}
+                            
+                        <div className="col-md-4">
+                          <div className="navbartext text-center">
+                            Avatar
+                          </div>
+                          <div>
+                            <img className="storeimage" src="https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png" height="100px"></img>
+                            </div>
+                        </div>
+                        <div className="col-md-8 subtitletext p-0" style={{fontSize : "15px"}}>
+                            <div className="mb-2 text-light">{this.props.username}</div>
+                            <div  className="mb-2 text-light"> Balance : Rp 0,00</div>
+                            <Link to="/editprofile" className="subtitletext">
+                            <DropdownItem  style={{padding : "0px", border : "none"}}>
+                            <div className="text-light"><input type="button" className="btn btn-success form-control" value="Edit Profile"/></div>
+                            </DropdownItem>
+                            </Link>
+                            <DropdownItem  style={{padding : "0px", margin : "0px"}}>
+                            <div className="btn bg-primary form-control"><Link to="/promo" className="navbartext " style={{color : "white", border : "none"}}>Check Coupon / Promo   </Link></div>
+                            </DropdownItem>
+                            <DropdownItem  style={{padding : "0px", margin : "0px"}}>
+                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><Link to="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </Link></div>
+                            </DropdownItem>
+                            
+                        </div>
+                            
+
+                        {/* </DropdownItem> */}
+                    
+                  
+                  </div>
                 </DropdownMenu>
+                </div>
                 </UncontrolledDropdown>
               </div>
              
@@ -125,8 +168,11 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
            {this.props.cart.length === 0 && this.props.username !== ""
            ?
            <div className="navbartext">
-             <FontAwesomeIcon size="2x"  icon={faShoppingCart} style={{color : "#c02c3a"}}></FontAwesomeIcon>
-             <div className="cartnum">{this.props.cart.length}</div>
+         
+             <FontAwesomeIcon size="2x"  icon={faShoppingCart} style={{color : "#c02c3a"}}>
+             {/* <div className="cartnum">{this.props.cart.length}</div> */}
+             </FontAwesomeIcon>
+             
            </div>
            :
            null

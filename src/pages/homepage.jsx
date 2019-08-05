@@ -25,6 +25,23 @@ class Homepage extends React.Component{
       }
    
     componentDidMount=()=>{
+        // Axios.get('http://localhost:1998/getproduct')
+        // .then((res)=>{
+        //     console.log("Masuk")
+        //     this.setState({
+        //     productlist : res.data
+
+        //     })
+        //     console.log(this.state.productlist)
+        
+        // })
+        // .catch((err)=>{
+        //     console.log("Error")
+        //     console.log(err)
+        // })
+    
+        
+
     Axios.get('http://localhost:2000/CO')
     .then((res)=>{
         
@@ -51,6 +68,18 @@ class Homepage extends React.Component{
     });
     }
 
+    renderName = (text) => {
+        var judul = text.split(" ")
+        for(var i = 0; i<7; i++){
+            judul.push(text[i])
+        }
+        if(judul.length > 5){
+            judul.push("...")
+        }
+        return judul.join(" ")
+    }
+    
+
 
 
   
@@ -63,9 +92,9 @@ class Homepage extends React.Component{
         // console.log(arr)
         return( 
 
-        <div className="card d-inline-block m-r-42 m-b-36 m-l-42" >
-            <img  className="mb-3" src={val.productimageurl} alt={val.productname} width="100%" height="100%"/>
-            <h5 style={{height : "50px"}}>{val.productname}</h5>
+        <div className="card d-inline-block m-r-21 m-b-25 m-l-21" >
+            <img  className="mb-3" src={val.productimageurl} alt={val.productname} width="100%" height="175px"/>
+            <div className="cardprtext pl-3 pr-3 mb-3" style={{height : "50px"}}>{this.renderName(val.productname)}</div>
             <p className="price">Rp. 50.000,00</p>
             <p>Some text about the Product.</p>
             {/* <StarRatingComponent 
@@ -84,9 +113,9 @@ class Homepage extends React.Component{
                 name='rating' // BERBEDA NANTI
                 />
             <p className="mt-4">
-                <Link to="/productdetails">
-                <button className="navbartext">Add to Cart </button>
-                </Link>
+                
+                <a href='/productdetails'><button className="navbartext">Add to Cart </button></a>
+                
             </p>
       
         </div>
@@ -150,7 +179,7 @@ class Homepage extends React.Component{
                 </div>
 
                 {/* BANNER */}
-                <div className="container mt-5">
+                <div className="container mt-5 mb-5">
                     <div className="mt-5 mb-4">
                         <input type="button" style={{height : "100px", fontWeight: "bolder", fontSize : "18px", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
                     </div>
@@ -165,7 +194,9 @@ class Homepage extends React.Component{
                     </div>
                     <div className="col-md-10 p-0">
                         {/* <div className="d-flex flex-row justify-content-center"> */}
+                        <center>
                         {this.renderProduct()}
+                        </center>
                         {/* </div> */}
                  
                     </div>

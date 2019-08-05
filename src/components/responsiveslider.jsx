@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 export default class Responsive extends Component {
   render() {
     var settings = {
-      dots: false,
+      dots: true,
       infinite: true,
       speed: 500,
       slidesToShow: 4,
@@ -48,47 +48,61 @@ export default class Responsive extends Component {
       <div > 
 
         <Slider {...settings}  >
-            <div  style={{width : "350px"}}  >
+            <div className="bg-light shadow" style={{width : "350px"}} >
+              <center>
                 <Link to='/product'>
                   <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
                 </Link>
-                <span className="caption"> Halo1</span>
+                <span className="caption"> CATEGORY</span>
+                </center>
             </div>
-            <div  style={{width : "350px"}} >
+            <div className="bg-light shadow" style={{width : "350px"}} >
+            <center>
                 <Link to='/product'>
                   <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
                 </Link>
-                <span className="caption"> Halo2</span>
+                <span className="caption"> CATEGORY</span>
+                </center>
             </div>
-            <div  style={{width : "350px"}}>
-                <Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> Halo3</span>
+            <div className="bg-light shadow" style={{width : "350px"}}>
+                <center>
+                  <Link to='/product'>
+                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
+                  </Link>
+                  <span className="caption"> CATEGORY</span>
+                </center>
             </div>
-            <div  style={{width : "350px"}}>
-                <Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> Halo4</span>
+            <div className="bg-light shadow" style={{width : "350px"}}>
+               <center>
+                  <Link to='/product'>
+                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
+                  </Link>
+                  <span className="caption"> CATEGORY</span>
+                </center>
             </div>
-            <div  style={{width : "350px"}}>
-                <Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> Halo5</span>
+            <div className="bg-light shadow" style={{width : "350px"}}>
+               <center>
+                  <Link to='/product'>
+                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
+                  </Link>
+                  <span className="caption"> CATEGORY</span>
+                </center>
             </div>
-            <div  style={{width : "350px"}}>
-               < Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> Halo6</span>
+            <div className="bg-light shadow" style={{width : "350px"}}>
+               <center>
+                  <Link to='/product'>
+                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
+                  </Link>
+                  <span className="caption"> CATEGORY</span>
+                </center>
             </div>
-            <div  style={{width : "350px"}} >
-                <Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> Halo7</span>
+            <div className="bg-light shadow" style={{width : "350px"}} >
+                <center>
+                  <Link to='/product'>
+                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
+                  </Link>
+                  <span className="caption"> CATEGORY</span>
+                </center>
             </div>
        
         </Slider>

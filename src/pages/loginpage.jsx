@@ -4,13 +4,16 @@ import './../assets/Templates/Login_v14/css/util.css'
 import { loginUser } from './../redux/actions/index'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
+import Axios from 'axios';
+
 
 
 
 
 class LoginPage extends React.Component{
     state ={
-      redirect : false
+      redirect : false,
+      userdata : []
     }
 
     componentDidMount(){
@@ -50,37 +53,75 @@ class LoginPage extends React.Component{
     //     }
     //   }
     
-    CheckInputKey=()=>{
-      console.log(this.refs.inputpassword.keyCode)
-    }
+     checkDatabaseUser = (username, password) => {
 
-    ValidateLogin = () => {
-      var username = this.refs.inputuser.value
-      var password = this.refs.inputpassword.value
+      Axios.get('http://localhost:1998/users?name='+username+'&pass='+password)
+      .then((res)=>{
+        if(res.data.length > 0){
+
+          console.log(res.data)
+          return this.log(username, password)
+        }else{
+          console.log("Gak dapaet")
+          return window.alert("Username / Password Tidak Valid!")
+        }
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
     
-       
-      if(username.replace(/\s/g, "") === "" || password.replace(/\s/g, "") === ""){
-        return (
-          window.alert("Password dan Username harus diisi")
-        )
-      }
-      if(username.replace(/\s/g, "").length <= 8 || password.replace(/\s/g, "").length <= 8){
-        return (
-          window.alert("Password dan Username minimal 8 karakter")
-        )
-      }
+
+    log = (username, password) => {
       var data = {
         USERNAME : username,
         PASSWORD : password,
         ROLE : 'user',
         CART : []
       }
+
       this.props.loginUser(data)
-      this.setState({
+      return this.setState({
         redirect : true
       })
-
     }
+
+
+    ValidateLogin = () => {
+      var username = this.refs.inputuser.value
+      var password = this.refs.inputpassword.value
+      
+       
+      if(username.replace(/\s/g, "") === "" || password.replace(/\s/g, "") === ""){
+        return (
+          window.alert("Password dan Username harus diisi")
+        )
+      }
+      if(username.replace(/\s/g, "").length <= 7 || password.replace(/\s/g, "").length <= 7){
+        return (
+          window.alert("Password dan Username minimal 8 karakter")
+        )
+      }
+      this.checkDatabaseUser(username, password)
+
+      // var test =  this.checkDatabaseUser(username, password)
+      // console.log(test)
+      // if(test){
+          // LOGIN
+        
+
+      // }else{
+
+      //   return (
+      //     window.alert("Username / Password Tidak Valid!")
+      //   )
+
+      }
+
+
+      
+
+    
 
 
     render(){

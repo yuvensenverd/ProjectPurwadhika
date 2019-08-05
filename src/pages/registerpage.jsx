@@ -1,13 +1,38 @@
 import React from 'react'
 import './../assets/Templates/Login_v14/css/main.css'
 import './../assets/Templates/Login_v14/css/util.css'
+import Axios from 'axios';
+import { Redirect } from 'react-router'
+import { loginUser } from './../redux/actions/index'
+import { connect } from 'react-redux'
+
 
 
 class registerPage extends React.Component{
+    state = {
+      redirect_status : false
+    }
+
+    log = (username, password) => {
+      var data = {
+        USERNAME : username,
+        PASSWORD : password,
+        ROLE : 'user',
+        CART : []
+      }
+
+      this.props.loginUser(data)
+
+    }
 
     validateRegister = () => {
       var username = this.refs.inputuser.value
       var password = this.refs.inputpassword.value
+      var phonenum = this.refs.inputcontact.value
+      var residence = this.refs.inputresidence.value
+      var confirm = this.refs.inputpasswordconfirm.value
+      
+      // NEED VALIDATION
        
       if(username.replace(/\s/g, "") === "" || password.replace(/\s/g, "") === ""){
         return (
@@ -20,10 +45,69 @@ class registerPage extends React.Component{
         )
       }
 
+      
+
+      // SQL
+
+      var validated_data =
+      {
+        username : username,
+        saldo : 0,
+        password : password,
+        phonenumber : phonenum,
+        residence : residence,
+        role_id: 3 
+      }
+
+  
+      // console.log(validated_data)
+      // console.log(typeof(validated_data))
+      // validated_data = JSON.stringify(validated_data)
+
+      //  {
+      //   "username" : username,
+      //   "saldo" : 0,
+      //   "password" : password,
+      //   "phonenumber" : phonenum,
+      //   "residence" : residence,
+      //   "role_id" : 3 
+      // }
+
+      
+
+      // JSON PARSE (TO JS ) // JSON STRINGIFY ( TO JSON )
+
+      Axios.post('http://localhost:1998/users', validated_data)
+      .then((res)=>{
+        console.log("Data Berhasil Dimasukkan")
+        console.log("Masuk")
+        console.log(res.data)
+        window.alert("Register Success")
+        // this.log(username, password)
+        this.setState({
+          redirect_status : true
+        })
+      
+
+   
+  
+      })
+      .catch((err)=>{
+        console.log("Masuk")
+        console.log(err.res)
+      })
+
+
+
     }
 
 
     render(){
+      if(this.state.redirect_status === true){
+        return (
+          <Redirect to="/"></Redirect>
+        )
+      }
         return(
          
         <div className="limiter">
@@ -41,6 +125,20 @@ class registerPage extends React.Component{
                   <span className="focus-input100" />
                 </div>
                 <span className="txt1 p-b-11">
+                  Contact Number
+                </span>
+                <div className="wrap-input100 validate-input m-b-36" >
+                  <input className="input100" ref="inputcontact" type="number" />
+                  <span className="focus-input100" />
+                </div>
+                <span className="txt1 p-b-11">
+                  Residence
+                </span>
+                <div className="wrap-input100 validate-input m-b-36" >
+                  <input className="input100" ref="inputresidence" type="text" />
+                  <span className="focus-input100" />
+                </div>
+                <span className="txt1 p-b-11">
                   Your Password
                 </span>
                 <div className="wrap-input100 validate-input m-b-12" >
@@ -49,6 +147,7 @@ class registerPage extends React.Component{
               
                   <input className="input100" ref="inputpassword" type="password" />
                   <span className="focus-input100" />
+                </div>
                 <span className="txt1 p-b-11">
                   Confirm Password
                 </span>
@@ -78,7 +177,7 @@ class registerPage extends React.Component{
                   </button>
                 </div>
               </div>
-            </div>
+      
           </div>
         </div>
         <div id="dropDownSelect1" />
@@ -86,4 +185,4 @@ class registerPage extends React.Component{
         )
     }
 }
-export default registerPage;
+export default connect(null, {loginUser}) (registerPage);

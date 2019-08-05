@@ -15,6 +15,7 @@ import {Link} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logoutUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 
 
@@ -45,11 +46,25 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
       <div className="navbarheader">
         <Navbar  style={{backgroundColor : "#1f2533"}}  fixed dark expand="md">
           <Link to="/" className="navbartext">
-          <NavbarBrand  className="navbartext">
+          <NavbarBrand  className="navbartext mr-5">
             home
           </NavbarBrand>
           </Link>
           <NavbarToggler onClick={this.toggle} />
+         
+          <NavItem>
+          <center>
+          <div className="d-flex flex-row justify-content-center" >
+                    <input type="text" className="form-control form-control text-center" placeholder="Search Items.." style={{ alignSelf: "center", borderRadius : "3px", width : "750px"}}></input>
+                    <div  className="btn"  style={{height : "40px", width : "100px", backgroundColor : "black", fontWeight : "bolder", color : "white"}}>
+                      <FontAwesomeIcon size="1x"  icon={faSearch} style={{color : "white"}}>
+             
+                      </FontAwesomeIcon>
+                    </div>
+          </div>
+          </center>
+          </NavItem>
+        
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               {/* <NavItem>
@@ -180,7 +195,7 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
           </Collapse>
           
         </Navbar>
-       
+        
       </div>
     );
   }

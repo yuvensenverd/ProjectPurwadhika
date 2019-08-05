@@ -135,11 +135,25 @@
   border: 1px solid red;
 } */
 
+.shadow {
+  box-shadow: 8px 4px 8px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border : #CECFD1 2px solid;
+}
+
 .carousel-caption{
   z-index: 0 !important;
 }
 
 /* Product List  */
+
+.carouselgenrehome { 
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center
+}
 
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -203,7 +217,7 @@
 }
 
 .cardprtext {
-  font-size: 15px;
+  font-size: 14px;
   font-family: Montserrat-Bold;
   text-align : center;
   color: black;

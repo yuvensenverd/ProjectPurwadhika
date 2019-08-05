@@ -93,6 +93,8 @@ class registerPage extends React.Component{
         this.setState({
           redirect_status : true
         })
+
+        this.log(username, password)
       
 
    
@@ -100,7 +102,7 @@ class registerPage extends React.Component{
       })
       .catch((err)=>{
         console.log("Masuk")
-        console.log(err.res)
+        console.log(err.response.data)
       })
 
 

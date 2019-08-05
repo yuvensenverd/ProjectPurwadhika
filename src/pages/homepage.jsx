@@ -3,6 +3,7 @@ import Carousel from './../components/carousel'
 import Axios from 'axios'
 import Responsive from './../components/responsiveslider'
 import Centered from './../components/centerslide'
+import numeral from 'numeral'
 
 // ROUTE 
 
@@ -42,21 +43,27 @@ class Homepage extends React.Component{
     
         
 
-    Axios.get('http://localhost:2000/CO')
-    .then((res)=>{
-        
-        this.setState({
-        productlist : res.data
-
-        })
-        console.log(this.state.productlist)
-   
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
+        this.getProduct()
 
     }
+
+    getProduct = () =>{
+        Axios.get('http://localhost:1998/products')
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({
+                productlist : res.data
+    
+            })
+         
+            console.log(this.state.productlist)
+       
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    
+        }
 
     onStarClick(nextValue, prevValue, name) {
         this.setState({rating: nextValue});
@@ -70,13 +77,16 @@ class Homepage extends React.Component{
 
     renderName = (text) => {
         var judul = text.split(" ")
-        for(var i = 0; i<7; i++){
-            judul.push(text[i])
+        var arr = []
+        
+        for(var i = 0; i<5; i++){
+            arr.push(judul[i])
+            
         }
         if(judul.length > 5){
-            judul.push("...")
+            arr.push("...")
         }
-        return judul.join(" ")
+        return arr.join(" ")
     }
     
 
@@ -93,9 +103,11 @@ class Homepage extends React.Component{
         return( 
 
         <div className="card d-inline-block m-r-21 m-b-25 m-l-21" >
-            <img  className="mb-3" src={val.productimageurl} alt={val.productname} width="100%" height="175px"/>
-            <div className="cardprtext pl-3 pr-3 mb-3" style={{height : "50px"}}>{this.renderName(val.productname)}</div>
-            <p className="price">Rp. 50.000,00</p>
+            <img  className="mb-3" src="" alt="image" width="100%" height="175px"/>
+            <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
+            <p className="price">
+            {"Rp. " + numeral(val.price).format(0,0)}
+                </p>
             <p>Some text about the Product.</p>
             {/* <StarRatingComponent 
                    
@@ -108,13 +120,17 @@ class Homepage extends React.Component{
             <StarRatings
                 rating={this.state.rating} // GAK PAKE STATE NANTI
                 starRatedColor="orange"
-                changeRating={this.changeRating.bind(this)}
+                // changeRating={this.changeRating.bind(this)}
                 numberOfStars={5}
                 name='rating' // BERBEDA NANTI
                 />
             <p className="mt-4">
                 
-                <a href='/productdetails'><button className="navbartext">Add to Cart </button></a>
+                <p className="">
+                    <a href="/productdetails">
+                    <button><p  className="navbartext">Add to Cart</p></button>
+                    </a>
+                    </p>
                 
             </p>
       

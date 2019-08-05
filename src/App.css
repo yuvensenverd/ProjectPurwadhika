@@ -157,7 +157,7 @@
 
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
+  width: 250px;
   margin: auto;
   text-align: center;
   font-family: arial;
@@ -191,7 +191,7 @@
 
 .cardpr {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 180px;
+  width: 181px;
 
   margin: auto;
   text-align: center;

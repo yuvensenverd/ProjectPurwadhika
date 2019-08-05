@@ -25,8 +25,9 @@ class Responsive extends Component {
                 <Link to={'/product?cat=' + val.name}> 
                 {/* Lanjut */}
                   <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
+              
                 <span className="caption"> {val.name}</span>
+                </Link>
                 </center>
             </div>
           )
@@ -48,6 +49,7 @@ class Responsive extends Component {
         {
           breakpoint: 1024,
           settings: {
+            dots: true,
             slidesToShow: 3,
             slidesToScroll: 3,
             infinite: true,
@@ -58,6 +60,7 @@ class Responsive extends Component {
         {
           breakpoint: 600,
           settings: {
+            dots: true,
             slidesToShow: 1,
             slidesToScroll: 1,
             variableWidth : false,
@@ -67,6 +70,7 @@ class Responsive extends Component {
         {
           breakpoint: 480,
           settings: {
+            dots: true,
             slidesToShow: 1,
             slidesToScroll: 1,
             variableWidth : false,

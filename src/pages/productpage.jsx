@@ -4,6 +4,7 @@ import Axios from 'axios'
 import { URLAPI } from "../redux/actions/types";
 import { connect } from "react-redux";
 import { getListCategory } from "./../redux/actions/index"
+import numeral from 'numeral'
 
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
@@ -14,8 +15,8 @@ import StarRatings from 'react-star-ratings';
 class productPage extends React.Component{
     state = {
         productlist  : [],
-        rating : 0,
-        genre : ["Fashion", "Electronics", "Sports", "Book", "Snacks", "Pet Accessories", "Gaming"]
+        rating : 0
+    
     
       }
 
@@ -28,33 +29,86 @@ class productPage extends React.Component{
         var currentgenre = this.props.location.search.replace("?cat=", "")
         if(!currentgenre){
             // PRINT ALL 
+            console.log(this.props.location)
             console.log("Nda ada query, Select ALL")
+            this.getProduct()
+            console.log(this.state.productlist)
+          
         }
-        console.log(this.props.location) //pathname, search, hash, state
+        else{
+        
+            this.getProduct(currentgenre)
+        }
+       //pathname, search, hash, state
      
 
-        
-
-
-
-
-
-        
-        // Axios.get('http://localhost:2000/CO')
-        // .then((res)=>{
-            
-        //     this.setState({
-        //     productlist : res.data
-    
-        //     })
-        //     console.log(this.state.productlist)
        
-        // })
-        // .catch((err)=>{
-        //     console.log(err)
-        // })
+
+        
+        
+
+  
+    }
+    getProduct = (category = "") =>{
+        Axios.get('http://localhost:1998/products?cat=' + category)
+        .then((res)=>{
+            
+            this.setState({
+            productlist : res.data
+    
+            })
+            var select_box = document.getElementById("catlist");
+            select_box.selectedIndex = 0;
+            console.log(this.state.productlist)
+       
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     
         }
+
+    filterProduct = (filterby) =>{
+        console.log(filterby)
+        if(filterby === "No Filter"){
+            this.getProduct()
+        }
+        if(filterby === "price low"){
+            var sorted=  this.state.productlist.sort(function(a,b){
+                return a.price - b.price
+            })
+            console.log(sorted)
+            this.setState({
+                productlist : sorted
+            })
+        }
+        if(filterby === "price high"){
+            var sorted=  this.state.productlist.sort(function(a,b){
+                return b.price - a.price
+            })
+            console.log(sorted)
+            this.setState({
+                productlist : sorted
+            })
+        }
+        if(filterby === "name a"){
+            var sorted = this.state.productlist.sort((a, b) => a.name.localeCompare(b.name))
+            console.log(sorted)
+            this.setState({
+                productlist : sorted
+            })
+        }
+        if(filterby === "name z"){
+            var sorted = this.state.productlist.sort((a, b) => b.name.localeCompare(a.name))
+            console.log(sorted)
+            this.setState({
+                productlist : sorted
+            })
+        }
+        
+
+  
+    }
 
     onStarClick(nextValue, prevValue, name) {
         this.setState({rating: nextValue});
@@ -62,25 +116,42 @@ class productPage extends React.Component{
     
     renderName = (text) => {
         var judul = text.split(" ")
+        var arr = []
+        
         for(var i = 0; i<5; i++){
-            judul.push(text[i])
+            arr.push(judul[i])
+            
         }
         if(judul.length > 5){
-            judul.push("...")
+            arr.push("...")
         }
-        return judul.join(" ")
+        return arr.join(" ")
     }
     
     renderProduct = () => {
+
+        console.log(this.state.productlist)
+        if(this.state.productlist.length === 0){
+            return (
+                <div className="pt-5">
+                <center>
+                <h1>Product Not Found</h1>
+                </center>
+                </div>
+            )
+        }
 
 
         var output = this.state.productlist.map((val)=>{
             return( 
     
             <div className="cardpr d-inline-block mr-3 mb-4" >
-                <img  src={val.productimageurl} alt={val.productname} width="100%" height="100%"/>
-                <div className="cardprtext p-2 mb-2" style={{height : "67px"}}>{this.renderName(val.productname)}</div>
-                <div className="pricepr mt-1 mb-3">Rp. 50.000,00</div>
+                <img  src='' alt="image" width="100%" height="100%"/>
+                <div className="cardprtext p-3 mb-2" style={{height : "80px"}}>{this.renderName(val.name)}</div>
+                <div className="pricepr mt-1 mb-3">
+                {/* {"Rp. " + numeral(val.name).format(0,0)} */}
+                {"Rp. " + numeral(val.price).format(0,0)}
+                </div>
                 {/* <StarRatingComponent 
                    
                     name="rate1" // INGAT KASIH ID BERBEDA 
@@ -96,7 +167,7 @@ class productPage extends React.Component{
                     numberOfStars={5}
                     name='rating'
                     />
-                <p className="mt-3"><button><a href={val.producturl} className="navbartext">Add to Cart</a></button></p>
+                <p className="mt-3"><button><p  className="navbartext">Add to Cart</p></button></p>
 
             
             </div>
@@ -114,7 +185,7 @@ class productPage extends React.Component{
             return (
                 <div className="d-flex flex-column align-items-center justify-content-center mb-4" style={{backgroundColor : "#BDC1C9"}}>
                     <img src="xd" alt="logo" height ="50%"></img>
-                    <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} ></input>
+                    <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
 
 
                 </div>
@@ -143,6 +214,10 @@ class productPage extends React.Component{
                                 Select Category
                             </div>
                             <div>
+                                <div className="d-flex flex-column align-items-center justify-content-center mb-4" style={{backgroundColor : "#BDC1C9"}}>
+                                    <img src="xd" alt="logo" height ="50%"></img>
+                                    <input type="button" className="btn navbartext btn-secondary form-control" value="All Product" onClick={() => this.getProduct()} ></input>
+                                </div>
                                 {this.printCategory()}
                             </div>
                         </div>
@@ -150,10 +225,16 @@ class productPage extends React.Component{
                             <div className="row">
                                 <div className="col-md-8">
                                     <h1>Product Genre</h1>
+                                    <div>{this.state.productlist.length === 0 ? null : this.state.productlist.length + "  Products Found"}</div>
                                 </div>
                                 <div className="col-md-4">
-                                    <select required id = "myList" ref="inputgenre" className="form-control mt-2" placeholder="Filter By">
-                                        <option value="" disabled selected hidden>Filter By</option>
+                                    <select  id = "catlist" ref="inputgenre" className="form-control mt-2" placeholder="Filter By" onChange={()=>this.filterProduct(this.refs.inputgenre.value)}>
+                                        <option value="No Filter" >No Sort</option>
+                                        <option value="price low">Price Lowest to Highest</option>
+                                        <option value="price high">Price Highest to Lowest</option>
+                                        <option value="name a">A to Z</option>
+                                        <option value="name z">Z to A</option>
+                                        <option value="Rating">Rating</option>
                                         
                                     </select>
                                 </div>

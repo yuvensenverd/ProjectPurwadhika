@@ -1,10 +1,15 @@
 import React from 'react'
 import Carousel from './../components/carousel'
 import Axios from 'axios'
+import { URLAPI } from "../redux/actions/types";
+import { connect } from "react-redux";
+import { getListCategory } from "./../redux/actions/index"
 
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
 import StarRatings from 'react-star-ratings';
+
+
 
 class productPage extends React.Component{
     state = {
@@ -16,20 +21,38 @@ class productPage extends React.Component{
 
 
     componentDidMount=()=>{
+        if(this.props.listcategory.length === 0){
+            this.props.getListCategory()
+        }
         
-        Axios.get('http://localhost:2000/CO')
-        .then((res)=>{
+        var currentgenre = this.props.location.search.replace("?cat=", "")
+        if(!currentgenre){
+            // PRINT ALL 
+            console.log("Nda ada query, Select ALL")
+        }
+        console.log(this.props.location) //pathname, search, hash, state
+     
+
+        
+
+
+
+
+
+        
+        // Axios.get('http://localhost:2000/CO')
+        // .then((res)=>{
             
-            this.setState({
-            productlist : res.data
+        //     this.setState({
+        //     productlist : res.data
     
-            })
-            console.log(this.state.productlist)
+        //     })
+        //     console.log(this.state.productlist)
        
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+        // })
+        // .catch((err)=>{
+        //     console.log(err)
+        // })
     
         }
 
@@ -87,11 +110,11 @@ class productPage extends React.Component{
     
     
     printCategory = () =>{
-        var jsx = this.state.genre.map((val)=>{
+        var jsx = this.props.listcategory.map((val)=>{
             return (
                 <div className="d-flex flex-column align-items-center justify-content-center mb-4" style={{backgroundColor : "#BDC1C9"}}>
                     <img src="xd" alt="logo" height ="50%"></img>
-                    <input type="button" className="btn navbartext btn-secondary form-control" value={val} ></input>
+                    <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} ></input>
 
 
                 </div>
@@ -153,6 +176,13 @@ class productPage extends React.Component{
 
 }
 
+const mapStateToProps = (state) =>{
+    return {
+        listcategory : state.categorylist
+  
+    }
+  }
 
 
-export default productPage;
+
+export default connect(mapStateToProps, {getListCategory})(productPage);

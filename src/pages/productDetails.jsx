@@ -1,5 +1,7 @@
 import React from 'react'
 import numeral from 'numeral'
+import Tab from './../components/tab'
+import StarRatings from 'react-star-ratings';
 
 class productDetails extends React.Component{
     state={
@@ -37,17 +39,33 @@ class productDetails extends React.Component{
             <div className="mycontainer mb-5">
                 <div >
                     <div className="row p-t-100">
-                        <div className="col-md-5">
+                        <div className="col-md-5 border border-secondary">
                             <img src="http://images.thenorthface.com/is/image/TheNorthFace/236x204_CLR/womens-better-than-naked-jacket-AVKL_NN4_hero.png" height="500px"></img>
                         </div>
-                        <div className="col-md-7">
+                        <div className="col-md-7 pl-5">
+                            
                             <h1 className="mb-4">Product Name</h1>
                             <div className="badge badge-pill badge-danger mb-3" style={{fontSize : "20px"}}> Product Genre</div>
                             <h3 className="mb-3">Quantity</h3>
+                           
+                           
                             <div className="mb-5">
                             <input type="button" className="btn btn-success rounded-circle mr-3" value="+" onClick={() => this.addQty()}/>
                             <input type="text" className="form-control d-inline text-center" style={{width :"100px", fontWeight : "bolder", fontSize : "23px"}} value={this.state.jumlah}  readOnly/>
                             <input type="button" className="btn btn-success rounded-circle ml-3 " value="-" onClick={() => this.minQty()}/>
+                            </div>
+                            <div className="mb-5 ">
+                            <h3 className="">Product Rating</h3>
+                            <div>
+                            <StarRatings
+                            rating={this.state.rating}
+                            starRatedColor="yellow"
+                            // changeRating={this.changeRating}
+                            numberOfStars={5}
+                            name='rating'
+                            
+                            />
+                            </div>
                             </div>
                             <h3 className="mb-3">Total Price</h3>
                             <input type="text"  className="form-control d-inline mb-5" style={{width :"250px", fontWeight : "bolder", fontSize : "23px"}} value={"Rp. " + numeral(this.state.totalprice).format(0,0)} readOnly/>
@@ -57,8 +75,9 @@ class productDetails extends React.Component{
                         </div>
                     </div>
                     <div className=" p-5">
-                        <div className="mb-4"><h1>Product Description</h1></div>
-                        <div className="subtitletext" style={{fontSize : "17px"}}>  ayayayayasdfasdf</div>
+                        {/* <div className="mb-4"><h1>Product Description</h1></div>
+                        <div className="subtitletext" style={{fontSize : "17px"}}>  ayayayayasdfasdf</div> */}
+                        <Tab></Tab>
                     </div>
 
                 </div>

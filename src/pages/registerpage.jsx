@@ -49,15 +49,15 @@ class registerPage extends React.Component{
 
       // SQL
 
-      var validated_data =
-      {
-        username : username,
-        saldo : 0,
-        password : password,
-        phonenumber : phonenum,
-        residence : residence,
-        role_id: 3 
-      }
+      // var validated_data =
+      // {
+      //   username : username,
+      //   saldo : 0,
+      //   password : password,
+      //   phonenumber : phonenum,
+      //   residence : residence,
+      //   role_id: 3 
+      // }
 
   
       // console.log(validated_data)
@@ -76,11 +76,17 @@ class registerPage extends React.Component{
       
 
       // JSON PARSE (TO JS ) // JSON STRINGIFY ( TO JSON )
-
-      Axios.post('http://localhost:1998/users', validated_data)
+      // console.log(validated_data)
+      Axios.post('http://localhost:1998/users',  {
+        username : username,
+        saldo : 0,
+        password : password,
+        phonenumber : phonenum,
+        residence : residence,
+        role_id: 3 
+      })
       .then((res)=>{
-        console.log("Data Berhasil Dimasukkan")
-        console.log("Masuk")
+        
         console.log(res.data)
         window.alert("Register Success")
         // this.log(username, password)
@@ -172,9 +178,9 @@ class registerPage extends React.Component{
                   </div>
                 </div> */}
                 <div className="container-login100-form-btn mt-5 mb-3">
-                  <button className="login100-form-btn btn-block" onClick={() => this.validateRegister()}>
-                    Sign Up Now!
-                  </button>
+                  <input type="button" className="login100-form-btn btn-block" value="Sign Up Now!" onClick={() => this.validateRegister()}/>
+                  
+                  
                 </div>
               </div>
       

@@ -52,7 +52,7 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
           </Link>
           <NavbarToggler onClick={this.toggle} />
          
-          <NavItem>
+         {/* <NavItem>
           <center>
           <div className="d-flex flex-row justify-content-center" >
                     <input type="text" className="form-control form-control text-center" placeholder="Search Items.." style={{ alignSelf: "center", borderRadius : "3px", width : "750px"}}></input>
@@ -63,7 +63,7 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
                     </div>
           </div>
           </center>
-          </NavItem>
+          </NavItem>  */}
         
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>

@@ -80,6 +80,7 @@ app.post('/users', (req,res)=>{
 
     var sql = `Insert into user set ?`
     db.query(sql,req.body, (err,result)=>{
+
         if(err) res.status(500).send(err);
 
         
@@ -115,6 +116,25 @@ app.post('/users', (req,res)=>{
     //     })
     // })
 })
+
+app.get('/categories', (req,res)=>{
+    var sql = `SELECT * FROM category`
+    db.query(sql, (err,results)=>{
+        if(err) throw err;
+   
+
+        console.log(results)
+        res.status(200).send(results)
+   
+
+    })
+})
+
+app.get('/products', (req,res)=>{
+    var sql = `SELECT `
+})
+
+
 
 
 app.listen(port, ()=> console.log(` Api aktif di port  ${port} `))

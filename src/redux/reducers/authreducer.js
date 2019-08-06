@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT } from "../actions/types";
+import { LOGIN, LOGOUT, ADDITEM } from "../actions/types";
 
 
 const Initial_state = 
@@ -15,6 +15,11 @@ export default(state = Initial_state, action)=>{
             ROLE : action.payload.ROLE, CART : action.payload.CART}
         case LOGOUT :
             return Initial_state
+        case ADDITEM :
+            console.log("Masuk ADD Reducer")
+            var newcart = state.CART
+            newcart.push(action.payload)
+            return {...state, CART : newcart}
         default : 
             return state
     }

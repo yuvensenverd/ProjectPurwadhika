@@ -5,5 +5,6 @@ import CategoryReducer from './categoryreducer'
 export default combineReducers({
    
     userdata : Reducer,
-    categorylist : CategoryReducer
+    categorylist : CategoryReducer,
+
 });

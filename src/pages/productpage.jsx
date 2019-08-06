@@ -5,6 +5,7 @@ import { URLAPI } from "../redux/actions/types";
 import { connect } from "react-redux";
 import { getListCategory } from "./../redux/actions/index"
 import numeral from 'numeral'
+import { Link } from 'react-router-dom'
 
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
@@ -71,7 +72,7 @@ class productPage extends React.Component{
     filterProduct = (filterby) =>{
         console.log(filterby)
         if(filterby === "No Filter"){
-            this.getProduct()
+            this.getProduct(this.props.location.search.replace("?cat=", ""))
         }
         if(filterby === "price low"){
             var sorted=  this.state.productlist.sort(function(a,b){
@@ -167,7 +168,14 @@ class productPage extends React.Component{
                     numberOfStars={5}
                     name='rating'
                     />
-                <p className="mt-3"><button><p  className="navbartext">Add to Cart</p></button></p>
+                
+                <p className="mt-3">
+                    <button>
+                        <Link to={"/productdetails?pid=" + val.id}>
+                        <p className="navbartext">Add to Cart</p>
+                        </Link>
+                    </button>
+                </p>
 
             
             </div>
@@ -183,12 +191,15 @@ class productPage extends React.Component{
     printCategory = () =>{
         var jsx = this.props.listcategory.map((val)=>{
             return (
-                <div className="d-flex flex-column align-items-center justify-content-center mb-4" style={{backgroundColor : "#BDC1C9"}}>
+                <Link to={"/product?cat=" + val.name}>
+                <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}}>
                     <img src="xd" alt="logo" height ="50%"></img>
                     <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
+                
 
 
                 </div>
+                </Link>
                
             )
         })

@@ -14,6 +14,8 @@ import userStore from './pages/userstore'
 import userHistory from './pages/userhistory'
 import editProfile from './pages/editprofile'
 import productDetails from './pages/productDetails'
+import PageNotFound from './pages/pagenotfound'
+import cartPage from './pages/usercart'
 import Axios from 'axios';
 
 
@@ -26,6 +28,7 @@ class App extends React.Component{
         <Header></Header>
      
         {/* <Switch> */}
+        <Switch>
         <Route path='/' exact component={Homepage}></Route>
         <Route path='/login'component={LoginPage}></Route>
         <Route path='/register'component={RegisterPage}></Route>
@@ -36,9 +39,11 @@ class App extends React.Component{
         <Route path='/userhistory' component={userHistory}></Route>
         <Route path='/editprofile' component={editProfile}></Route>
         <Route path= '/productdetails' component={productDetails}></Route>
+        <Route path= '/usercart' component={cartPage}></Route>
+        <Route path='*' component={PageNotFound}></Route>
+        </Switch>
 
-        <Footer></Footer>
-        
+       
 
         {/* </Switch> */}
       </div>

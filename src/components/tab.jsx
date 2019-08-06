@@ -3,6 +3,9 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, Ca
 import classnames from 'classnames';
 
 export default class Example extends React.Component {
+    componentDidMount(){
+      console.log(this.props.datatabone)
+    }
     constructor(props) {
       super(props);
   
@@ -44,7 +47,7 @@ export default class Example extends React.Component {
             <TabPane tabId="1">
               <Row>
                 <Col sm="12" className="pt-4">
-                  <h4>Tab 1 Contents</h4>
+                  <h4>{!this.props.datatabone ? "No  Description Available for this Product" : this.props.datatabone}</h4>
                 </Col>
               </Row>
             </TabPane>

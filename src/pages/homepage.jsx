@@ -102,7 +102,7 @@ class Homepage extends React.Component{
         // console.log(arr)
         return( 
 
-        <div className="card d-inline-block m-r-21 m-b-25 m-l-21" >
+        <div className="card d-inline-block m-r-21 m-b-25 " >
             <img  className="mb-3" src="" alt="image" width="100%" height="175px"/>
             <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
             <p className="price">
@@ -124,14 +124,13 @@ class Homepage extends React.Component{
                 numberOfStars={5}
                 name='rating' // BERBEDA NANTI
                 />
-            <p className="mt-4">
                 
-                <p className="">
-                    <a href="/productdetails">
-                    <button><p  className="navbartext">Add to Cart</p></button>
-                    </a>
-                    </p>
-                
+            <p className="mt-3">
+                    <button>
+                        <Link to={"/productdetails?pid=" + val.id}>
+                        <p className="navbartext">Add to Cart</p>
+                        </Link>
+                    </button>
             </p>
       
         </div>

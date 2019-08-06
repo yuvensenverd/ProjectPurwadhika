@@ -1,6 +1,7 @@
 import { LOGIN, LOGOUT, URLAPI } from './types'
 import Axios from 'axios'
 
+
 export const loginUser = (value) =>{
     return{
         type : LOGIN,
@@ -30,4 +31,11 @@ export const getListCategory = () => {
         
       
       }
+}
+
+export const addItemCart = (item) =>{
+    return {
+        type : "ADD_TO_CART",
+        payload : item
+    }
 }

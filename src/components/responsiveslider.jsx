@@ -40,7 +40,7 @@ class Responsive extends Component {
       dots: true,
       infinite: true,
       speed: 500,
-      slidesToShow: 4,
+      slidesToShow: 3,
       centerMode: true,
       slidesToScroll: 3,
       variableWidth : true,

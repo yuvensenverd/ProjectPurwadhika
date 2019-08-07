@@ -31,7 +31,7 @@ export default class Example extends React.Component {
                 className={classnames({ active: this.state.activeTab === '1' })}
                 onClick={() => { this.toggle('1'); }}
               >
-                Description
+                Product Description
               </NavLink>
             </NavItem>
             <NavItem>
@@ -39,7 +39,7 @@ export default class Example extends React.Component {
                 className={classnames({ active: this.state.activeTab === '2' })}
                 onClick={() => { this.toggle('2'); }}
               >
-                Later
+                Shop Description
               </NavLink>
             </NavItem>
           </Nav>
@@ -54,7 +54,7 @@ export default class Example extends React.Component {
             <TabPane tabId="2">
               <Row>
                 <Col sm="12" className="pt-4">
-                  <h4>CONTNETN 2</h4>
+                  <h4>{!this.props.datatabtwo ? "No  Shop Description Available for this Product" : this.props.datatabtwo}</h4>
                 </Col>
               </Row>
             </TabPane>

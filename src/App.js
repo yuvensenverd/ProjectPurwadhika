@@ -2,7 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Header from './components/header';
-import Footer from './components/footer';
+
 import { Route , Link, Switch } from 'react-router-dom'
 import Homepage from './pages/homepage'
 import LoginPage from './pages/loginpage'
@@ -16,12 +16,55 @@ import editProfile from './pages/editprofile'
 import productDetails from './pages/productDetails'
 import PageNotFound from './pages/pagenotfound'
 import cartPage from './pages/usercart'
+import { connect } from 'react-redux'
+import { loginUser } from './redux/actions/index'
 import Axios from 'axios';
 
 
 
 class App extends React.Component{
+
+  // LOCAL STORAGE FOR LOGIN
+  componentDidMount(){
+    var username = localStorage.getItem('username')
+    var password = localStorage.getItem('password')
+    if(username && password){
+
+      this.checkDatabaseUser(username, password)
+    }
+  }
+
+  checkDatabaseUser = (username, password) => {
+
+    Axios.get('http://localhost:1998/users?name='+username+'&pass='+password)
+    .then((res)=>{
+      if(res.data.length > 0){
+
+        console.log(res.data)
+        return this.log(username, password)
+      }else{
+        console.log("Gak dapaet")
+        return window.alert("Username / Password Tidak Valid!")
+      }
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  log = (username, password) => {
+    var data = {
+      USERNAME : username,
+      PASSWORD : password,
+      ROLE : 'user',
+      CART : []
+    }
+
+    this.props.loginUser(data)
+   
+  }
   
+
   render(){
     return (
       <div>
@@ -52,4 +95,4 @@ class App extends React.Component{
   }
 }
 
-export default App;
+export default connect(null, {loginUser})(App) ;

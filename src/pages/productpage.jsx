@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { getListCategory } from "./../redux/actions/index"
 import numeral from 'numeral'
 import { Link } from 'react-router-dom'
+import Footer from './../components/footer';
 
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
@@ -260,6 +261,7 @@ class productPage extends React.Component{
                     </div>
 
                 </div>
+                <Footer/>
 
             </div>
         )

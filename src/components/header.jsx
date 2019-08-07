@@ -180,12 +180,14 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
           }
 
 
-           {this.props.cart.length === 0 && this.props.username !== ""
+           { this.props.username !== ""
            ?
+           
            <div className="navbartext">
-         
+          
+             <div className="cartnum">{this.props.usercartlen}</div>
              <FontAwesomeIcon size="2x"  icon={faShoppingCart} style={{color : "#c02c3a"}}>
-             {/* <div className="cartnum">{this.props.cart.length}</div> */}
+            
              </FontAwesomeIcon>
              
            </div>
@@ -204,7 +206,8 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 const mapStateToProps= (state)=>{
   return{ 
       username : state.userdata.USERNAME,
-      cart : state.userdata.CART
+      usercart : state.userdata.CART,
+      usercartlen : state.userdata.CARTLEN
   }
 }
 

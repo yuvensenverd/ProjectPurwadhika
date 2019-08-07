@@ -9,8 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/Templates/Login_v14/css/util.css';
 
 
-
-
 import { BrowserRouter } from 'react-router-dom';
 
 // Carousel

@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom'
 import Axios from 'axios';
 import { connect } from 'react-redux'
 import { addItemCart } from './../redux/actions/index'
+import Footer from './../components/footer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
 class productDetails extends React.Component{
@@ -15,7 +19,8 @@ class productDetails extends React.Component{
         price : 10000,
         totalprice : 0,
         productdetail : [],
-        message : ""
+        message : "",
+        modalOpen : false
         // productid : null
     }
     
@@ -36,6 +41,12 @@ class productDetails extends React.Component{
         }
    
       
+    }
+
+    closeModal = () =>{
+        this.setState({
+            modalOpen : false
+        })
     }
 
 
@@ -74,13 +85,52 @@ class productDetails extends React.Component{
         })
     }
 
+    addToCart = (item) =>{
+        var newcart = this.props.usercart.CART
+        item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
+        console.log(item)
+
+        // COUNTING DUPLICATE ITEMS
+        var exist = false
+        newcart.forEach(itemprop => {
+            if(item.name === itemprop.name){
+                itemprop.qty = itemprop.qty + item.qty
+                itemprop.totalprice = itemprop.totalprice + item.totalprice
+                exist = true
+            }
+        });
+        if(exist === false){
+            newcart.push(item)
+        }
+        
+
+        console.log(newcart)
+        this.props.addItemCart(newcart)
+
+        // OPEN MODAL NOTIFICATION
+        this.setState({
+            modalOpen : true
+        })
+
+    }
+
     printProductDetails = () =>{
-        if(this.state.productdetail.length === 1){
+        if(this.state.productdetail.length === 1){ 
             return (
-                <div>
-                <div className="row p-t-100">
+                <div className="p-t-100">
+                
+                         <div >
+                            <Link to="/product" className="d-flex flex-row mb-4">
+                                <FontAwesomeIcon size="2x"  icon={faBackward} style={{color : "#c02c3a"}}>  
+                                </FontAwesomeIcon>
+                                <div className="subtitletext ml-4 pb-2 " style={{fontSize : "22px"}}>Back</div>
+                            </Link>
+                        </div>
+                        <div className="badge badge-pill badge-secondary mb-4" style={{fontSize : "30px"}}>{this.state.productdetail[0].shopname}</div>
+                <div className="row ">
+                        
                         <div className="col-md-5 border border-secondary">
-                            <img src="http://images.thenorthface.com/is/image/TheNorthFace/236x204_CLR/womens-better-than-naked-jacket-AVKL_NN4_hero.png" height="500px"></img>
+                            <img src="" alt="productimage" height="500px"></img>
                         </div>
                         <div className="col-md-7 pl-5">
                             
@@ -111,7 +161,7 @@ class productDetails extends React.Component{
                             <h3 className="mb-3">Total Price</h3>
                             <input type="text"  className="form-control d-inline mb-5" style={{width :"250px", fontWeight : "bolder", fontSize : "23px"}} value={"Rp. " + numeral(this.state.productdetail[0].price * this.state.jumlah).format(0,0)} readOnly/>
                             <div>
-                                <input type="button" value="PROCEED" className="btn btn-dark btn-lg navbartext" style={{width : "350px"}} onClick={()=>this.props.addItemCart(this.state.productdetail[0])} />
+                                <input type="button" value="PROCEED" className="btn btn-dark btn-lg navbartext" style={{width : "350px"}} onClick={()=>this.addToCart(this.state.productdetail[0])} />
                             </div>
                             
 
@@ -120,7 +170,7 @@ class productDetails extends React.Component{
                      <div className=" p-5">
                      {/* <div className="mb-4"><h1>Product Description</h1></div>
                      <div className="subtitletext" style={{fontSize : "17px"}}>  ayayayayasdfasdf</div> */}
-                     <Tab datatabone={this.state.productdetail[0].desc}></Tab>
+                     <Tab datatabone={this.state.productdetail[0].desc} datatabtwo={this.state.productdetail[0].shopdesc}></Tab>
                     </div>
                     </div>
             )
@@ -137,26 +187,60 @@ class productDetails extends React.Component{
             totalprice : state.jumlah *  state.price
         }));
     }
+    printLength =()=>{
+        return (
+            <h1>{this.props.usercart.length}</h1>
+        )
+    }
     render(){
      
         return(
+            <div>
             <div className="mycontainer mb-5">
+                 <Modal isOpen={this.state.modalOpen} toggle={this.closeModal} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>
+                        <ModalHeader>
+                            <div className="subtitletext text-center p-l-90" style={{fontSize : "26px"}}>Item Added To Cart !</div>
+                        </ModalHeader>
+                        <ModalBody >
+                                <center>
+                                <FontAwesomeIcon size="5x"  icon={faCheckCircle} style={{color : "green"}}>  
+                                </FontAwesomeIcon>
+                                </center>
+                        </ModalBody>
+                        <ModalFooter>
+                                <Link to="/product">
+                                <input type="button" value="Go Back to Shop" className="btn btn-danger btn-lg navbartext" />
+                                </Link>
+                                <Link to="/usercart">
+                                <input type="button" value="Transaction Page" className="btn btn-info btn-lg navbartext"/>
+                                </Link>    
+                        </ModalFooter>
+                </Modal>
                 <div >
+        
+
                     {this.printProductDetails()}
                     {this.state.productdetail.length === 0 ? <h1 className="row p-t-100">{this.state.message}</h1> : null}
-                    {console.log(this.props.usercart)}
+                    {console.log(this.props.usercart.CART)} 
+                    {/* {console.log(JSON.stringify(this.props.usercart))}} */}
+       
+                    {/* <h1>{this.props.usercart.CARTLEN}</h1> */}
+                    {/* SUDAH TAMBAH :) CART DI MOVIE PAKAI JSON */}
            
 
 
                 </div>
+               
             </div>
+             <Footer/>
+             </div>
         )
     }
 }
 
 const mapStateToProps= (state)=>{
     return{ 
-      usercart : state.userdata.CART
+      usercart : state.userdata
     }
 }
 

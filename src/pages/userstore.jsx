@@ -4,6 +4,8 @@ import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf } from '@for
 import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
+import Footer from './../components/footer';
+
 
 
 
@@ -31,6 +33,7 @@ class userStore extends React.Component{
   
        
         var reader  = new FileReader();
+        console.log(reader)
       
         reader.onloadend = function () {
           preview.src = reader.result;
@@ -49,12 +52,9 @@ class userStore extends React.Component{
         }
       }
 
+
     printInputFile = () => {
 
-       
-     
-
-        
         var jsx = this.state.imagenum.map((val, index)=>{
             if(index <= 4){
 
@@ -242,7 +242,7 @@ class userStore extends React.Component{
                         </div> */}
                     </div>
                 </div>
-
+                <Footer />
             </div>
         )
     }

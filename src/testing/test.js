@@ -1,25 +1,22 @@
 
 
-var props = {judul : "a",
- pengarang : "b",
-nama : {
-    asd : "a"
-}}
-var test = {asd : "c"}
 
-props = {...props,...test}
-var {nama} = props // DESTRUCTURING
-console.log(nama)
+// var props = {judul : "a",
+//  pengarang : "b",
+// nama : {
+//     asd : "a"
+// }}
 
-var test = `
+// var test = {asd : "z"}
 
-8
-`
+// props = {...props,...test}
+// props.asd = "c"
+// var {nama} = props // DESTRUCTURING
 
-var b = 
-`
-8shs
+// console.log(props)
+// console.log(nama)
 
-`
+var obj = {nama : "asd", usia : 23, test : 50}
+var newobj = {...obj, qty : 5}
+console.log(newobj)
 
-console.log(test+b)

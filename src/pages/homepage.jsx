@@ -4,6 +4,7 @@ import Axios from 'axios'
 import Responsive from './../components/responsiveslider'
 import Centered from './../components/centerslide'
 import numeral from 'numeral'
+import Footer from './../components/footer';
 
 // ROUTE 
 
@@ -124,7 +125,7 @@ class Homepage extends React.Component{
                 numberOfStars={5}
                 name='rating' // BERBEDA NANTI
                 />
-                
+
             <p className="mt-3">
                     <button>
                         <Link to={"/productdetails?pid=" + val.id}>
@@ -220,7 +221,7 @@ class Homepage extends React.Component{
                       
                     </div>
                 </div>
-     
+                <Footer/>
                 
               
             </div>

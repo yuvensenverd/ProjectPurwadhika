@@ -56,8 +56,7 @@ class App extends React.Component{
     var data = {
       USERNAME : username,
       PASSWORD : password,
-      ROLE : 'user',
-      CART : []
+      ROLE : 'user'
     }
 
     this.props.loginUser(data)

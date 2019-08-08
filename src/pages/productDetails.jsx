@@ -39,6 +39,7 @@ class productDetails extends React.Component{
         }else {
             console.log("Product Not Found")
         }
+        console.log(this.props.username)
    
       
     }
@@ -85,32 +86,51 @@ class productDetails extends React.Component{
         })
     }
 
-    addToCart = (item) =>{
-        var newcart = this.props.usercart.CART
-        item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
-        console.log(item)
 
-        // COUNTING DUPLICATE ITEMS
-        var exist = false
-        newcart.forEach(itemprop => {
-            if(item.name === itemprop.name){
-                itemprop.qty = itemprop.qty + item.qty
-                itemprop.totalprice = itemprop.totalprice + item.totalprice
-                exist = true
-            }
-        });
-        if(exist === false){
-            newcart.push(item)
-        }
+
+    addToCart = (item) =>{
+
+        // MAKE CART AUTO ADD
+        // INSERT INTO TABLE CART 
+        // USERNAME = THIS.props.userdata.username
+
+
+        // var newcart = this.props.usercart.CART
+        // item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
+        // console.log(item)
+
+        // // COUNTING DUPLICATE ITEMS
+        // var exist = false
+        // newcart.forEach(itemprop => {
+        //     if(item.name === itemprop.name){
+        //         itemprop.qty = itemprop.qty + item.qty
+        //         itemprop.totalprice = itemprop.totalprice + item.totalprice
+        //         exist = true
+        //     }
+        // });
+        // if(exist === false){
+        //     newcart.push(item)
+        // }
+        // console.log(this.props.username)
+        //ADD TO SQL DATABASE CART
+
+        Axios.post('http://localhost:1998/addtocart?user='+this.props.username, {
+            qty : this.state.jumlah,
+            productid : this.props.location.search.replace("?pid=", "")
+        })
+        .then((res)=>{
+
+            // OPEN MODAL NOTIFICATION
+            this.setState({
+                modalOpen : true
+            })
+        })
+        .catch((err)=>{
+            console.log(err.response.data)
+        })
         
 
-        console.log(newcart)
-        this.props.addItemCart(newcart)
-
-        // OPEN MODAL NOTIFICATION
-        this.setState({
-            modalOpen : true
-        })
+        
 
     }
 
@@ -140,9 +160,10 @@ class productDetails extends React.Component{
                            
                            
                             <div className="mb-5">
-                            <input type="button" className="btn btn-success rounded-circle mr-3" value="+" onClick={() => this.addQty()}/>
+                            <input type="button" className="btn btn-success rounded-circle mr-3 " value="-" onClick={() => this.minQty()}/>
+                            
                             <input type="text" className="form-control d-inline text-center" style={{width :"100px", fontWeight : "bolder", fontSize : "23px"}} value={this.state.jumlah}  readOnly/>
-                            <input type="button" className="btn btn-success rounded-circle ml-3 " value="-" onClick={() => this.minQty()}/>
+                            <input type="button" className="btn btn-success rounded-circle ml-3" value="+" onClick={() => this.addQty()}/>
                             </div>
                             <div className="mb-5 ">
                             <h3 className="">Product Rating</h3>
@@ -221,7 +242,7 @@ class productDetails extends React.Component{
 
                     {this.printProductDetails()}
                     {this.state.productdetail.length === 0 ? <h1 className="row p-t-100">{this.state.message}</h1> : null}
-                    {console.log(this.props.usercart.CART)} 
+                    <h1>{this.props.username}</h1>
                     {/* {console.log(JSON.stringify(this.props.usercart))}} */}
        
                     {/* <h1>{this.props.usercart.CARTLEN}</h1> */}
@@ -240,7 +261,8 @@ class productDetails extends React.Component{
 
 const mapStateToProps= (state)=>{
     return{ 
-      usercart : state.userdata
+      usercart : state.userdata,
+      username : state.userdata.USERNAME
     }
 }
 

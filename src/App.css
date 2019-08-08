@@ -123,6 +123,22 @@
   border-radius: 25px;
 }
 
+.itemcart{
+  padding: 20px;
+  border: 1px solid black;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.2);
+  background-color: #F2F2F2;
+}
+
+.itempricecart {
+  font-family: Montserrat-Bold ;
+
+  font-size: 18px ;
+
+  color: #c02c3a;
+  font-weight: bolder ;
+}
+
 /* .fixedfooter {
   
   bottom: 0px;

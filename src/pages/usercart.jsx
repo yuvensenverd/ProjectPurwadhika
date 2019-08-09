@@ -22,6 +22,7 @@ class UserCart extends React.Component{
     getItemCartUser = () => {
      
         if(this.props.username !== "" && this.state.finishload === false){
+            console.log(this.props.userdata.CART)
             console.log(this.props.username)
             Axios.get('http://localhost:1998/getcart?user='+this.props.username)
             .then((res)=>{
@@ -133,7 +134,7 @@ class UserCart extends React.Component{
 const mapStateToProps= (state)=>{
     return{ 
       username : state.userdata.USERNAME,
-      usercart : state.userdata.CART
+      userdata : state.userdata
     }
 }
 

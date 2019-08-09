@@ -6,32 +6,35 @@ const Initial_state =
 { USERNAME : "",
   PASSWORD : "",
   ROLE : "",
-  CARTLEN : 0 // LENGTH DARI CART 
+  CART : [], // ANOTHER DISPATCH THAT TAKES CART ITEMS FROM SQL
+  CARTLEN : 0, // LENGTH DARI CART
+  userid : null  
 }
 
 export default(state = Initial_state, action)=>{
     switch(action.type){
         case LOGIN :
-            console.log(action.payload)
-            localStorage.setItem('username', action.payload.USERNAME)
-            localStorage.setItem('password', action.payload.PASSWORD)
-            console.log(action.payload.cartlength)
-
+ 
+            localStorage.setItem('username', action.payload[0].username)
+            localStorage.setItem('password', action.payload[0].password)
+    
+            console.log(action.payload[0])
             // return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
             // ROLE : action.payload.userrole, CARTLEN : action.payload.cartlength}
-            return {...state, USERNAME : action.payload.USERNAME, PASSWORD : action.payload.PASSWORD, role : action.payload.ROLE}
+            return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password, ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength , userid : action.payload[0].userid}
         case LOGOUT :
             localStorage.removeItem('username')
             localStorage.removeItem('password')
             return Initial_state
-        // case ADDITEM :
-        //     // console.log("Masuk ADD Reducer")
-        //     // console.log(action.payload)
-        //     // var newcart = state.CART
-        //     // newcart.push(action.payload)
-        //     console.log("masuk")
+        case ADDITEM :
+            // console.log("Masuk ADD Reducer")
+            // console.log(action.payload)
+            // var newcart = state.CART
+            // newcart.push(action.payload)
+            console.log(action.payload)
+            console.log(action.payload.length)
             
-        //     return {...state, CART : action.payload, CARTLEN : action.payload.length}
+            return {...state,CARTLEN : action.payload.length, CART: action.payload}
         default : 
                 console.log("default")
             return state

@@ -95,39 +95,61 @@ class productDetails extends React.Component{
         // USERNAME = THIS.props.userdata.username
 
 
-        // var newcart = this.props.usercart.CART
-        // item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
-        // console.log(item)
+        var newcart = this.props.userdata.CART
+        item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
+        
 
-        // // COUNTING DUPLICATE ITEMS
-        // var exist = false
-        // newcart.forEach(itemprop => {
-        //     if(item.name === itemprop.name){
-        //         itemprop.qty = itemprop.qty + item.qty
-        //         itemprop.totalprice = itemprop.totalprice + item.totalprice
-        //         exist = true
-        //     }
-        // });
-        // if(exist === false){
-        //     newcart.push(item)
-        // }
-        // console.log(this.props.username)
-        //ADD TO SQL DATABASE CART
+        // COUNTING DUPLICATE ITEMS
+        var exist = false
+        console.log(newcart)
+        newcart.forEach(itemprop => {
+            if(item.name === itemprop.name){
+                itemprop.qty = itemprop.qty + item.qty
+                itemprop.totalprice = itemprop.totalprice + item.totalprice
+                exist = true
+            }
+        });
+        if(exist === false){
+            newcart.push(item)
+            this.props.addItemCart(newcart)
 
-        Axios.post('http://localhost:1998/addtocart?user='+this.props.username, {
-            qty : this.state.jumlah,
-            productid : this.props.location.search.replace("?pid=", "")
-        })
-        .then((res)=>{
 
-            // OPEN MODAL NOTIFICATION
-            this.setState({
-                modalOpen : true
+            Axios.post('http://localhost:1998/addtocart?user='+this.props.username, {
+                qty : this.state.jumlah,
+                productid : this.props.location.search.replace("?pid=", "")
             })
-        })
-        .catch((err)=>{
-            console.log(err.response.data)
-        })
+            .then((res)=>{
+              
+                // OPEN MODAL NOTIFICATION
+              
+                this.setState({
+                    modalOpen : true
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }else{
+            this.props.addItemCart(newcart)
+            Axios.post('http://localhost:1998/addtocart?user='+this.props.username, {
+                qty : this.state.jumlah,
+                productid : this.props.location.search.replace("?pid=", "")
+            })
+            .then((res)=>{
+              
+                // OPEN MODAL NOTIFICATION
+                
+                this.setState({
+                    modalOpen : true
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+
+        // ADD TO SQL DATABASE CART
+     
         
 
         
@@ -261,7 +283,7 @@ class productDetails extends React.Component{
 
 const mapStateToProps= (state)=>{
     return{ 
-      usercart : state.userdata,
+      userdata : state.userdata,
       username : state.userdata.USERNAME
     }
 }

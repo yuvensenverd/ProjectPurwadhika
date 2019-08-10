@@ -19,6 +19,7 @@ import cartPage from './pages/usercart'
 import { connect } from 'react-redux'
 import { loginUser } from './redux/actions/index'
 import Axios from 'axios';
+import { URLAPI } from './redux/actions/types';
 
 
 
@@ -28,6 +29,8 @@ class App extends React.Component{
   componentDidMount(){
     var username = localStorage.getItem('username')
     var password = localStorage.getItem('password')
+    console.log(username)
+    console.log(password)
     if(username && password){
 
       this.checkDatabaseUser(username, password)
@@ -36,9 +39,14 @@ class App extends React.Component{
 
   checkDatabaseUser = (username, password) => {
 
-    Axios.get('http://localhost:1998/users?name='+username+'&pass='+password)
+    var data = {
+      name : username,
+      pass : password
+    }
+
+    Axios.post(URLAPI+'/user/getuser', data)
     .then((res)=>{
-      if(res.data.length > 0){
+      if(res.data[0].username){
 
         console.log(res.data)
         return this.log(username, password)

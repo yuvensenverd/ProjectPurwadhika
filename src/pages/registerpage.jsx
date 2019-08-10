@@ -5,7 +5,9 @@ import Axios from 'axios';
 import { Redirect } from 'react-router'
 import { loginUser } from './../redux/actions/index'
 import { connect } from 'react-redux'
-import { GETTOKENURL, APIWILAYAHURL } from '../redux/actions/types';
+import { GETTOKENURL, APIWILAYAHURL, URLAPI } from '../redux/actions/types';
+import { isNull } from 'util';
+
 
 
 
@@ -93,18 +95,27 @@ class registerPage extends React.Component{
         role_id: 3 
       }
 
-      
+      var checkuser = {
+        name : username,
+        pass : password
+      }
 
-      Axios.get('http://localhost:1998/users?name='+username+'&pass='+password)
+      Axios.post(URLAPI+'/user/getuser', checkuser)
       .then((res)=>{
-        if(res.data.length > 0){
+        console.log(res.data)
+        if(res.data[0].username){
 
-          console.log(res.data)
+          // console.log(res.data)
+          // console.log(!res.data[0].username)
+          // console.log(res.data[0].username)
+          // console.log(res.data[0].cartlength)
+          // console.log(isNull(res.data[0].username))
           return window.alert("Username already exist !")
         }else{
-          console.log("Gak dapaet")
+        
           return this.validateRegister(data)
         }
+
       })
       .catch((err)=>{
         console.log(err)
@@ -139,7 +150,7 @@ class registerPage extends React.Component{
 
       // JSON PARSE (TO JS ) // JSON STRINGIFY ( TO JSON )
       // console.log(validated_data)
-      Axios.post('http://localhost:1998/users',  data)
+      Axios.post(URLAPI+'/user/addUser',  data)
       .then((res)=>{
         
         console.log(res.data)

@@ -5,6 +5,7 @@ import { loginUser } from './../redux/actions/index'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import Axios from 'axios';
+import { URLAPI } from '../redux/actions/types';
 
 
 
@@ -54,10 +55,15 @@ class LoginPage extends React.Component{
     //   }
     
      checkDatabaseUser = (username, password) => {
+      
+      var data = {
+        name : username,
+        pass : password
+      }
 
-      Axios.get('http://localhost:1998/users?name='+username+'&pass='+password)
+      Axios.post(URLAPI+'/user/getuser', data)
       .then((res)=>{
-        if(res.data.length > 0){
+        if(res.data[0].username){
 
           console.log(res.data)
           return this.log(username, password)

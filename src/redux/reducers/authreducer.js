@@ -1,4 +1,5 @@
 import { LOGIN, LOGOUT, ADDITEM } from "../actions/types";
+import { isNull } from "util";
 
 
 
@@ -8,7 +9,8 @@ const Initial_state =
   ROLE : "",
   CART : [], // ANOTHER DISPATCH THAT TAKES CART ITEMS FROM SQL
   CARTLEN : 0, // LENGTH DARI CART
-  userid : null  
+  userid : null  ,
+  HAVESHOP : false
 }
 
 export default(state = Initial_state, action)=>{
@@ -19,9 +21,12 @@ export default(state = Initial_state, action)=>{
             localStorage.setItem('password', action.payload[0].password)
     
             console.log(action.payload[0])
+            console.log(!isNull(action.payload[0].shopname))
             // return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
             // ROLE : action.payload.userrole, CARTLEN : action.payload.cartlength}
-            return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password, ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength , userid : action.payload[0].userid}
+            return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password,
+                    ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength ,
+                     userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname)}
         case LOGOUT :
             localStorage.removeItem('username')
             localStorage.removeItem('password')

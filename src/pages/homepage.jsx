@@ -18,6 +18,7 @@ import { loginUser } from './../redux/actions/index'
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
 import StarRatings from 'react-star-ratings';
+import { URLAPI } from '../redux/actions/types';
 
 class Homepage extends React.Component{
     state = {
@@ -49,7 +50,7 @@ class Homepage extends React.Component{
     }
 
     getProduct = () =>{
-        Axios.get('http://localhost:1998/products')
+        Axios.get(URLAPI+'/product/getproduct')
         .then((res)=>{
             console.log(res.data)
             this.setState({

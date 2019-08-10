@@ -5,7 +5,10 @@ import Axios from 'axios'
 
 export const loginUser = (value) =>{
     return  (dispatch) =>{
-        Axios.get(URLAPI+'/users?name=' + value.USERNAME + "&pass=" + value.PASSWORD)
+        Axios.post(URLAPI+'/user/getuser', {
+            name : value.USERNAME,
+            pass : value.PASSWORD
+        })
         .then((res)=>{
             console.log(res.data)
             // var asd = res.data
@@ -23,7 +26,7 @@ export const loginUser = (value) =>{
                 payload : res.data
             })
         
-            Axios.get(URLAPI+'/getcart?user='+res.data[0].username)
+            Axios.get(URLAPI+'/cart/getcart?user='+res.data[0].username)
             .then((res2)=>{
                 console.log(res2.data)
                 dispatch({
@@ -55,7 +58,7 @@ export const logoutUser = () =>{
 export const getListCategory = () => {
     return (dispatch) =>{
    
-        Axios.get(URLAPI + "/categories")
+        Axios.get(URLAPI + "/category/getcategory")
         .then((res)=>{
         
             dispatch({

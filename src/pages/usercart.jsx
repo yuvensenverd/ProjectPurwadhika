@@ -6,12 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Card, Button,  CardText, Row,  } from 'reactstrap';
 import Footer from '../components/footer'
+import { URLAPI } from '../redux/actions/types';
 
 
 class UserCart extends React.Component{
     state={
         cart_user : [],
-        finishload : false
+        finishload : false,
+        totalprice : 0
     }
    
 
@@ -24,7 +26,7 @@ class UserCart extends React.Component{
         if(this.props.username !== "" && this.state.finishload === false){
             console.log(this.props.userdata.CART)
             console.log(this.props.username)
-            Axios.get('http://localhost:1998/getcart?user='+this.props.username)
+            Axios.get(URLAPI+'/cart/getcart?user='+this.props.username)
             .then((res)=>{
                 this.setState({
                     cart_user : res.data,
@@ -34,20 +36,46 @@ class UserCart extends React.Component{
                 
             })
             .catch((err)=>{
-                console.log(err.response.data)
+                console.log(err)
             })
         }
         
     }
 
+    addQty = (index) => {
+        console.log(index)
+        console.log(this.state.cart_user[index].qty)
+        if(this.state.cart_user[index].qty !== 0){
+            this.state.cart_user[index].qty = this.state.cart_user[index].qty +1
+        }
+        var hasil = this.state.cart_user
+        this.setState({
+            cart_user : hasil
+        })
+    }
+
+    minQty = (index) => {
+        console.log(index)
+        console.log(this.state.cart_user[index].qty)
+        if(this.state.cart_user[index].qty !== 0){
+            this.state.cart_user[index].qty = this.state.cart_user[index].qty -1
+        }
+        var hasil = this.state.cart_user
+        this.setState({
+            cart_user : hasil
+        })
+        
+    }
+
+
 
 
     printCartSummary = () =>{
-        
-            console.log("Masuk")
+       
             if(this.state.finishload === true) {
 
-                var output = this.state.cart_user.map((item)=>{
+                var output = this.state.cart_user.map((item, index)=>{
+                  
                     return(
                         <div className="itemcart">
                             <div className="subtitletext">{item.shopname}</div>
@@ -71,9 +99,9 @@ class UserCart extends React.Component{
                                                 <div className="mr-4">
                                                 <FontAwesomeIcon size="2x"  icon={faTrashAlt} style={{color : "black"}}/>
                                                 </div>
-                                                <input type="button" className="btn btn-secondary rounded-circle mr-3 p-1 pl-3 pr-3 font-weight-bolder" value="-"/>
+                                                <input type="button" className="btn btn-secondary rounded-circle mr-3 p-1 pl-3 pr-3 font-weight-bolder" value="-" onClick={()=>this.minQty(index)}/>
                                                 <input type="text" className="form-control d-inline text-center" style={{width :"75px", fontWeight : "bolder", fontSize : "18px"}} value={item.qty}  readOnly/>
-                                                <input type="button" className="btn btn-secondary rounded-circle ml-3 p-1 pl-3 pr-3 font-weight-bolder" value="+"/>
+                                                <input type="button" className="btn btn-secondary rounded-circle ml-3 p-1 pl-3 pr-3 font-weight-bolder" value="+" onClick={()=>this.addQty(index)}/>
                                             </div>
                                         </div>
                                     </div>
@@ -82,6 +110,7 @@ class UserCart extends React.Component{
                         </div>
                     )
                 })
+          
      
                 return output
             }
@@ -91,20 +120,19 @@ class UserCart extends React.Component{
    
 
     printTotalPrice = () =>{
-        return(
-            <div className="mt-5 ml-2">
-                <Row>
-            
-                    <Card body>
-                    <div className="subtitletext mb-5">Cart Summary</div>
-                    <CardText>Total Price</CardText>
-                    <CardText>Rp. {this.props.username}</CardText>
-                    <Button>PAYMENT</Button>
-                    </Card>
-                  
-                </Row>
-            </div>
-        )
+        if(this.state.finishload === true){
+            var total = 0 
+            this.state.cart_user.map((item)=>{
+                total = total + (item.qty * item.price)
+            })
+            if(total !== this.state.totalprice){ // SUPAYA GAK REACH MAXIMUM DEPTH DLL
+                this.setState({
+                    totalprice : total
+                })
+            }
+           
+            console.log(this.state.totalprice)
+        }
     }
 
     render(){
@@ -114,14 +142,26 @@ class UserCart extends React.Component{
                 <div className="row">
                     <div className="col-md-9">
                         <h1 className="mb-3">Cart Items</h1>
+                 
                         {this.getItemCartUser()}
                         {this.printCartSummary()}
-                    </div>
-                    <div className="col-md-3">
                         {this.printTotalPrice()}
                     </div>
+                    <div className="col-md-3">
+                        <div className="mt-5 ml-2">
+                            <Row>
+                        
+                                <Card body>
+                                <div className="subtitletext mb-3">Cart Summary</div>
+                                <CardText>Total Price</CardText>
+                                <CardText>Rp. {numeral(this.state.totalprice).format(0,0)}</CardText>
+                                <Button>PAYMENT</Button>
+                                </Card>
+                            
+                            </Row>
+                        </div>
+                    </div>
                 </div>
-            
             </div>
             
                 <Footer/>

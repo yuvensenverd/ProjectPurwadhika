@@ -52,7 +52,7 @@ class productPage extends React.Component{
   
     }
     getProduct = (category = "") =>{
-        Axios.get('http://localhost:1998/products?cat=' + category)
+        Axios.get(URLAPI+'/product/getproduct?cat=' + category)
         .then((res)=>{
             
             this.setState({

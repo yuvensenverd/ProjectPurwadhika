@@ -10,6 +10,7 @@ import Footer from './../components/footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { URLAPI } from '../redux/actions/types';
 
 
 class productDetails extends React.Component{
@@ -71,7 +72,7 @@ class productDetails extends React.Component{
     }
     getProductDetails= (id)=>{
        
-        Axios.get('http://localhost:1998/products?id='+id)
+        Axios.get(URLAPI+'/product/getproduct?id='+id)
         .then((res)=>{
             this.setState({
                 productdetail : res.data
@@ -93,7 +94,9 @@ class productDetails extends React.Component{
         // MAKE CART AUTO ADD
         // INSERT INTO TABLE CART 
         // USERNAME = THIS.props.userdata.username
-
+        if(this.state.jumlah === 0){
+            return window.alert("Quantity must be atleast 1!")
+        }
 
         var newcart = this.props.userdata.CART
         item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
@@ -114,7 +117,7 @@ class productDetails extends React.Component{
             this.props.addItemCart(newcart)
 
 
-            Axios.post('http://localhost:1998/addtocart?user='+this.props.username, {
+            Axios.post(URLAPI+'/cart/addcart?user='+this.props.username, {
                 qty : this.state.jumlah,
                 productid : this.props.location.search.replace("?pid=", "")
             })
@@ -131,7 +134,7 @@ class productDetails extends React.Component{
             })
         }else{
             this.props.addItemCart(newcart)
-            Axios.post('http://localhost:1998/addtocart?user='+this.props.username, {
+            Axios.post(URLAPI+'/cart/addcart?user='+this.props.username, {
                 qty : this.state.jumlah,
                 productid : this.props.location.search.replace("?pid=", "")
             })
@@ -264,7 +267,7 @@ class productDetails extends React.Component{
 
                     {this.printProductDetails()}
                     {this.state.productdetail.length === 0 ? <h1 className="row p-t-100">{this.state.message}</h1> : null}
-                    <h1>{this.props.username}</h1>
+        
                     {/* {console.log(JSON.stringify(this.props.usercart))}} */}
        
                     {/* <h1>{this.props.usercart.CARTLEN}</h1> */}

@@ -164,7 +164,7 @@ class UserCart extends React.Component{
                 </div>
             </div>
             
-                <Footer/>
+                {/* <Footer/> */}
              
             </div>
         )

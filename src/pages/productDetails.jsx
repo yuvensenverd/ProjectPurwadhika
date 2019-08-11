@@ -99,15 +99,21 @@ class productDetails extends React.Component{
         }
 
         var newcart = this.props.userdata.CART
+
+        // NAMBAH PROPERTY TOTALPRICE DAN QTY KEDALAM CART
         item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
         
 
         // COUNTING DUPLICATE ITEMS
         var exist = false
+        var updatedqty = 0
         console.log(newcart)
         newcart.forEach(itemprop => {
             if(item.name === itemprop.name){
                 itemprop.qty = itemprop.qty + item.qty
+
+                updatedqty = itemprop.qty // take the updated qty for update in sql
+
                 itemprop.totalprice = itemprop.totalprice + item.totalprice
                 exist = true
             }
@@ -116,7 +122,7 @@ class productDetails extends React.Component{
             newcart.push(item)
             this.props.addItemCart(newcart)
 
-
+            // SQL INSERT (Coz New)
             Axios.post(URLAPI+'/cart/addcart?user='+this.props.username, {
                 qty : this.state.jumlah,
                 productid : this.props.location.search.replace("?pid=", "")
@@ -133,15 +139,19 @@ class productDetails extends React.Component{
                 console.log(err)
             })
         }else{
-            this.props.addItemCart(newcart)
-            Axios.post(URLAPI+'/cart/addcart?user='+this.props.username, {
-                qty : this.state.jumlah,
+
+            // SHOULD BE SQL UPDATE , WHERE USERID & PRODUCT ID 
+        
+            this.props.addItemCart(newcart) // sama aja krn redux diupdate seluruh isi cart
+
+            //SQL UPDATE
+            Axios.post(URLAPI + '/cart/updatecart', {
+                qtyupdated : updatedqty,
+                userid : this.props.userdata.userid ,
                 productid : this.props.location.search.replace("?pid=", "")
             })
             .then((res)=>{
-              
-                // OPEN MODAL NOTIFICATION
-                
+                console.log("Berhasil update cart")
                 this.setState({
                     modalOpen : true
                 })
@@ -149,6 +159,7 @@ class productDetails extends React.Component{
             .catch((err)=>{
                 console.log(err)
             })
+
         }
 
         // ADD TO SQL DATABASE CART

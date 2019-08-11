@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router'
 import Footer from './../components/footer';
+import { connect } from 'react-redux'
 
 
 class CreateStore extends React.Component{
@@ -45,7 +46,7 @@ class CreateStore extends React.Component{
       
 
     render(){
-        if(this.state.redirect === true){
+        if(this.state.redirect === true || this.props.userdata.HAVESHOP === true){
             return ( 
                 <Redirect to="/userstore"> </Redirect>
             )
@@ -84,4 +85,10 @@ class CreateStore extends React.Component{
     }
 }
 
-export default CreateStore;
+const mapStateToProps= (state)=>{
+    return{ 
+      userdata : state.userdata,
+    }
+}
+
+export default connect(mapStateToProps, null)(CreateStore);

@@ -5,6 +5,7 @@ import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import Footer from './../components/footer';
+import { connect } from 'react-redux'
 
 
 
@@ -248,4 +249,10 @@ class userStore extends React.Component{
     }
 }
 
-export default userStore;
+const mapStateToProps= (state)=>{
+    return{ 
+      userdata : state.userdata,
+    }
+}
+
+export default connect(mapStateToProps, null)(userStore);

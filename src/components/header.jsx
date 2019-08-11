@@ -111,11 +111,16 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
                   
                         {/* <DropdownItem> */}
                         <DropdownItem  style={{padding : "0px", border : "none", background : "transparent"}}>
-                             <Link  to="/createstore" style={{color : "white", border : "none"}}   onClick={()=>this.closeNav()} className="navbartext form-control bg-danger text-center mb-2">
-                               
-                               Create your Store
-                              
+                              {this.props.userdata.HAVESHOP === true
+                               ? 
+                             <Link  to="/userstore" style={{color : "white", border : "none"}}   onClick={()=>this.closeNav()} className="navbartext form-control bg-info text-center mb-2">
+                               Your Store
                               </Link>
+                              :
+                              <Link  to="/createstore" style={{color : "white", border : "none"}}   onClick={()=>this.closeNav()} className="navbartext form-control bg-danger text-center mb-2">
+                               Create your Store
+                              </Link>
+                              }
                               </DropdownItem>
                          
                          
@@ -185,7 +190,7 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
           
            
            <div className="navbartext">
-              {console.log(this.props.data)}
+              {console.log(this.props.userdata)}
              <Link to='/usercart'>
              <div className="cartnum">{this.props.usercartlen}</div>
              <FontAwesomeIcon size="2x"  icon={faShoppingCart} style={{color : "#c02c3a"}}>
@@ -209,7 +214,7 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
 const mapStateToProps= (state)=>{
   return{ 
       username : state.userdata.USERNAME,
-      data : state.userdata,
+      userdata : state.userdata,
       usercartlen : state.userdata.CARTLEN
   }
 }

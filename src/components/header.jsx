@@ -17,6 +17,7 @@ import { logoutUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
+import { URLAPI } from '../redux/actions/types';
 
 
 
@@ -43,7 +44,8 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
   }
   render() {
     return (
-      <div className="navbarheader">
+      <div className="navbarheader d-flex flex-column">
+        <div>
         <Navbar  style={{backgroundColor : "#1f2533"}}  fixed dark expand="md">
           <Link to="/" className="navbartext">
           <NavbarBrand  className="navbartext mr-5">
@@ -51,47 +53,10 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
           </NavbarBrand>
           </Link>
           <NavbarToggler onClick={this.toggle} />
-         
-         {/* <NavItem>
-          <center>
-          <div className="d-flex flex-row justify-content-center" >
-                    <input type="text" className="form-control form-control text-center" placeholder="Search Items.." style={{ alignSelf: "center", borderRadius : "3px", width : "750px"}}></input>
-                    <div  className="btn"  style={{height : "40px", width : "100px", backgroundColor : "black", fontWeight : "bolder", color : "white"}}>
-                      <FontAwesomeIcon size="1x"  icon={faSearch} style={{color : "white"}}>
-             
-                      </FontAwesomeIcon>
-                    </div>
-          </div>
-          </center>
-          </NavItem>  */}
+       
         
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              {/* <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem className="navbartext pt-2">
-                GitHub
-              </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    Option 1
-                  </DropdownItem>
-                  <DropdownItem>
-                    Option 2
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    Reset
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown> */}
-    
-           
             </Nav>
             {this.props.username === '' 
               ?
@@ -205,6 +170,24 @@ import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
           </Collapse>
           
         </Navbar>
+        </div>
+        
+        {/* <div>
+
+        
+          <center>
+          <div className="d-flex flex-row justify-content-center p-2" >
+                    <input type="text" className="form-control form-control text-center" placeholder="Search Items.." style={{ alignSelf: "center", borderRadius : "3px", width : "750px"}}></input>
+                    <div  className="btn"  style={{height : "40px", width : "100px", backgroundColor : "black", fontWeight : "bolder", color : "white"}}>
+                      <FontAwesomeIcon size="1x"  icon={faSearch} style={{color : "white"}}>
+             
+                      </FontAwesomeIcon>
+                    </div>
+          </div>
+          </center>
+      
+
+        </div> */}
         
       </div>
     );

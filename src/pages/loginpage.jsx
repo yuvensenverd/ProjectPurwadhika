@@ -81,9 +81,7 @@ class LoginPage extends React.Component{
     log = (username, password) => {
       var data = {
         USERNAME : username,
-        PASSWORD : password,
-        ROLE : 'user',
-     
+        PASSWORD : password
       }
 
       this.props.loginUser(data)

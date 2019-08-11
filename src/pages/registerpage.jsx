@@ -22,7 +22,7 @@ class registerPage extends React.Component{
       
     }
 
-
+    // MAP, RETURN ITEM = {nama : val.nama}
     getDataProvince = () =>{
       Axios.get(GETTOKENURL)
       .then((res)=>{

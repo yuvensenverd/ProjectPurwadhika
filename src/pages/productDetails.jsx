@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { URLAPI } from '../redux/actions/types';
+import { Redirect } from 'react-router'
+import { isNull } from 'util';
 
 
 class productDetails extends React.Component{
@@ -21,7 +23,8 @@ class productDetails extends React.Component{
         totalprice : 0,
         productdetail : [],
         message : "",
-        modalOpen : false
+        modalOpen : false,
+        redirect : false
         // productid : null
     }
     
@@ -40,7 +43,7 @@ class productDetails extends React.Component{
         }else {
             console.log("Product Not Found")
         }
-        console.log(this.props.username)
+     
    
       
     }
@@ -96,6 +99,12 @@ class productDetails extends React.Component{
         // USERNAME = THIS.props.userdata.username
         if(this.state.jumlah === 0){
             return window.alert("Quantity must be atleast 1!")
+        }
+        if(this.props.userdata.USERNAME === ""){
+            this.setState({
+                redirect : true
+            })
+            return window.alert("Login First before proceed to buy items")
         }
 
         var newcart = this.props.userdata.CART
@@ -170,18 +179,23 @@ class productDetails extends React.Component{
 
     }
 
+    goBack = () => {
+        window.history.back();
+    }
+
     printProductDetails = () =>{
         if(this.state.productdetail.length === 1){ 
             return (
                 <div className="p-t-100">
-                
-                         <div >
-                            <Link to="/product" className="d-flex flex-row mb-4">
-                                <FontAwesomeIcon size="2x"  icon={faBackward} style={{color : "#c02c3a"}}>  
+                    {/* <div>
+                         <div  className="btn btn-danger badge badge-pill d-flex flex-row mb-4 p-2" onClick={()=>this.goBack()} style={{width : "150px"}}>
+                          
+                                <FontAwesomeIcon size="2x"  icon={faBackward} style={{color : "white"}}>  
                                 </FontAwesomeIcon>
-                                <div className="subtitletext ml-4 pb-2 " style={{fontSize : "22px"}}>Back</div>
-                            </Link>
+                                <div className="subtitletext ml-4 pb-2 "  style={{fontSize : "22px"}}>Back</div>
+                        
                         </div>
+                </div> */}
                         <div className="badge badge-pill badge-secondary mb-4" style={{fontSize : "30px"}}>{this.state.productdetail[0].shopname}</div>
                 <div className="row ">
                         
@@ -240,7 +254,7 @@ class productDetails extends React.Component{
     }
 
     calculateTotal = () => {
-        this.setState((state) => ({
+        this.setState((state) => ({ // TAKE state parameter so the totalprice is updated (syncronously)
             totalprice : state.jumlah *  state.price
         }));
     }
@@ -250,6 +264,12 @@ class productDetails extends React.Component{
         )
     }
     render(){
+        if(this.state.redirect === true){
+            return (
+                <Redirect to="/login"></Redirect>
+            )
+    
+        }
      
         return(
             <div>

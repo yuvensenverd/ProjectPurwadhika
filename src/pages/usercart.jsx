@@ -21,6 +21,7 @@ class UserCart extends React.Component{
         
     }
 
+    // Get user cart data from database
     getItemCartUser = () => {
      
         if(this.props.username !== "" && this.state.finishload === false){
@@ -42,9 +43,10 @@ class UserCart extends React.Component{
         
     }
 
+
+    // Add item in usercart page
     addQty = (index) => {
-        console.log(index)
-        console.log(this.state.cart_user[index].qty)
+
         if(this.state.cart_user[index].qty !== 0){
             this.state.cart_user[index].qty = this.state.cart_user[index].qty +1
         }
@@ -55,8 +57,7 @@ class UserCart extends React.Component{
     }
 
     minQty = (index) => {
-        console.log(index)
-        console.log(this.state.cart_user[index].qty)
+ 
         if(this.state.cart_user[index].qty !== 0){
             this.state.cart_user[index].qty = this.state.cart_user[index].qty -1
         }
@@ -71,7 +72,7 @@ class UserCart extends React.Component{
 
 
     printCartSummary = () =>{
-       
+            // Print user cart table when loading is finished
             if(this.state.finishload === true) {
 
                 var output = this.state.cart_user.map((item, index)=>{
@@ -131,7 +132,7 @@ class UserCart extends React.Component{
                 })
             }
            
-            console.log(this.state.totalprice)
+          
         }
     }
 

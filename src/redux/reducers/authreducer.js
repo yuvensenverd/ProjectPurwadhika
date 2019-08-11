@@ -10,7 +10,10 @@ const Initial_state =
   CART : [], // ANOTHER DISPATCH THAT TAKES CART ITEMS FROM SQL
   CARTLEN : 0, // LENGTH DARI CART
   userid : null  ,
-  HAVESHOP : false
+  HAVESHOP : false,
+  SALDO : null,
+  PHONENUMBER : null,
+  RESIDENCE : ""
 }
 
 export default(state = Initial_state, action)=>{
@@ -20,13 +23,13 @@ export default(state = Initial_state, action)=>{
             localStorage.setItem('username', action.payload[0].username)
             localStorage.setItem('password', action.payload[0].password)
     
-            console.log(action.payload[0])
-            console.log(!isNull(action.payload[0].shopname))
+    
             // return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
             // ROLE : action.payload.userrole, CARTLEN : action.payload.cartlength}
             return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password,
                     ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength ,
-                     userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname)}
+                     userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
+                    SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber, RESIDENCE : action.payload[0].residence}
         case LOGOUT :
             localStorage.removeItem('username')
             localStorage.removeItem('password')
@@ -36,8 +39,7 @@ export default(state = Initial_state, action)=>{
             // console.log(action.payload)
             // var newcart = state.CART
             // newcart.push(action.payload)
-            console.log(action.payload)
-            console.log(action.payload.length)
+      
             
             return {...state,CARTLEN : action.payload.length, CART: action.payload}
         default : 

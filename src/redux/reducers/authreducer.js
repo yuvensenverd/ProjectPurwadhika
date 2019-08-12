@@ -13,7 +13,8 @@ const Initial_state =
   HAVESHOP : false,
   SALDO : null,
   PHONENUMBER : null,
-  RESIDENCE : ""
+  RESIDENCE : "",
+  EMAIL : ""
 }
 
 export default(state = Initial_state, action)=>{
@@ -29,7 +30,8 @@ export default(state = Initial_state, action)=>{
             return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password,
                     ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength ,
                      userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
-                    SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber, RESIDENCE : action.payload[0].residence}
+                    SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
+                     RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email}
         case LOGOUT :
             localStorage.removeItem('username')
             localStorage.removeItem('password')

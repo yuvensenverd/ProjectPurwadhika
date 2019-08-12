@@ -86,7 +86,7 @@ class productDetails extends React.Component{
             this.setState({
                 message : "Product Loading Error..."
             })
-            console.log(err.response.data)
+            console.log(err)
         })
     }
 

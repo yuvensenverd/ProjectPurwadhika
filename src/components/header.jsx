@@ -26,6 +26,8 @@ import { URLAPI } from '../redux/actions/types';
     super(props);
     this.closeNav = this.closeNav.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
     this.state = {
       isOpen: false
     };
@@ -36,6 +38,15 @@ import { URLAPI } from '../redux/actions/types';
       isOpen: !this.state.isOpen
     });
   }
+
+  onMouseEnter() {
+    this.setState({dropdownOpen: true});
+  }
+
+  onMouseLeave() {
+    this.setState({dropdownOpen: false});
+  }
+
   closeNav = () =>{
   
     this.setState({
@@ -63,10 +74,13 @@ import { URLAPI } from '../redux/actions/types';
               null
             :
               <div className="p-0">
-              <UncontrolledDropdown   nav inNavbar >
+              <UncontrolledDropdown  onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.toggle} nav inNavbar >
+             
                 <DropdownToggle className="navbartext pt-1 mr-3" style={{fontWeight : "bolder", fontSize : '15px'}} nav caret>
-                {"Welcome, "+ this.props.username }
+
+                <Link to="/editprofile" className="navbartext">{"Welcome, "+ this.props.username }     </Link>
                 </DropdownToggle>
+           
 
                 <div className="fixednav p-0">
                 <DropdownMenu className="navbartext pt-1 "  style={{backgroundColor : "transparent", color : "black", width : "600px", border:"none"}} right> 
@@ -98,7 +112,7 @@ import { URLAPI } from '../redux/actions/types';
                             Avatar
                           </div>
                           <div>
-                            <img className="storeimage" src="https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png" height="100px"></img>
+                            <img className="storeimage" src="https://cdn3.iconfinder.com/data/icons/users-6/100/654853-user-men-2-512.png" height="100px"></img>
                             </div>
                         </div>
                         <div className="col-md-8 subtitletext p-0" style={{fontSize : "15px"}}>

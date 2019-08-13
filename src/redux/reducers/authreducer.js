@@ -14,7 +14,8 @@ const Initial_state =
   SALDO : null,
   PHONENUMBER : null,
   RESIDENCE : "",
-  EMAIL : ""
+  EMAIL : "",
+  PROFILEIMG : ''
 }
 
 export default(state = Initial_state, action)=>{
@@ -31,7 +32,7 @@ export default(state = Initial_state, action)=>{
                     ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength ,
                      userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
                     SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
-                     RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email}
+                     RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email, PROFILEIMG :action.payload[0].profileimg}
         case LOGOUT :
             localStorage.removeItem('username')
             localStorage.removeItem('password')

@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
 
-
+// NANTI KALAU ADD PRODUCT DI LOOPING 
 
 
 

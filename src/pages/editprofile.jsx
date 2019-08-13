@@ -9,7 +9,8 @@ class editProfile extends React.Component{
         modalOpen : false,
         //Change Residence
         modalOpenResidence : false,
-        province : []
+        province : [],
+        imageFile : null
     }
 
     
@@ -38,26 +39,26 @@ class editProfile extends React.Component{
         })
       }
 
-    getProfile = () => {
+    // getProfile = () => {
 
-        // if(this.props.userdata.username !== "" & this.state.loading === false){
-        //     console.log("Masuk")
-        //     Axios.post(URLAPI + '/user/getprofile', {
-        //         id : this.props.userdata.userid
-        //     })
-        //     .then((res)=>{
-        //         console.log("Selesai gEt")
-        //         this.setState({
-        //             userprofile : res.data,
-        //             loading : true
-        //         })
-        //         console.log(res.data)
-        //     })
-        //     .catch((err)=>{
-        //         console.log(err)
-        //     })
-        // }
-    }
+    //     // if(this.props.userdata.username !== "" & this.state.loading === false){
+    //     //     console.log("Masuk")
+    //     //     Axios.post(URLAPI + '/user/getprofile', {
+    //     //         id : this.props.userdata.userid
+    //     //     })
+    //     //     .then((res)=>{
+    //     //         console.log("Selesai gEt")
+    //     //         this.setState({
+    //     //             userprofile : res.data,
+    //     //             loading : true
+    //     //         })
+    //     //         console.log(res.data)
+    //     //     })
+    //     //     .catch((err)=>{
+    //     //         console.log(err)
+    //     //     })
+    //     // }
+    // }
 
     closeModal = () =>{
         this.setState({
@@ -65,10 +66,13 @@ class editProfile extends React.Component{
         })
     }
 
-    previewFile = () => {
+    previewFile = (event) => {
         var preview = document.getElementById('imgpreview')
         var file    = document.getElementById('imgprofileinput').files[0];
-   
+        console.log(event.target.files[0])
+
+        var imgfile = event.target.files[0]
+
        
         var reader  = new FileReader();
       
@@ -78,27 +82,63 @@ class editProfile extends React.Component{
       
         if (file) {
           reader.readAsDataURL(file);
+          this.setState({
+              imageFile : imgfile
+          })
+          console.log("image terisi")
         } else {
           preview.src = "";
+          this.setState({
+            imageFile : null
+        })
+        console.log("balik state null")
         }
       }
 
+    onClickSaveImage = () => {
+        if(this.state.imageFile){
+            var formData = new FormData()
+            var headers ={
+                headers : 
+                {'Content-Type' : 'multipart/form-data'}
+            }
+            console.log(this.state.imageFile)
+
+            var data = {
+                userid : this.props.userdata.userid
+            }
+
+            formData.append('image', this.state.imageFile)
+            formData.append('data', JSON.stringify(data))
+            
+
+            // AXIOS POST
+            Axios.post(URLAPI+'/user/saveprofile',formData, headers )
+            .then((res)=>{
+                console.log("Berhasil update")
+            })
+            .then((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
     printProfile = () => {
         if(this.props.userdata.USERNAME !== ""){
-            console.log(this.props.userdata.EMAIL)
-
+        
                 return(
     
                 <div className="mycontainer p-t-100">
                     
                 <div className="row border border-secondary ">
                    
-                    <div className="col-md-3 " style={{height : "400px"}}>
+                    <div className="col-md-3" style={{height : "400px"}}>
                         
-                        <center><h3 className="mb-3 mt-3">Your Avatar</h3></center>
+                        <center><h3 className="mb-3 mt-3">Your Avatar Preview</h3></center>
                        
-                        <img id="imgpreview" className="rounded-circle mb-4 mt-5 text-center ml-5 " src="https://cdn3.iconfinder.com/data/icons/users-6/100/654853-user-men-2-512.png" width="150px" height="150px"></img>
-                        <input type="file" className="mt-5 btn " id="imgprofileinput" style={{width : "250px", color : "white", backgroundColor : "black"}} onChange={() => this.previewFile()}></input>
+                        <img id="imgpreview" className="rounded-circle mb-4 mt-5 text-center m-l-85 " src={URLAPI+this.props.userdata.PROFILEIMG} width="150px" height="150px"></img>
+                        <input type="file" className="mt-5 mb-5 btn " id="imgprofileinput" style={{ color : "white", backgroundColor : "black"}} onChange={this.previewFile}></input>
+                        <input type="button" className="btn btn-success navbartext form-control" value="SAVE AVATAR" onClick={()=>this.onClickSaveImage()}/>
                     </div>
                     <div className="col-md-9 pl-5 pt-2">
                         

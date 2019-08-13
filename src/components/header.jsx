@@ -17,7 +17,8 @@ import { logoutUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPICT } from '../redux/actions/types';
+import numeral from 'numeral'
 
 
 
@@ -112,12 +113,19 @@ import { URLAPI } from '../redux/actions/types';
                             Avatar
                           </div>
                           <div>
-                            <img className="storeimage" src="https://cdn3.iconfinder.com/data/icons/users-6/100/654853-user-men-2-512.png" height="100px"></img>
+                            <img className="storeimage" 
+                            src={this.props.userdata.PROFILEIMG
+                              ?
+                              URLAPI+this.props.userdata.PROFILEIMG
+                              :
+                              URLAPI+PATHDEFAULTPICT} 
+                            height="100px">
+                            </img>
                             </div>
                         </div>
                         <div className="col-md-8 subtitletext p-0" style={{fontSize : "15px"}}>
                             <div className="mb-2 text-light">{this.props.username}</div>
-                            <div  className="mb-2 text-light"> Balance : Rp 0,00</div>
+                            <div  className="mb-2 text-light"> {"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)}</div>
                             <Link to="/editprofile" className="subtitletext">
                             <DropdownItem  style={{padding : "0px", border : "none"}}>
                             <div className="text-light"><input type="button" className="btn btn-success form-control" value="Edit Profile"/></div>

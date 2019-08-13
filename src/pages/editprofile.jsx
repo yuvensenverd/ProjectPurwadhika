@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Axios from 'axios';
-import { URLAPI, GETTOKENURL, APIWILAYAHURL } from '../redux/actions/types';
+import { URLAPI, GETTOKENURL, APIWILAYAHURL, PATHDEFAULTPICT } from '../redux/actions/types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
+import { updateUser } from '../redux/actions/index'
 class editProfile extends React.Component{
     state = { 
         modalOpen : false,
@@ -116,8 +116,12 @@ class editProfile extends React.Component{
             Axios.post(URLAPI+'/user/saveprofile',formData, headers )
             .then((res)=>{
                 console.log("Berhasil update")
+                console.log(res.data) // array of object
+                
+                this.props.updateUser(res.data[0]) 
+                return window.alert("Image Avatar Berhasil Diubah")
             })
-            .then((err)=>{
+            .catch((err)=>{
                 console.log(err)
             })
         }
@@ -136,7 +140,14 @@ class editProfile extends React.Component{
                         
                         <center><h3 className="mb-3 mt-3">Your Avatar Preview</h3></center>
                        
-                        <img id="imgpreview" className="rounded-circle mb-4 mt-5 text-center m-l-85 " src={URLAPI+this.props.userdata.PROFILEIMG} width="150px" height="150px"></img>
+                        <img id="imgpreview" className="rounded-circle mb-4 mt-5 text-center m-l-85 "
+                         src={this.props.userdata.PROFILEIMG ? 
+                            URLAPI+this.props.userdata.PROFILEIMG
+                            :
+                           URLAPI+PATHDEFAULTPICT
+                        } width="150px" height="150px">
+
+                        </img>
                         <input type="file" className="mt-5 mb-5 btn " id="imgprofileinput" style={{ color : "white", backgroundColor : "black"}} onChange={this.previewFile}></input>
                         <input type="button" className="btn btn-success navbartext form-control" value="SAVE AVATAR" onClick={()=>this.onClickSaveImage()}/>
                     </div>
@@ -264,4 +275,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, null)(editProfile);
+export default connect(mapStateToProps, {updateUser})(editProfile);

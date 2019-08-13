@@ -28,8 +28,9 @@ export default(state = Initial_state, action)=>{
     
             // return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
             // ROLE : action.payload.userrole, CARTLEN : action.payload.cartlength}
+            // HAPUS CARTLENGTH TD
             return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password,
-                    ROLE : action.payload[0].userrole, CARTLEN : action.payload[0].cartlength ,
+                    ROLE : action.payload[0].userrole,
                      userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
                     SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
                      RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email, PROFILEIMG :action.payload[0].profileimg}
@@ -45,8 +46,15 @@ export default(state = Initial_state, action)=>{
       
             
             return {...state,CARTLEN : action.payload.length, CART: action.payload}
+        case  "UPDATE_USER":
+            return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
+                ROLE : action.payload.userrole, 
+                 userid : action.payload.userid, HAVESHOP : !isNull(action.payload.shopname),
+                SALDO : parseInt(action.payload.saldo), PHONENUMBER : action.payload.phonenumber,
+                 RESIDENCE : action.payload.residence, EMAIL : action.payload.email, PROFILEIMG :action.payload.profileimg}
+            
         default : 
-                console.log("default")
+            console.log("default")
             return state
     }
 }

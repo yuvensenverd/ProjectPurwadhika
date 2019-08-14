@@ -82,7 +82,7 @@ class UserCart extends React.Component{
                             <div className="subtitletext">{item.shopname}</div>
                             <div className="row">
                                 <div className="col-md-2">
-                                    <img src={item.image} alt="item image" width="100%" height="100%"/>
+                                    <img src={item.image_id} alt="item image" width="100%" height="100%"/>
                                 </div>
                                 <div className="col-md-9">
                                     <div className="row">

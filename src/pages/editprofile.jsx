@@ -2,15 +2,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI, GETTOKENURL, APIWILAYAHURL, PATHDEFAULTPICT } from '../redux/actions/types';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { updateUser } from '../redux/actions/index'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {Link} from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+
 class editProfile extends React.Component{
     state = { 
         modalOpen : false,
         //Change Residence
         modalOpenResidence : false,
         province : [],
-        imageFile : null
+        imageFile : null,
+        avatarChangeModal : false
     }
 
     
@@ -104,22 +109,24 @@ class editProfile extends React.Component{
             }
             console.log(this.state.imageFile)
 
-            var data = {
+            var data = { 
                 userid : this.props.userdata.userid
             }
 
-            formData.append('image', this.state.imageFile)
+            formData.append('image', this.state.imageFile) 
             formData.append('data', JSON.stringify(data))
             
 
-            // AXIOS POST
+            // AXIOS >> Update Path Image if image exist, Write path 
             Axios.post(URLAPI+'/user/saveprofile',formData, headers )
             .then((res)=>{
                 console.log("Berhasil update")
                 console.log(res.data) // array of object
                 
-                this.props.updateUser(res.data[0]) 
-                return window.alert("Image Avatar Berhasil Diubah")
+                this.props.updateUser(res.data[0]) // UPDATE DATA TERBARU
+                this.setState({
+                    avatarChangeModal : true
+                })
             })
             .catch((err)=>{
                 console.log(err)
@@ -145,9 +152,10 @@ class editProfile extends React.Component{
                             URLAPI+this.props.userdata.PROFILEIMG
                             :
                            URLAPI+PATHDEFAULTPICT
-                        } width="150px" height="150px">
+                        } width="150px" height="150px" alt="avatar image"/>
+                            
 
-                        </img>
+                        
                         <input type="file" className="mt-5 mb-5 btn " id="imgprofileinput" style={{ color : "white", backgroundColor : "black"}} onChange={this.previewFile}></input>
                         <input type="button" className="btn btn-success navbartext form-control" value="SAVE AVATAR" onClick={()=>this.onClickSaveImage()}/>
                     </div>
@@ -256,6 +264,27 @@ class editProfile extends React.Component{
                                     <input type="button" className="btn btn-success navbartext" value="CHANGE"/>
                                 </div>
                             </center>
+                        </ModalFooter>
+                </Modal>
+
+                {/* USER AVATAR SUCCESS */}
+                <Modal isOpen={this.state.avatarChangeModal} toggle={()=>this.setState({avatarChangeModal : false})} size="lg" style={{maxWidth: '800px', position : 'absolute', top : '20%', left : '40%'}}>
+                        <ModalHeader>
+                            <div className="subtitletext text-center p-l-10" style={{fontSize : "26px"}}>Avatar Has Been Updated!</div>
+                        </ModalHeader>
+                        <ModalBody >
+                                <center>
+                                <FontAwesomeIcon size="5x"  icon={faCheckCircle} style={{color : "red"}}>  
+                                </FontAwesomeIcon>
+                                </center>
+                        </ModalBody>
+                        <ModalFooter>
+                                <Link to="/">
+                                <input type="button" value="Go to Homepage" className="btn btn-danger btn-lg navbartext" />
+                                </Link>
+                          
+                                <input type="button" value="Stay this page" className="btn btn-info btn-lg navbartext" onClick={()=>this.setState({avatarChangeModal : false})}/>
+                              
                         </ModalFooter>
                 </Modal>
 

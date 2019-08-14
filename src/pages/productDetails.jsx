@@ -241,7 +241,7 @@ class productDetails extends React.Component{
                      <div className=" p-5">
                      {/* <div className="mb-4"><h1>Product Description</h1></div>
                      <div className="subtitletext" style={{fontSize : "17px"}}>  ayayayayasdfasdf</div> */}
-                     <Tab datatabone={this.state.productdetail[0].desc} datatabtwo={this.state.productdetail[0].shopdesc}></Tab>
+                     <Tab datatabone={this.state.productdetail[0].description} datatabtwo={this.state.productdetail[0].shopdesc}></Tab>
                     </div>
                     </div>
             )

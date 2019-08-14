@@ -1,11 +1,14 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
+import Axios from 'axios';
+import { URLAPI } from '../redux/actions/types';
+import numeral from 'numeral'
 
 // NANTI KALAU ADD PRODUCT DI LOOPING 
 
@@ -16,7 +19,77 @@ import { connect } from 'react-redux'
 class userStore extends React.Component{
     state = {
         modalOpen : false,
-        imagenum : [true]
+        imagenum : [true],
+        userStore : [],
+        storeProduct : [],
+        categorylist : []
+    }
+
+    componentDidMount(){
+        // KETIKA MASUK LEWAT LINK
+        this.getCategoryList()
+        this.getStoreInfo()
+        this.getProductStore()
+    }
+
+    componentWillReceiveProps(){
+        console.log("MASUK")
+        // KETIKA RELOG f5
+        this.getStoreInfo()
+        this.getProductStore()
+        
+    }
+    getCategoryList = () =>{
+        Axios.get(URLAPI + '/category/getcategory')
+        .then((res)=>{
+            this.setState({
+                categorylist : res.data
+            })
+         
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+
+    getStoreInfo = () => {
+        
+        if(this.props.userdata.userid){
+            console.log(this.props.userdata.userid)
+            Axios.get(URLAPI+'/shop/getshopinfo/'+this.props.userdata.userid)
+            .then((res)=>{
+                console.log(res.data)
+                this.setState({
+                    userStore : res.data
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+    getProductStore = () => {
+        
+        if(this.props.userdata.userid){
+            console.log(this.props.userdata.userid)
+            Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid)
+            .then((res)=>{
+                console.log(res.data)
+                this.setState({
+                    storeProduct : res.data
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
+    modalOpen =()=>{
+        this.setState({
+            modalOpen :true,
+        
+        })
     }
 
     closeModal = () =>{
@@ -26,6 +99,93 @@ class userStore extends React.Component{
             
          
         })
+    }
+
+    
+
+    renderCategoryList = () =>{
+        if(this.state.categorylist.length === 0 ){
+            return (
+              <option value="" disabled selected hidden>Loading...</option>
+            )
+          }else{
+            var list = this.state.categorylist.map((val)=>{
+              return (
+                  <option value={val.name}> {val.name} </option>
+              )
+          })
+          
+          return list 
+          }
+    }
+
+    renderShopHeader = () => {
+        if(this.state.userStore.length !== 0 ){
+            return (
+                <div className="storecard p-3 mb-5">
+                    <div className="row">
+                        <div className="col-md-1 p-0" >
+                            <img src='https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png' alt="userprofile" className="storeimage"/>
+                        </div>
+                        <div className="col-md-3 subtitletext text-center" style={{paddingTop : "28px"}}>
+                            <div className="mb-2">{this.state.userStore[0].name}</div>
+                            <div style={{fontSize : "14px"}}>
+                                <FontAwesomeIcon size="1x"  icon={faQuoteLeft} />
+                                &nbsp;&nbsp; {this.state.userStore[0].description} &nbsp;&nbsp;
+                                <FontAwesomeIcon size="1x"  icon={faQuoteRight}/>
+                            </div>
+                        </div>
+                        <div className="col-md-3 subtitletext  p-3 text-center">
+                            <div className="mb-2"> <FontAwesomeIcon size="2x"  icon={faHourglassHalf} ></FontAwesomeIcon></div>
+                            <Link to="/userhistory">
+                            <input type="button" className="btn form-control btn-primary navbartext" value="$ Transaction "/>
+                            </Link>
+                        </div>
+                        <div className="col-md-1 subtitletext  p-3">
+                        
+                        </div>
+                        <div className="col-md-2 subtitletext  text-center p-3"style={{fontSize : "17px"}}>
+                        <div className="mb-2"><FontAwesomeIcon size="2x"  icon={faLuggageCart} ></FontAwesomeIcon></div>
+                            <div className="mb-1" style={{color : '#83897D'}} > No. of Product</div>
+                            <div> {this.state.storeProduct.length} </div>
+                        </div>
+                        <div className="col-md-2 subtitletext  text-center p-3"style={{fontSize : "17px"}}>
+                        <div className="mb-2"><FontAwesomeIcon size="2x"  icon={faStoreAlt} ></FontAwesomeIcon></div>
+                            <div className="mb-1" style={{color : '#83897D'}}> Product Sold</div>
+                            <div> 0 </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    // RENDER TABLE PRODUCT 
+
+    renderProductTable = () =>{
+    
+        console.log(this.state.storeProduct.length)
+        if(this.state.storeProduct.length !== 0){
+            var jsx = this.state.storeProduct.map((prd, i)=>{
+                return(
+                    <tr>
+                        <th scope="row">{i+1}</th>
+                        <td>
+                            <img src="" alt=""></img>
+                        </td>
+                        <td>{prd.name}</td>
+                        <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
+                        <td>{prd.cat}</td>
+                        <td>{prd.rating+"/5"}</td>
+                        <td>
+                            <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
+                            <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
+                        </td>
+                    </tr>
+                )
+            })
+            return jsx
+        }
     }
 
     previewFile = (index) => {
@@ -63,7 +223,7 @@ class userStore extends React.Component{
             return (
                 <div>
                     <div>
-                    <input type="file" id={`productimage${index + 1}`} className="form-control form-control-lg mb-3 " onChange={() => this.previewFile(index+1)}/>
+                    <input type="file" id={`productimage${index + 1}`} ref={"prdimg"+(index+1)} className="form-control form-control-lg mb-3 " onChange={() => this.previewFile(index+1)}/>
                     </div>
                     <img id={`primg${index + 1}`} src="#" alt="image preview" height="100" />    
                 </div>
@@ -81,12 +241,47 @@ class userStore extends React.Component{
     
     }
 
-    modalOpen =()=>{
-        this.setState({
-            modalOpen :true,
+    onClickAddProduct = () =>{
+        var name = this.refs.prdname.value
+        var price = this.refs.prdprice.value
+        var description = this.refs.prddesc.value
+        var cat_name = this.refs.prdgenre.value
+        var shop_id = this.state.userStore[0].userid
+        var image = document.getElementById('productimage1').files[0]
+        console.log(name, price, description, cat_name, shop_id)
+        console.log(image)
+        // IMG TO BE CONTINUED
         
-        })
+        var data = {
+            name,
+            price,
+            cat_name,
+            shop_id,
+            description,
+            rating : 5 //default rating
+        }
+        console.log(data)
+
+        if(image){
+            var formData = new FormData()
+            var headers ={
+                headers : 
+                {'Content-Type' : 'multipart/form-data'}
+            }
+            formData.append('image', image) 
+            formData.append('data', JSON.stringify(data))
+            console.log(formData)
+            Axios.post(URLAPI + '/product/addproduct', formData, headers)
+            .then((res)=>{
+                console.log(res.data)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
     }
+
+    
       
 
 
@@ -102,27 +297,25 @@ class userStore extends React.Component{
                             <div className="subtitletext mb-3">
                                 Product Name
                             </div>
-                            <input type="text" className="form-control form-control-lg mb-3 "/>
+                            <input type="text" ref="prdname" className="form-control form-control-lg mb-3 "/>
                             
                             <div className="subtitletext mb-3">
                                 Product Genre
                             </div>
-                            <select  className="mb-5" required id = "myList" ref="inputgenre" className="form-control mb-2" placeholder="Genre">
+                            <select  className="mb-5" required id = "myList" ref="prdgenre" className="form-control mb-2" placeholder="Genre">
                                     <option value="" disabled selected hidden>Choose Genre</option>
-                                    {/* function */}
+                                    {this.renderCategoryList()}
+                                    
                             </select>
                             <div className="subtitletext mb-3">
                                 Product Description
                             </div>
-                            <input type="text" className="form-control form-control-lg mb-3 "/>
+                            <input type="text" ref="prddesc" className="form-control form-control-lg mb-3 "/>
                             <div className="subtitletext mb-3">
                                 Product Price
                             </div>
-                            <input type="number" className="form-control form-control-lg mb-3 "/>
-                            <div className="subtitletext mb-3">
-                                No. of Product Stock Available
-                            </div>
-                            <input type="number" className="form-control form-control-lg mb-3 "/>
+                            <input type="number" ref="prdprice" className="form-control form-control-lg mb-3 "/>
+                     
                             <div className="subtitletext mb-3">
                                 Product Image (up to 5)
                             </div>
@@ -143,39 +336,10 @@ class userStore extends React.Component{
                         <ModalFooter>
 
                             <input type="button" className="btn btn-lg btn-danger navbartext mb-2 p-2" value=" - Cancel" onClick={()=>this.closeModal()}/>
-                            <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Submit Product" />
+                            <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Submit Product" onClick={()=>this.onClickAddProduct()}/>
                         </ModalFooter>
                     </Modal>
-                    <div className="storecard p-3 mb-5">
-                        <div className="row">
-                            <div className="col-md-1 p-0" >
-                                <img src='https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png' alt="userprofile" className="storeimage"/>
-                            </div>
-                            <div className="col-md-2 subtitletext text-center" style={{paddingTop : "28px"}}>
-                                <div className="mb-2">Store Name</div>
-                                <div style={{fontSize : "14px"}}><FontAwesomeIcon size="1x"  icon={faMapMarkerAlt} ></FontAwesomeIcon>&nbsp;&nbsp; Makassar, Indonesia</div>
-                            </div>
-                            <div className="col-md-2 subtitletext  p-3 text-center">
-                                <div className="mb-2"> <FontAwesomeIcon size="2x"  icon={faHourglassHalf} ></FontAwesomeIcon></div>
-                                <Link to="/userhistory">
-                                <input type="button" className="btn form-control btn-primary navbartext" value="$ Transaction "/>
-                                </Link>
-                            </div>
-                            <div className="col-md-3 subtitletext  p-3">
-                          
-                            </div>
-                            <div className="col-md-2 subtitletext  text-center p-3"style={{fontSize : "17px"}}>
-                            <div className="mb-2"><FontAwesomeIcon size="2x"  icon={faLuggageCart} ></FontAwesomeIcon></div>
-                                <div className="mb-1" style={{color : '#83897D'}} > No. of Product</div>
-                                <div> 0 </div>
-                            </div>
-                            <div className="col-md-2 subtitletext  text-center p-3"style={{fontSize : "17px"}}>
-                            <div className="mb-2"><FontAwesomeIcon size="2x"  icon={faStoreAlt} ></FontAwesomeIcon></div>
-                                <div className="mb-1" style={{color : '#83897D'}}> Product Sold</div>
-                                <div> 0 </div>
-                            </div>
-                        </div>
-                    </div>
+                    {this.renderShopHeader()}
                     <div>
                         <div>
                             <div  style={{float : "right"}}> 
@@ -189,19 +353,22 @@ class userStore extends React.Component{
                                 <th>Image</th>
                                 <th>Product Name</th>
                                 <th>Price</th>
-                                <th>Stock</th>
+                                <th>Categories</th>
+                                <th>Ratings</th>
                                 <th>Settings</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+                           
+                            {this.renderProductTable()}
+                            {/* <tr>
                                 <th scope="row">1</th>
                                 <td>
                                     <img src="" alt=""></img>
                                 </td>
                                 <td>Mark</td>
                                 <td>Otto</td>
-                                <td>@mdo</td>
+                         
                                 <td>
                                     <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
                                     <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
@@ -214,7 +381,7 @@ class userStore extends React.Component{
                                 </td>
                                 <td>Jacob</td>
                                 <td>Thornton</td>
-                                <td>@fat</td>
+                   
                                 <td>
                                     <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
                                     <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
@@ -227,12 +394,12 @@ class userStore extends React.Component{
                                 </td>
                                 <td>Larry</td>
                                 <td>the Bird</td>
-                                <td>@twitter</td>
+                           
                                 <td>
                                     <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
                                     <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
                                 </td>
-                            </tr>
+                            </tr> */}
                             </tbody>
                         </Table>
                         </div>
@@ -243,7 +410,7 @@ class userStore extends React.Component{
                         </div> */}
                     </div>
                 </div>
-                <Footer />
+                {/* <Footer /> */}
             </div>
         )
     }

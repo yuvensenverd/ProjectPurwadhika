@@ -125,7 +125,7 @@ class userStore extends React.Component{
                 <div className="storecard p-3 mb-5">
                     <div className="row">
                         <div className="col-md-1 p-0" >
-                            <img src='https://app.unbouncepreview.com/publish/assets/567d1d2a-99a8-4b43-ae7f-2e3eaa9fc929/116cead7-sqd-step1.png' alt="userprofile" className="storeimage"/>
+                            <img src={URLAPI + this.state.userStore[0].shopimage} alt="userprofile" className="storeimage"/>
                         </div>
                         <div className="col-md-3 subtitletext text-center" style={{paddingTop : "28px"}}>
                             <div className="mb-2">{this.state.userStore[0].name}</div>

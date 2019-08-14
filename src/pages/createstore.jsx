@@ -2,6 +2,8 @@ import React from 'react'
 import { Redirect } from 'react-router'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
+import Axios from 'axios';
+import { URLAPI } from '../redux/actions/types';
 
 
 class CreateStore extends React.Component{
@@ -12,17 +14,44 @@ class CreateStore extends React.Component{
     checkValidate =() =>{
         var name = this.refs.storename.value
         var description = this.refs.storedesc.value
-
-        console.log(name)
-        console.log(description)
+        var image = document.getElementById('inputfile').files[0]
         
+        var data = {
+            userid : this.props.userdata.userid,
+            name,
+            description
+        }
+        
+        if(image){
+
+            var formData = new FormData()
+            var headers ={
+                headers : 
+                {'Content-Type' : 'multipart/form-data'}
+            }
+    
+    
+            formData.append('image', image) 
+            formData.append('data', JSON.stringify(data))
+
+            Axios.post(URLAPI + '/shop/createshop', formData, headers)
+            .then((res)=>{
+                console.log(res.data)
+                this.setState({
+                    redirect : true
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
 
         // axios get localhost1998 /createshop?user=enverdliem
 
         // REDIRECT FALSE, USER INPUT ALL VALID
-        this.setState({
-            redirect : true
-        })
+        // this.setState({
+        //     redirect : true
+        // })
     }
 
      previewFile = () => {

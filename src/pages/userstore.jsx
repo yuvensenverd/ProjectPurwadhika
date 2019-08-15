@@ -221,11 +221,13 @@ class userStore extends React.Component{
 
             
             return (
-                <div>
-                    <div>
-                    <input type="file" id={`productimage${index + 1}`} ref={"prdimg"+(index+1)} className="form-control form-control-lg mb-3 " onChange={() => this.previewFile(index+1)}/>
+                <div className="col-md-2" >
+                    <div className="d-flex flex-column justify-content-center"> 
+                        <img id={`primg${index + 1}`} src="#" alt="image preview" height="250" />   
+                        <div>
+                            <input type="file" id={`productimage${index + 1}`} ref={"prdimg"+(index+1)} className="form-control form-control-lg mb-3 " onChange={() => this.previewFile(index+1)}/>
+                        </div> 
                     </div>
-                    <img id={`primg${index + 1}`} src="#" alt="image preview" height="100" />    
                 </div>
             )
             }
@@ -247,10 +249,24 @@ class userStore extends React.Component{
         var description = this.refs.prddesc.value
         var cat_name = this.refs.prdgenre.value
         var shop_id = this.state.userStore[0].userid
-        var image = document.getElementById('productimage1').files[0]
-        console.log(name, price, description, cat_name, shop_id)
-        console.log(image)
+
+        // Multiple Images
+        var images = []
+        for(var i = 0; i<this.state.imagenum.length-1; i++){
+            if(document.getElementById(`productimage${i+1}`).files[0]){
+                images.push(document.getElementById(`productimage${i+1}`).files[0])
+            }else{
+                
+            }
+        }
+        // var image = document.getElementById('productimage1').files[0]
+        // console.log(image)
+        // console.log(name, price, description, cat_name, shop_id)
+         // console.log(image)
         // IMG TO BE CONTINUED
+
+       // yang harus di push
+       
         
         var data = {
             name,
@@ -260,20 +276,27 @@ class userStore extends React.Component{
             description,
             rating : 5 //default rating
         }
-        console.log(data)
 
-        if(image){
+
+        if(images){
             var formData = new FormData()
             var headers ={
                 headers : 
                 {'Content-Type' : 'multipart/form-data'}
             }
-            formData.append('image', image) 
+            for(var y = 0; y<images.length; y++){
+                console.log(images[y])
+                console.log("Masuk images"+y)
+                formData.append('image', images[y]) 
+            }
             formData.append('data', JSON.stringify(data))
+            console.log(data)
             console.log(formData)
             Axios.post(URLAPI + '/product/addproduct', formData, headers)
             .then((res)=>{
                 console.log(res.data)
+                
+                return window.alert("Add Product Berhasil")
             })
             .catch((err)=>{
                 console.log(err)
@@ -319,8 +342,11 @@ class userStore extends React.Component{
                             <div className="subtitletext mb-3">
                                 Product Image (up to 5)
                             </div>
-                           
-                            {this.printInputFile()}
+
+                            <div className="row">
+
+                                {this.printInputFile()}
+                            </div>
                             {/* {this.state.imagenum.length === 1 
                             ?
                             <div>
@@ -339,6 +365,7 @@ class userStore extends React.Component{
                             <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Submit Product" onClick={()=>this.onClickAddProduct()}/>
                         </ModalFooter>
                     </Modal>
+                   
                     {this.renderShopHeader()}
                     <div>
                         <div>

@@ -79,10 +79,10 @@ class UserCart extends React.Component{
                   
                     return(
                         <div className="itemcart">
-                            <div className="subtitletext">{item.shopname}</div>
+                            <div className="subtitletext mb-3">{item.shopname}</div>
                             <div className="row">
                                 <div className="col-md-2">
-                                    <img src={item.image_id} alt="item image" width="100%" height="100%"/>
+                                    <img src={URLAPI+ item.images.split(',')[0]} alt="item image" width="100%" height="100%"/>
                                 </div>
                                 <div className="col-md-9">
                                     <div className="row">

@@ -70,9 +70,11 @@ class Slider extends Component {
           onExiting={this.onExiting}
           onExited={this.onExited}
           key={item.src}
+          style={{padding : '0px', margin : '0px', height : '100%', width : '100%'}}
         >
-          <img src={item.src} alt={item.altText} width="100%" height="330px"/>
-          <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
+          <img src={item.src} alt={item.altText} width="100%" height={this.props.slideheight}/> 
+          {/* FFULL HEIGHT DI PR PAGE JJADI 600px */}
+          {/* <CarouselCaption captionText={item.caption} captionHeader={item.caption} /> */}
         </CarouselItem>
         
         

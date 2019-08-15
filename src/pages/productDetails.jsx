@@ -13,6 +13,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { URLAPI } from '../redux/actions/types';
 import { Redirect } from 'react-router'
 import { isNull } from 'util';
+import Carousel from './../components/carousel'
 
 
 class productDetails extends React.Component{
@@ -199,8 +200,10 @@ class productDetails extends React.Component{
                         <div className="badge badge-pill badge-secondary mb-4" style={{fontSize : "30px"}}>{this.state.productdetail[0].shopname}</div>
                 <div className="row ">
                         
-                        <div className="col-md-5 border border-secondary">
-                            <img src="" alt="productimage" height="500px"></img>
+                        <div className="col-md-5 border border-secondary" style={{padding : '0px', margin : '0px'}}>
+                            {/* <img src={URLAPI+this.state.productdetail[0].images.split(',')[0]} alt="productimage" height="100%" width="100%" style={{padding : '0px', margin : '0px'}}/> */}
+                            <Carousel slideheight={'600px'}/>
+                            
                         </div>
                         <div className="col-md-7 pl-5">
                             

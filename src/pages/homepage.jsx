@@ -105,7 +105,7 @@ class Homepage extends React.Component{
         return( 
 
         <div className="card d-inline-block m-r-21 m-b-25 " >
-            <img  className="mb-3" src="" alt="image" width="100%" height="175px"/>
+            <img  className="mb-3" src={URLAPI+ val.images.split(',')[0]} alt="image" width="100%" height="175px"/>
             <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
             <p className="price">
             {"Rp. " + numeral(val.price).format(0,0)}
@@ -152,7 +152,7 @@ class Homepage extends React.Component{
         return(
             <div className="col p-0">
                 <div className="row-md-3 mb-5">
-                    <Carousel ></Carousel>
+                    <Carousel slideheight={'330px'}/>
                     {/* <Centered></Centered> */}
                 </div>
 

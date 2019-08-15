@@ -148,7 +148,7 @@ class productPage extends React.Component{
             return( 
     
             <div className="cardpr d-inline-block mr-3 mb-4" >
-                <img  src='' alt="image" width="100%" height="100%"/>
+                <img  src={URLAPI+ val.images.split(',')[0]} alt="image" width="100%" height="200px"/>
                 <div className="cardprtext p-3 mb-2" style={{height : "80px"}}>{this.renderName(val.name)}</div>
                 <div className="pricepr mt-1 mb-3">
                 {/* {"Rp. " + numeral(val.name).format(0,0)} */}
@@ -163,7 +163,7 @@ class productPage extends React.Component{
                     
                 /> */}
                  <StarRatings
-                    rating={this.state.rating}
+                    rating={val.rating}
                     starRatedColor="orange"
                     // changeRating={this.changeRating}
                     numberOfStars={5}
@@ -212,11 +212,8 @@ class productPage extends React.Component{
 
         return(
 
-        
-
-
             <div >
-                <Carousel></Carousel>
+                <Carousel slideheight={'330px'}/>
                 <div className="mycontainer mt-5">
 
                     <div class="row">

@@ -151,8 +151,9 @@ class Homepage extends React.Component{
         const { rating } = this.state;
         return(
             <div className="col p-0">
-                <div className="row-md-3 mb-5">
-                    <Carousel slideheight={'330px'}/>
+                <div className="row-md-3 mb-5 p-t-58">
+                    <Carousel slideheight={'330px'} items={'/post/image/banner/temporarybanner.jpg'}/> 
+                    {/* SEMENTARA */}
                     {/* <Centered></Centered> */}
                 </div>
 

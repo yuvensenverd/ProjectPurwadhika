@@ -212,8 +212,8 @@ class productPage extends React.Component{
 
         return(
 
-            <div >
-                <Carousel slideheight={'330px'}/>
+            <div className="p-t-58">
+                <Carousel slideheight={'330px'} items={'/post/image/banner/temporarybanner.jpg'}/>
                 <div className="mycontainer mt-5">
 
                     <div class="row">

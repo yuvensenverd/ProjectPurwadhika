@@ -156,7 +156,7 @@ class UserCart extends React.Component{
                                 <div className="subtitletext mb-3">Cart Summary</div>
                                 <CardText>Total Price</CardText>
                                 <CardText>Rp. {numeral(this.state.totalprice).format(0,0)}</CardText>
-                                <Button>PAYMENT</Button>
+                                <input type="button" className="btn btn-dark navbartext" value="PAYMENT"></input>
                                 </Card>
                             
                             </Row>

@@ -171,7 +171,7 @@ class userStore extends React.Component{
                     <tr>
                         <th scope="row">{i+1}</th>
                         <td>
-                            <img src="" alt=""></img>
+                            <img src={URLAPI + prd.images.split(',')[0]} alt="" width='100px'></img>
                         </td>
                         <td>{prd.name}</td>
                         <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
@@ -256,7 +256,7 @@ class userStore extends React.Component{
             if(document.getElementById(`productimage${i+1}`).files[0]){
                 images.push(document.getElementById(`productimage${i+1}`).files[0])
             }else{
-                
+
             }
         }
         // var image = document.getElementById('productimage1').files[0]
@@ -295,6 +295,17 @@ class userStore extends React.Component{
             Axios.post(URLAPI + '/product/addproduct', formData, headers)
             .then((res)=>{
                 console.log(res.data)
+                this.closeModal()
+                Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid)
+                .then((res)=>{
+                    console.log(res.data)
+                    this.setState({
+                        storeProduct : res.data
+                    })
+                })
+                .catch((err)=>{
+                    console.log(err)
+                })
                 
                 return window.alert("Add Product Berhasil")
             })

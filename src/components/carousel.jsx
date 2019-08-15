@@ -42,6 +42,7 @@ class Slider extends Component {
   }
 
   componentDidMount = () => {
+    console.log("Masuk")
     console.log(this.props.items)
     var array = this.props.items.split(',')
     console.log(array)
@@ -85,17 +86,17 @@ class Slider extends Component {
   render() {
     const { activeIndex } = this.state;
     if(this.state.items.length !== 0){
-      console.log("Masuk")
+ 
       const slides = this.state.items.map((val, index) => {
         return (
-       
+         
           <CarouselItem
             onExiting={this.onExiting}
             onExited={this.onExited}
             key={index}
             style={{padding : '0px', margin : '0px', height : '100%', width : '100%'}}
           >
-               {console.log("Masuk Carousel", val)}
+          
             <img src={val} alt={val} width="100%" height={this.props.slideheight}/> 
             {/* FFULL HEIGHT DI PR PAGE JJADI 600px */}
             {/* <CarouselCaption captionText={item.caption} captionHeader={item.caption} /> */}

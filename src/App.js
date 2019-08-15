@@ -16,10 +16,12 @@ import editProfile from './pages/editprofile'
 import productDetails from './pages/productDetails'
 import PageNotFound from './pages/pagenotfound'
 import cartPage from './pages/usercart'
+import AdminPage from './pages/adminpage'
 import { connect } from 'react-redux'
 import { loginUser } from './redux/actions/index'
 import Axios from 'axios';
 import { URLAPI } from './redux/actions/types';
+
 
 
 
@@ -87,8 +89,9 @@ class App extends React.Component{
         <Route path='/userstore' component={userStore}></Route>
         <Route path='/userhistory' component={userHistory}></Route>
         <Route path='/editprofile' component={editProfile}></Route>
-        <Route path= '/productdetails' component={productDetails}></Route>
-        <Route path= '/usercart' component={cartPage}></Route>
+        <Route path='/productdetails' component={productDetails}></Route>
+        <Route path='/usercart' component={cartPage}></Route>
+        <Route path='/admin' component={AdminPage}></Route>
         <Route path='*' component={PageNotFound}></Route>
         </Switch>
 

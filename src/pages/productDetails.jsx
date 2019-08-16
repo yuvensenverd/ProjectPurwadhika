@@ -202,7 +202,9 @@ class productDetails extends React.Component{
                         
                         <div className="col-md-5 border border-secondary" style={{padding : '0px', margin : '0px'}}>
                             {/* <img src={URLAPI+this.state.productdetail[0].images.split(',')[0]} alt="productimage" height="100%" width="100%" style={{padding : '0px', margin : '0px'}}/> */}
-                            <Carousel slideheight={'600px'} items={this.state.productdetail[0].images}/>
+                            <Carousel slideheight={'600px'} 
+                            items={this.state.productdetail[0].images}/>
+                           
                             
                         </div>
                         <div className="col-md-7 pl-5">

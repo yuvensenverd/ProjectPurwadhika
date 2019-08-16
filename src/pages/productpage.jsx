@@ -1,7 +1,7 @@
 import React from 'react'
 import Carousel from './../components/carousel'
 import Axios from 'axios'
-import { URLAPI } from "../redux/actions/types";
+import { URLAPI, PATHDEFAULTPRD } from "../redux/actions/types";
 import { connect } from "react-redux";
 import { getListCategory } from "./../redux/actions/index"
 import numeral from 'numeral'
@@ -52,6 +52,8 @@ class productPage extends React.Component{
   
     }
     getProduct = (category = "") =>{
+        console.log("masuk")
+        console.log(category)
         Axios.get(URLAPI+'/product/getproduct?cat=' + category)
         .then((res)=>{
             
@@ -148,7 +150,13 @@ class productPage extends React.Component{
             return( 
     
             <div className="cardpr d-inline-block mr-3 mb-4" >
-                <img  src={URLAPI+ val.images.split(',')[0]} alt="image" width="100%" height="200px"/>
+                <img 
+                   src={val.images ?
+                    URLAPI+ val.images.split(',')[0]
+                    :
+                    URLAPI + PATHDEFAULTPRD
+                    } 
+                  alt="image" width="100%" height="200px"/>
                 <div className="cardprtext p-3 mb-2" style={{height : "80px"}}>{this.renderName(val.name)}</div>
                 <div className="pricepr mt-1 mb-3">
                 {/* {"Rp. " + numeral(val.name).format(0,0)} */}

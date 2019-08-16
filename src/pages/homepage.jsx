@@ -18,7 +18,7 @@ import { loginUser } from './../redux/actions/index'
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
 import StarRatings from 'react-star-ratings';
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 
 class Homepage extends React.Component{
     state = {
@@ -105,7 +105,13 @@ class Homepage extends React.Component{
         return( 
 
         <div className="card d-inline-block m-r-21 m-b-25 " >
-            <img  className="mb-3" src={URLAPI+ val.images.split(',')[0]} alt="image" width="100%" height="175px"/>
+            <img  className="mb-3" 
+            src={val.images ?
+                URLAPI+ val.images.split(',')[0]
+                :
+                URLAPI + PATHDEFAULTPRD
+                } 
+            alt="image" width="100%" height="175px"/>
             <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
             <p className="price">
             {"Rp. " + numeral(val.price).format(0,0)}

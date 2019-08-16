@@ -6,7 +6,7 @@ import {
   CarouselIndicators,
   CarouselCaption
 } from 'reactstrap';
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 
 
 // const items = [
@@ -44,7 +44,12 @@ class Slider extends Component {
   componentDidMount = () => {
     console.log("Masuk")
     console.log(this.props.items)
-    var array = this.props.items.split(',')
+    if(this.props.items){
+      var array = this.props.items.split(',')
+
+    }else{
+      var array = [PATHDEFAULTPRD]
+    }
     console.log(array)
     for(var i = 0; i<array.length; i++){
       array[i] = URLAPI+array[i]

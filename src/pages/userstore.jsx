@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
 import Axios from 'axios';
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 import numeral from 'numeral'
 
 // NANTI KALAU ADD PRODUCT DI LOOPING 
@@ -171,7 +171,14 @@ class userStore extends React.Component{
                     <tr>
                         <th scope="row">{i+1}</th>
                         <td>
-                            <img src={URLAPI + prd.images.split(',')[0]} alt="" width='100px'></img>
+                            <img
+                             src={prd.images ?
+                                URLAPI+ prd.images.split(',')[0]
+                                :
+                                URLAPI + PATHDEFAULTPRD
+                                } 
+                             
+                             alt="" width='100px'></img>
                         </td>
                         <td>{prd.name}</td>
                         <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>

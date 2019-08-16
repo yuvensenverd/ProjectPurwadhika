@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Card, Button,  CardText, Row,  } from 'reactstrap';
 import Footer from '../components/footer'
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 
 
 class UserCart extends React.Component{
@@ -82,7 +82,13 @@ class UserCart extends React.Component{
                             <div className="subtitletext mb-3">{item.shopname}</div>
                             <div className="row">
                                 <div className="col-md-2">
-                                    <img src={URLAPI+ item.images.split(',')[0]} alt="item image" width="100%" height="100%"/>
+                                    <img 
+                                     src={item.images ?
+                                        URLAPI+ item.images.split(',')[0]
+                                        :
+                                        URLAPI + PATHDEFAULTPRD
+                                        }  
+                                    alt="item image" width="100%" height="100%"/>
                                 </div>
                                 <div className="col-md-9">
                                     <div className="row">

@@ -66,6 +66,8 @@ class LoginPage extends React.Component{
         if(res.data[0].username){
 
           console.log(res.data)
+          // TEMPORARY
+          localStorage.setItem('password', data.pass)
           return this.log(username, password)
         }else{
           console.log("Gak dapaet")

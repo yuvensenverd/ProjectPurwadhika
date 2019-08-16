@@ -15,7 +15,8 @@ const Initial_state =
   PHONENUMBER : null,
   RESIDENCE : "",
   EMAIL : "",
-  PROFILEIMG : ''
+  PROFILEIMG : '',
+  STATUS : ''
 }
 
 export default(state = Initial_state, action)=>{
@@ -23,7 +24,7 @@ export default(state = Initial_state, action)=>{
         case LOGIN :
  
             localStorage.setItem('username', action.payload[0].username)
-            localStorage.setItem('password', action.payload[0].password)
+  
     
     
             // return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
@@ -33,7 +34,8 @@ export default(state = Initial_state, action)=>{
                     ROLE : action.payload[0].userrole,
                      userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
                     SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
-                     RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email, PROFILEIMG :action.payload[0].profileimg}
+                     RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email,
+                      PROFILEIMG :action.payload[0].profileimg, STATUS : action.payload[0].status}
         case LOGOUT :
             localStorage.removeItem('username')
             localStorage.removeItem('password')

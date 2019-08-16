@@ -35,11 +35,11 @@ export const loginUser = (value) =>{
                 })
             })
             .catch((err)=>{
-
+                console.log(err)
             })
         })
         .catch((err)=>{
-            console.log(err.response.data)
+            console.log(err)
         })
     }
 

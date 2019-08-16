@@ -51,7 +51,7 @@ class registerPage extends React.Component{
         ROLE : 'user',
         CART : []
       }
-
+      console.log(data)
       this.props.loginUser(data)
 
     }
@@ -63,6 +63,7 @@ class registerPage extends React.Component{
       var phonenum = this.refs.inputcontact.value
       var residence = this.refs.inputresidence.value
       var confirm = this.refs.inputpasswordconfirm.value
+      var email = this.refs.inputemail.value
       console.log(residence)
       
       // NEED VALIDATION
@@ -92,8 +93,11 @@ class registerPage extends React.Component{
         password : password,
         phonenumber : phonenum,
         residence : residence,
-        role_id: 3 
+        role_id: 3,
+        email : email,
+        status : 'Unverified'
       }
+      console.log(data)
 
       var checkuser = {
         name : username,
@@ -103,7 +107,7 @@ class registerPage extends React.Component{
       Axios.post(URLAPI+'/user/getuser', checkuser)
       .then((res)=>{
         console.log(res.data)
-        if(res.data[0].username){
+        if(res.data[0]){
 
           // console.log(res.data)
           // console.log(!res.data[0].username)
@@ -152,15 +156,17 @@ class registerPage extends React.Component{
       // console.log(validated_data)
       Axios.post(URLAPI+'/user/addUser',  data)
       .then((res)=>{
-        
+        // TEMPORARY
+        localStorage.setItem('password', data.password)
         console.log(res.data)
         window.alert("Register Success")
         // this.log(username, password)
+        console.log(data)
+        this.log(data.username, data.password)
         this.setState({
           redirect_status : true
         })
-
-        this.log(data.username, data.password)
+        
       
 
    
@@ -179,7 +185,7 @@ class registerPage extends React.Component{
     render(){
       if(this.state.redirect_status === true){
         return (
-          <Redirect to="/"></Redirect>
+          <Redirect to="/waitingverification"></Redirect>
         )
       }
         return(
@@ -203,6 +209,13 @@ class registerPage extends React.Component{
                 </span>
                 <div className="wrap-input100 validate-input m-b-36" >
                   <input className="input100" ref="inputcontact" type="number" />
+                  <span className="focus-input100" />
+                </div>
+                <span className="txt1 p-b-11">
+                  Email
+                </span>
+                <div className="wrap-input100 validate-input m-b-36" >
+                  <input className="input100" ref="inputemail" type="text" />
                   <span className="focus-input100" />
                 </div>
                 <span className="txt1 p-b-11">

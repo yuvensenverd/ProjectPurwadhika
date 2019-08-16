@@ -15,6 +15,8 @@ import userHistory from './pages/userhistory'
 import editProfile from './pages/editprofile'
 import productDetails from './pages/productDetails'
 import PageNotFound from './pages/pagenotfound'
+import WaitingVerification from './pages/waitingverification'
+import Verified from './pages/verified'
 import cartPage from './pages/usercart'
 import AdminPage from './pages/adminpage'
 import { connect } from 'react-redux'
@@ -45,10 +47,10 @@ class App extends React.Component{
       name : username,
       pass : password
     }
-
+    
     Axios.post(URLAPI+'/user/getuser', data)
     .then((res)=>{
-      if(res.data[0].username){
+      if(res.data[0]){
 
         console.log(res.data)
         return this.log(username, password)
@@ -83,7 +85,7 @@ class App extends React.Component{
         <Route path='/' exact component={Homepage}></Route>
         <Route path='/login'component={LoginPage}></Route>
         <Route path='/register'component={RegisterPage}></Route>
-        <Route path ='/promo' component={promoDetails}></Route>
+        <Route path='/promo' component={promoDetails}></Route>
         <Route path='/product' component={productPage}></Route>
         <Route path='/createstore' component={createStore}></Route>
         <Route path='/userstore' component={userStore}></Route>
@@ -91,6 +93,8 @@ class App extends React.Component{
         <Route path='/editprofile' component={editProfile}></Route>
         <Route path='/productdetails' component={productDetails}></Route>
         <Route path='/usercart' component={cartPage}></Route>
+        <Route path='/waitingverification' component={WaitingVerification}></Route>
+        <Route path='/verified' component={Verified}></Route>
         <Route path='/admin' component={AdminPage}></Route>
         <Route path='*' component={PageNotFound}></Route>
         </Switch>

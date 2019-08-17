@@ -166,11 +166,6 @@ class registerPage extends React.Component{
         this.setState({
           redirect_status : true
         })
-        
-      
-
-   
-  
       })
       .catch((err)=>{
         console.log("Masuk")

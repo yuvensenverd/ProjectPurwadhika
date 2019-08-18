@@ -143,11 +143,10 @@ class AdminPage extends React.Component{
                         <tr>
                             <td>{i+1}</td>
                             <td>
-                                <img src="" alt="image"/>
+                                <img src={URLAPI + banner.image} width="200px" alt="image"/>
                             </td>
                             <td>
-                                <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
-                                <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
+                                <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}} onClick={()=>this.onClickDeleteBanner(banner.idbanner)}/>
                             </td>
                         </tr>
                     )
@@ -283,15 +282,28 @@ class AdminPage extends React.Component{
     }
 
     renderTableFoot = () =>{
-        if(this.state.showTable === 3){
+        if(this.state.showTable === 2){ // BANNER
             return(
                 <tr>
-                    <td> <img id="primg" src="#" alt="image preview" height="150" /></td>
+                    <td> <img id="imgpreview" src="#" alt="image preview" height="150" /></td>
+                    <td>
+                        <input type="file" id="imagefile" ref="catimg"  onChange={() => this.previewFile()}/>
+                    </td>
+                    <td>
+                        <input type="button" className="btn btn-success" value="ADD" onClick={()=>this.onClickAddBanner()}/>
+                    </td>
+                </tr>
+            )
+        }
+        if(this.state.showTable === 3){ // CATEGORY
+            return(
+                <tr>
+                    <td> <img id="imgpreview" src="#" alt="image preview" height="150" /></td>
                     <td>
                         <input type="text" id="cattextid" ref="catinput" className="form-control" placeholder="Category Name.." />
                     </td>
                     <td>
-                        <input type="file" id="catimage" ref="catimg"  onChange={() => this.previewFile()}/>
+                        <input type="file" id="imagefile" ref="catimg"  onChange={() => this.previewFile()}/>
                     </td>
                     <td>
                         <input type="button" className="btn btn-success" value="ADD" onClick={()=>this.onClickAddCategory()}/>
@@ -306,8 +318,8 @@ class AdminPage extends React.Component{
     }
 
     previewFile = () => {
-        var preview = document.getElementById('primg');
-        var file    = document.getElementById('catimage').files[0];
+        var preview = document.getElementById('imgpreview');
+        var file    = document.getElementById('imagefile').files[0];
   
        
         var reader  = new FileReader();
@@ -377,21 +389,21 @@ class AdminPage extends React.Component{
 
     onClickAddCategory = () => {
 
-        if(document.getElementById('catimage').files[0]){
+        if(document.getElementById('imagefile').files[0]){
             console.log("Masuk")
             var formData = new FormData()
             var headers ={
                 headers : 
                 {'Content-Type' : 'multipart/form-data'}
             }
-            console.log(document.getElementById('catimage').files[0])
+            console.log(document.getElementById('imagefile').files[0])
 
             var data = { 
                 name : this.refs.catinput.value
             }
             console.log(data)
 
-            formData.append('image', document.getElementById('catimage').files[0]) 
+            formData.append('image', document.getElementById('imagefile').files[0]) 
             formData.append('data', JSON.stringify(data))
             
 
@@ -408,12 +420,71 @@ class AdminPage extends React.Component{
                 window.alert("Berhasil Add Category")
                 document.getElementById('primg').src = ""
                 document.getElementById('cattextid').value =""
-                document.getElementById('catimage').files[0]=null
-                document.getElementById('catimage').value=null
+                document.getElementById('imagefile').files[0]=null
+                document.getElementById('imagefile').value=null
 
                
 
                 
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
+    onClickAddBanner = () => {
+        
+        console.log("Masuk Add Banner")
+        if(document.getElementById('imagefile').files[0]){
+        var formData = new FormData()
+        var headers ={
+            headers : 
+            {'Content-Type' : 'multipart/form-data'}
+        }
+        
+        console.log(document.getElementById('imagefile').files[0])
+
+        var data = {}
+        console.log(data)
+       
+
+        formData.append('image', document.getElementById('imagefile').files[0]) 
+        formData.append('data', JSON.stringify(data))
+        
+
+        // AXIOS >> Update Path Image if image exist, Write path 
+        Axios.post(URLAPI+`/banner/addbanner`,formData, headers )
+        .then((res)=>{
+            console.log(res.data) // array of object
+            this.setState({
+                change : true,
+                // data : res.data,
+                editnum : null
+            })
+            // reset input
+            window.alert("Berhasil Add Banner")  
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+    }
+
+    onClickDeleteBanner = (id) =>{
+
+        var confirm = window.confirm("are you sure you want to delete this banner?")
+        if(confirm){
+
+            console.log(id)
+            Axios.delete(URLAPI + '/banner/deletebanner/'+id)
+            .then((res)=>{
+                this.setState({
+                    change : true,
+                    // data : res.data,
+                    editnum : null
+                })
+                window.alert("Berhasil Delete Banner")  
             })
             .catch((err)=>{
                 console.log(err)

@@ -23,7 +23,8 @@ import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 class Homepage extends React.Component{
     state = {
         productlist  : [],
-        rating : 1
+        rating : 1,
+        bannerimgpath : []
 
       }
    
@@ -46,6 +47,7 @@ class Homepage extends React.Component{
         
 
         this.getProduct()
+        this.getBannerPath()
 
     }
 
@@ -66,6 +68,20 @@ class Homepage extends React.Component{
         })
     
         }
+
+    getBannerPath = () => {
+        Axios.get(URLAPI + '/banner/getpathbanner')
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({
+                bannerimgpath : res.data
+            })
+            console.log(this.state.bannerimgpath)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
 
     onStarClick(nextValue, prevValue, name) {
         this.setState({rating: nextValue});
@@ -158,7 +174,13 @@ class Homepage extends React.Component{
         return(
             <div className="col p-0">
                 <div className="row-md-3 mb-5 p-t-58">
-                    <Carousel slideheight={'330px'} items={'/post/image/banner/temporarybanner.jpg'}/> 
+                    {this.state.bannerimgpath.length !== 0 
+                    ?
+                    <Carousel slideheight={'330px'} items={this.state.bannerimgpath[0].images}/> 
+                    :
+                    null //loading
+                    }
+                    
                     {/* SEMENTARA */}
                     {/* <Centered></Centered> */}
                 </div>

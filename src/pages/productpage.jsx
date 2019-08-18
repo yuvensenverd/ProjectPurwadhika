@@ -17,13 +17,16 @@ import StarRatings from 'react-star-ratings';
 class productPage extends React.Component{
     state = {
         productlist  : [],
-        rating : 0
+        rating : 0,
+        bannerimgpath : []
+        
     
     
       }
 
 
     componentDidMount=()=>{
+        this.getBannerPath()
         if(this.props.listcategory.length === 0){
             this.props.getListCategory()
         }
@@ -42,15 +45,23 @@ class productPage extends React.Component{
             this.getProduct(currentgenre)
         }
        //pathname, search, hash, state
-     
-
-       
-
-        
-        
 
   
     }
+    getBannerPath = () => {
+        Axios.get(URLAPI + '/banner/getpathbanner')
+        .then((res)=>{
+            console.log(res.data)
+            this.setState({
+                bannerimgpath : res.data
+            })
+            console.log(this.state.bannerimgpath)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+
     getProduct = (category = "") =>{
         console.log("masuk")
         console.log(category)
@@ -202,7 +213,7 @@ class productPage extends React.Component{
             return (
                 <Link to={"/product?cat=" + val.name}>
                 <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}}>
-                    <img src="xd" alt="logo" height ="50%"></img>
+                    <img src={URLAPI + val.image} alt="logo"  height="75px"></img>
                     <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
                 
 
@@ -221,7 +232,12 @@ class productPage extends React.Component{
         return(
 
             <div className="p-t-58">
-                <Carousel slideheight={'330px'} items={'/post/image/banner/temporarybanner.jpg'}/>
+                {this.state.bannerimgpath.length !== 0 
+                    ?
+                    <Carousel slideheight={'330px'} items={this.state.bannerimgpath[0].images}/> 
+                    :
+                    null //loading
+                    }
                 <div className="mycontainer mt-5">
 
                     <div class="row">
@@ -232,7 +248,7 @@ class productPage extends React.Component{
                             </div>
                             <div>
                                 <div className="d-flex flex-column align-items-center justify-content-center mb-4" style={{backgroundColor : "#BDC1C9"}}>
-                                    <img src="xd" alt="logo" height ="50%"></img>
+                                    {/* <img src="xd" alt="logo" height ="50%"></img> */}
                                     <input type="button" className="btn navbartext btn-secondary form-control" value="All Product" onClick={() => this.getProduct()} ></input>
                                 </div>
                                 {this.printCategory()}

@@ -8,6 +8,7 @@ import { getListCategory } from "./../redux/actions/index"
 
 
 
+
 class Responsive extends Component {
 
 
@@ -17,14 +18,14 @@ class Responsive extends Component {
   }
   printCatList = () => {
     if(this.props.listcategory.length > 0){
-     
+     console.log(this.props.listcategory)
       var output = this.props.listcategory.map((val)=>{
           return (
-            <div className="bg-light shadow" style={{width : "350px"}} >
+            <div className="bg-light shadow" style={{width : "255px"}} >
               <center>
                 <Link to={'/product?cat=' + val.name}> 
                 {/* Lanjut */}
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
+                  <img  className="p-0" src={URLAPI + val.image} height="75px"/>
               
                 <span className="caption"> {val.name}</span>
                 </Link>

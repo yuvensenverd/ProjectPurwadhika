@@ -106,6 +106,26 @@
   border-radius: 50%;
 }
 
+.bellnum{
+  position: absolute;
+  top: 1%;
+  left: 95.5%;
+
+  background-color: yellow;
+  color: black;
+
+  border: none;
+  padding: 2px 5px 2px 5px;
+
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  z-index: 20;
+ 
+  border-radius: 50%;
+}
+
 .fixednav {
   position: fixed;
   top : 50;

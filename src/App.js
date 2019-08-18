@@ -16,6 +16,7 @@ import editProfile from './pages/editprofile'
 import productDetails from './pages/productDetails'
 import PageNotFound from './pages/pagenotfound'
 import WaitingVerification from './pages/waitingverification'
+import NotificationPage from './pages/notificationpage'
 import Verified from './pages/verified'
 import cartPage from './pages/usercart'
 import AdminPage from './pages/adminpage'
@@ -93,6 +94,7 @@ class App extends React.Component{
         <Route path='/editprofile' component={editProfile}></Route>
         <Route path='/productdetails' component={productDetails}></Route>
         <Route path='/usercart' component={cartPage}></Route>
+        <Route path='/notification' component={NotificationPage}></Route>
         <Route path='/waitingverification' component={WaitingVerification}></Route>
         <Route path='/verified' component={Verified}></Route>
         <Route path='/admin' component={AdminPage}></Route>

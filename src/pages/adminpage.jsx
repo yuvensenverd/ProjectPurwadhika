@@ -375,7 +375,7 @@ class AdminPage extends React.Component{
             console.log(res.data) // array of object
             this.setState({
                 change : true,
-                data : res.data,
+                // data : res.data,
                 editnum : null
             })
             // reset input
@@ -413,8 +413,8 @@ class AdminPage extends React.Component{
                 console.log("Berhasil update")
                 console.log(res.data) // array of object
                 this.setState({
-                   change : true,
-                   data : res.data
+                   change : true, // otomatis refresh, get data baru
+                //    data : res.data
                 })
                 // reset input
                 window.alert("Berhasil Add Category")

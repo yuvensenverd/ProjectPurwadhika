@@ -5,6 +5,7 @@ import numeral from 'numeral'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Card, Button,  CardText, Row,  } from 'reactstrap';
+import { addItemCart } from './../redux/actions/index'
 import Footer from '../components/footer'
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 
@@ -21,19 +22,27 @@ class UserCart extends React.Component{
         
     }
 
+    componentWillUnmount(){
+        console.log("masuk unmount")
+        console.log(this.state.cart_user)
+    }
+
     // Get user cart data from database
     getItemCartUser = () => {
      
         if(this.props.username !== "" && this.state.finishload === false){
             console.log(this.props.userdata.CART)
-            console.log(this.props.username)
+            console.log("masuk getitem")
+         
             Axios.get(URLAPI+'/cart/getcart?user='+this.props.username)
             .then((res)=>{
                 this.setState({
                     cart_user : res.data,
                     finishload : true
                 })
+            
                 console.log(this.state.cart_user)
+                this.props.addItemCart(res.data) // update redux
                 
             })
             .catch((err)=>{
@@ -47,9 +56,9 @@ class UserCart extends React.Component{
     // Add item in usercart page
     addQty = (index) => {
 
-        if(this.state.cart_user[index].qty !== 0){
-            this.state.cart_user[index].qty = this.state.cart_user[index].qty +1
-        }
+     
+        this.state.cart_user[index].qty = this.state.cart_user[index].qty +1
+        
         var hasil = this.state.cart_user
         this.setState({
             cart_user : hasil
@@ -58,7 +67,7 @@ class UserCart extends React.Component{
 
     minQty = (index) => {
  
-        if(this.state.cart_user[index].qty !== 0){
+        if(this.state.cart_user[index].qty !== 1){
             this.state.cart_user[index].qty = this.state.cart_user[index].qty -1
         }
         var hasil = this.state.cart_user
@@ -66,6 +75,25 @@ class UserCart extends React.Component{
             cart_user : hasil
         })
         
+    }
+
+    onDeleteItemCart = (id) =>{
+        console.log(id)
+        console.log(this.props.userdata.userid)
+        Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid)
+        .then((res)=>{
+            console.log("berhasil delete")
+            window.alert("berhasil delete product")
+            console.log(res.data)
+            this.setState({
+                finishload : false // supaya nge-get ulang
+            })
+            this.getItemCartUser()
+
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 
 
@@ -104,7 +132,7 @@ class UserCart extends React.Component{
                                         <div className="col-md-3">
                                             <div className="d-flex flex-row">
                                                 <div className="mr-4">
-                                                <FontAwesomeIcon size="2x"  icon={faTrashAlt} style={{color : "black"}}/>
+                                                <FontAwesomeIcon size="2x"  icon={faTrashAlt} style={{color : "black"}} onClick={()=>this.onDeleteItemCart(item.id)}/>
                                                 </div>
                                                 <input type="button" className="btn btn-secondary rounded-circle mr-3 p-1 pl-3 pr-3 font-weight-bolder" value="-" onClick={()=>this.minQty(index)}/>
                                                 <input type="text" className="form-control d-inline text-center" style={{width :"75px", fontWeight : "bolder", fontSize : "18px"}} value={item.qty}  readOnly/>
@@ -186,4 +214,4 @@ const mapStateToProps= (state)=>{
 }
 
 
-export default connect(mapStateToProps)(UserCart)
+export default connect(mapStateToProps, {addItemCart})(UserCart)

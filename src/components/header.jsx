@@ -16,7 +16,7 @@ import { connect } from 'react-redux'
 import { logoutUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { faShoppingCart} from '@fortawesome/free-solid-svg-icons'
+import { faShoppingCart, faBell} from '@fortawesome/free-solid-svg-icons'
 import { URLAPI, PATHDEFAULTPICT } from '../redux/actions/types';
 import numeral from 'numeral'
 
@@ -170,6 +170,23 @@ import numeral from 'numeral'
             :
             null
           }
+          { this.props.username !== ""
+           ?
+          
+           
+           <div className="navbartext mr-3">
+          
+             <Link to='/notification'>
+             <div className="bellnum">0</div>
+             <FontAwesomeIcon size="2x"  icon={faBell} style={{color : "orange"}}>
+            
+             </FontAwesomeIcon>
+             </Link>
+             
+           </div>
+           :
+           null
+          }
 
 
            { this.props.username !== ""
@@ -189,6 +206,7 @@ import numeral from 'numeral'
            :
            null
           }
+
           </Collapse>
           
         </Navbar>

@@ -94,6 +94,11 @@ class productDetails extends React.Component{
 
 
     addToCart = (item) =>{
+        
+        if(this.props.userdata.USERNAME === ""){
+            
+            return window.alert("You have to login first! Please log in !")
+        }
 
         // MAKE CART AUTO ADD
         // INSERT INTO TABLE CART 

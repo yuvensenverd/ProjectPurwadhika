@@ -80,6 +80,18 @@ class CreateStore extends React.Component{
                 <Redirect to="/userstore"> </Redirect>
             )
         }
+        if(this.props.userdata.USERNAME === ""){
+            window.alert("please login first before proceed !")
+            return (
+                <Redirect to="/login"> </Redirect> 
+            )
+        }
+        if(this.props.userdata.STATUS !== "Verified"){
+            window.alert("please verify your account before creating the store")
+            return (
+                <Redirect to="/"> </Redirect> 
+            )
+        }
         return(
             <div>
             <div className="mycontainer">

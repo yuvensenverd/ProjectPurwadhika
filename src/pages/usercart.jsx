@@ -24,6 +24,10 @@ class UserCart extends React.Component{
     }
 
     componentWillUnmount(){
+        this.updateItemCart()
+    }
+
+    updateItemCart = () =>{
         console.log(this.props.userdata.userid)
         var statecart = this.state.cart_user
         var updatecart = this.state.updatedproduct
@@ -126,26 +130,54 @@ class UserCart extends React.Component{
         
     }
 
-    onDeleteItemCart = (id) =>{
+
+
+    onDeleteItemCart = (id, index) =>{
         console.log(id)
         console.log(this.props.userdata.userid)
         var confirm = window.confirm("Are you sure to remove this item from your cart?")
         if(confirm){
-
-            Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid)
-            .then((res)=>{
-                console.log("berhasil delete")
-                window.alert("berhasil delete product")
-                console.log(res.data)
-                this.setState({
-                    finishload : false // supaya nge-get ulang
-                })
-                this.getItemCartUser()
+            var statecart = this.state.cart_user
+            var updatecart = this.state.updatedproduct
+            console.log(statecart)
+            for(var i = 0; i<updatecart.length; i++){
+                if(updatecart[i].value !== 0){
+                    var updatedqty = statecart[i].qty 
+                    console.log("updatedqty menjadi " + updatedqty)
+                    console.log("Masuk ubah produk " + updatecart[i].productid + "qty menjadi " + updatedqty)
     
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
+                    Axios.post(URLAPI + '/cart/updatecart', {
+                        qtyupdated : updatedqty,
+                        userid : this.props.userdata.userid ,
+                        productid : updatecart[i].productid
+                    })
+                    .then((res)=>{
+                        console.log("Berhasil update cart willunmount")
+                        Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid)
+                        .then((res)=>{
+                            console.log("berhasil delete")
+                            window.alert("berhasil delete product")
+                            console.log(res.data)
+                            var cartupdate = this.state.updatedproduct
+                            cartupdate.splice(index, 1)
+                            this.setState({
+                                finishload : false, // supaya nge-get ulang
+                                updatedproduct : cartupdate
+                            })
+                            this.getItemCartUser()
+                
+                        })
+                        .catch((err)=>{
+                            console.log(err)
+                        })
+                    })
+                    .catch((err)=>{
+                        console.log(err)
+                    })
+                }else{
+                    console.log("Gak ada perubahan")
+                }
+            }
         }
     }
 
@@ -189,7 +221,7 @@ class UserCart extends React.Component{
                                         <div className="col-md-3">
                                             <div className="d-flex flex-row">
                                                 <div className="mr-4">
-                                                <FontAwesomeIcon  size="2x"  icon={faTrashAlt} style={{color : "black", cursor : "pointer"}} onClick={()=>this.onDeleteItemCart(item.id)} />
+                                                <FontAwesomeIcon  size="2x"  icon={faTrashAlt} style={{color : "black", cursor : "pointer"}} onClick={()=>this.onDeleteItemCart(item.id, index)} />
                                                 </div>
                                                 <input type="button" className="btn btn-secondary rounded-circle mr-3 p-1 pl-3 pr-3 font-weight-bolder" value="-" onClick={()=>this.minQty(index, item.id)}/>
                                                 <input type="text" className="form-control d-inline text-center" style={{width :"75px", fontWeight : "bolder", fontSize : "18px"}} value={item.qty}  readOnly/>

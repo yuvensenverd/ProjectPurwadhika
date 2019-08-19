@@ -14,7 +14,8 @@ class UserCart extends React.Component{
     state={
         cart_user : [],
         finishload : false,
-        totalprice : 0
+        totalprice : 0,
+        updatedproduct : []
     }
    
 
@@ -23,8 +24,37 @@ class UserCart extends React.Component{
     }
 
     componentWillUnmount(){
-        console.log("masuk unmount")
-        console.log(this.state.cart_user)
+        console.log(this.props.userdata.userid)
+        var statecart = this.state.cart_user
+        var updatecart = this.state.updatedproduct
+        console.log(statecart)
+        for(var i = 0; i<updatecart.length; i++){
+            if(updatecart[i].value !== 0){
+                var updatedqty = statecart[i].qty 
+                console.log("updatedqty menjadi " + updatedqty)
+                console.log("Masuk ubah produk " + updatecart[i].productid + "qty menjadi " + updatedqty)
+
+                Axios.post(URLAPI + '/cart/updatecart', {
+                    qtyupdated : updatedqty,
+                    userid : this.props.userdata.userid ,
+                    productid : updatecart[i].productid
+                })
+                .then((res)=>{
+                    console.log("Berhasil update cart willunmount")
+                })
+                .catch((err)=>{
+                    console.log(err)
+                })
+                // {
+                //     qtyupdated : updatedqty,
+                //     userid : this.props.userdata.userid ,
+                //     productid : this.props.location.search.replace("?pid=", "")
+                // }
+            }else{
+                console.log("Gak ada perubahan")
+            }
+        }
+
     }
 
     // Get user cart data from database
@@ -54,57 +84,84 @@ class UserCart extends React.Component{
 
 
     // Add item in usercart page
-    addQty = (index) => {
+    addQty = (index,itemid) => {
+       
 
-     
-        this.state.cart_user[index].qty = this.state.cart_user[index].qty +1
         
+        // console.log(this.state.updatedproduct[0]["productid"]) 
         var hasil = this.state.cart_user
+        hasil[index].qty = hasil[index].qty +1
+
+       
+        // save changes
+        var cart = this.state.updatedproduct // arr of obj
+        cart[index].value = cart[index].value + 1
+   
+        
+   
+        
         this.setState({
-            cart_user : hasil
+            cart_user : hasil,
+            updatedproduct : cart
         })
     }
 
-    minQty = (index) => {
- 
+    minQty = (index, itemid) => {
+      
         if(this.state.cart_user[index].qty !== 1){
-            this.state.cart_user[index].qty = this.state.cart_user[index].qty -1
+            var hasil = this.state.cart_user
+            hasil[index].qty =hasil[index].qty -1
+            
+            // save changes
+            var cart = this.state.updatedproduct // arr of obj
+            cart[index].value = cart[index].value -1
+
+            this.setState({
+                cart_user : hasil,
+                updatedproduct : cart
+            })
         }
-        var hasil = this.state.cart_user
-        this.setState({
-            cart_user : hasil
-        })
+       
+        
         
     }
 
     onDeleteItemCart = (id) =>{
         console.log(id)
         console.log(this.props.userdata.userid)
-        Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid)
-        .then((res)=>{
-            console.log("berhasil delete")
-            window.alert("berhasil delete product")
-            console.log(res.data)
-            this.setState({
-                finishload : false // supaya nge-get ulang
-            })
-            this.getItemCartUser()
+        var confirm = window.confirm("Are you sure to remove this item from your cart?")
+        if(confirm){
 
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+            Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid)
+            .then((res)=>{
+                console.log("berhasil delete")
+                window.alert("berhasil delete product")
+                console.log(res.data)
+                this.setState({
+                    finishload : false // supaya nge-get ulang
+                })
+                this.getItemCartUser()
+    
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
     }
 
 
 
 
     printCartSummary = () =>{
+            var productobj = []
             // Print user cart table when loading is finished
             if(this.state.finishload === true) {
 
                 var output = this.state.cart_user.map((item, index)=>{
-                  
+                    productobj.push({
+                        productid : item.id,
+                        value : 0
+                    })
                     return(
                         <div className="itemcart">
                             <div className="subtitletext mb-3">{item.shopname}</div>
@@ -132,11 +189,11 @@ class UserCart extends React.Component{
                                         <div className="col-md-3">
                                             <div className="d-flex flex-row">
                                                 <div className="mr-4">
-                                                <FontAwesomeIcon size="2x"  icon={faTrashAlt} style={{color : "black"}} onClick={()=>this.onDeleteItemCart(item.id)}/>
+                                                <FontAwesomeIcon  size="2x"  icon={faTrashAlt} style={{color : "black", cursor : "pointer"}} onClick={()=>this.onDeleteItemCart(item.id)} />
                                                 </div>
-                                                <input type="button" className="btn btn-secondary rounded-circle mr-3 p-1 pl-3 pr-3 font-weight-bolder" value="-" onClick={()=>this.minQty(index)}/>
+                                                <input type="button" className="btn btn-secondary rounded-circle mr-3 p-1 pl-3 pr-3 font-weight-bolder" value="-" onClick={()=>this.minQty(index, item.id)}/>
                                                 <input type="text" className="form-control d-inline text-center" style={{width :"75px", fontWeight : "bolder", fontSize : "18px"}} value={item.qty}  readOnly/>
-                                                <input type="button" className="btn btn-secondary rounded-circle ml-3 p-1 pl-3 pr-3 font-weight-bolder" value="+" onClick={()=>this.addQty(index)}/>
+                                                <input type="button" className="btn btn-secondary rounded-circle ml-3 p-1 pl-3 pr-3 font-weight-bolder" value="+" onClick={()=>this.addQty(index, item.id)}/>
                                             </div>
                                         </div>
                                     </div>
@@ -145,8 +202,13 @@ class UserCart extends React.Component{
                         </div>
                     )
                 })
-          
-     
+                if(this.state.updatedproduct.length === 0){
+                    this.setState({
+                        updatedproduct : productobj
+                    })
+                }
+                
+                
                 return output
             }
         

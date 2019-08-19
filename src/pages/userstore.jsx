@@ -185,7 +185,7 @@ class userStore extends React.Component{
                         <td>{prd.cat}</td>
                         <td>{prd.rating+"/5"}</td>
                         <td>
-                            <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
+                            <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
                             <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
                         </td>
                     </tr>
@@ -315,6 +315,23 @@ class userStore extends React.Component{
                 })
                 
                 return window.alert("Add Product Berhasil")
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
+    onDeleteProduct = (id) =>{
+        console.log(id)
+        var confirm = window.confirm("Are you sure you want to delete this item ?")
+        if(confirm){
+
+            Axios.get(URLAPI + '/product/deleteproduct/' + id)
+            .then((res)=>{
+                console.log(res.data)
+                window.alert("Delete Product Success!")
+                this.getProductStore()
             })
             .catch((err)=>{
                 console.log(err)

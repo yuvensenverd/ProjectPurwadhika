@@ -21,7 +21,7 @@ import Verified from './pages/verified'
 import cartPage from './pages/usercart'
 import AdminPage from './pages/adminpage'
 import { connect } from 'react-redux'
-import { loginUser } from './redux/actions/index'
+import { loginToken } from './redux/actions/index'
 import Axios from 'axios';
 import { URLAPI } from './redux/actions/types';
 
@@ -32,48 +32,41 @@ class App extends React.Component{
 
   // LOCAL STORAGE FOR LOGIN
   componentDidMount(){
-    var username = localStorage.getItem('username')
-    var password = localStorage.getItem('password')
-    console.log(username)
-    console.log(password)
-    if(username && password){
-
-      this.checkDatabaseUser(username, password)
-    }
+    this.props.loginToken()
   }
 
-  checkDatabaseUser = (username, password) => {
+  // checkDatabaseUser = (username, password) => {
 
-    var data = {
-      name : username,
-      pass : password
-    }
+  //   var data = {
+  //     name : username,
+  //     pass : password
+  //   }
     
-    Axios.post(URLAPI+'/user/getuser', data)
-    .then((res)=>{
-      if(res.data[0]){
+  //   Axios.post(URLAPI+'/user/getuser', data)
+  //   .then((res)=>{
+  //     if(res.data[0]){
 
-        console.log(res.data)
-        return this.log(username, password)
-      }else{
-        console.log("Gak dapaet")
-        return window.alert("Username / Password Tidak Valid!")
-      }
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  }
+  //       console.log(res.data)
+  //       return this.log(username, password)
+  //     }else{
+  //       console.log("Gak dapaet")
+  //       return window.alert("Username / Password Tidak Valid!")
+  //     }
+  //   })
+  //   .catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }
 
-  log = (username, password) => {
-    var data = {
-      USERNAME : username,
-      PASSWORD : password
-    }
+  // log = (username, password) => {
+  //   var data = {
+  //     USERNAME : username,
+  //     PASSWORD : password
+  //   }
 
-    this.props.loginUser(data)
+  //   this.props.loginUser(data)
    
-  }
+  // }
   
 
   render(){
@@ -110,4 +103,4 @@ class App extends React.Component{
   }
 }
 
-export default connect(null, {loginUser})(App) ;
+export default connect(null, {loginToken})(App) ;

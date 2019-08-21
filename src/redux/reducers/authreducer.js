@@ -16,29 +16,22 @@ const Initial_state =
   RESIDENCE : "",
   EMAIL : "",
   PROFILEIMG : '',
-  STATUS : ''
+  STATUS : '',
+  TOKEN : ''
 }
 
 export default(state = Initial_state, action)=>{
     switch(action.type){
         case LOGIN :
  
-            localStorage.setItem('username', action.payload[0].username)
-  
-    
-    
-            // return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
-            // ROLE : action.payload.userrole, CARTLEN : action.payload.cartlength}
-            // HAPUS CARTLENGTH TD
             return {...state, USERNAME : action.payload[0].username, PASSWORD : action.payload[0].password,
                     ROLE : action.payload[0].userrole,
                      userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
                     SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
                      RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email,
-                      PROFILEIMG :action.payload[0].profileimg, STATUS : action.payload[0].status}
+                      PROFILEIMG :action.payload[0].profileimg, STATUS : action.payload[0].status, TOKEN : action.payload[0].token}
         case LOGOUT :
-            localStorage.removeItem('username')
-            localStorage.removeItem('password')
+            localStorage.removeItem('token')
             return Initial_state
         case ADDITEM :
             // console.log("Masuk ADD Reducer")

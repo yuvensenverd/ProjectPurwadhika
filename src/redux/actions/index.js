@@ -11,22 +11,24 @@ export const loginUser = (value) =>{
         })
         .then((res)=>{
             console.log(res.data)
-            // var asd = res.data
-            // console.log(asd)
-            // var objuser = {
-            //     USERNAME : res.data.username,
-            //     PASSWORD : res.data.password,
-            //     CARTLENGTH : res.data.CartLength,
-            //     ROLE : res.data.userrole
-            // }
-            // console.log(objuser)
+            console.log(res.data[1])
+            localStorage.removeItem('token')
+            localStorage.setItem('token', res.data[1])
+            res.data[0].token = res.data[1]
           
             dispatch({
                 type : LOGIN,
                 payload : res.data
             })
+
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
         
-            Axios.get(URLAPI+'/cart/getcart?user='+res.data[0].username)
+            Axios.get(URLAPI+'/cart/getcart?user='+res.data[0].username, headers)
             .then((res2)=>{
                 console.log(res2.data)
                 dispatch({
@@ -42,11 +44,6 @@ export const loginUser = (value) =>{
             console.log(err)
         })
     }
-
-    // return{
-    //     type : LOGIN,
-    //     payload : value
-    // }
 }
 
 export const logoutUser = () =>{
@@ -86,5 +83,54 @@ export const updateUser = (data) =>{
     return {
         type : "UPDATE_USER",
         payload : data
+    }
+}
+
+export const loginToken = () =>{
+    return  (dispatch) =>{
+        console.log("Masuk login Token")
+        const token = localStorage.getItem('token')
+        const headers = {
+            headers: {
+                'Authorization' : `${token}`
+            }
+        }
+        Axios.post(URLAPI+'/user/logintoken', {}, headers)
+        .then((res)=>{
+            console.log(res.data)
+            console.log(res.data[1])
+            localStorage.removeItem('token')
+            localStorage.setItem('token', res.data[1])
+            res.data[0].token = res.data[1]
+            // var asd = res.data
+            // console.log(asd)
+            // var objuser = {
+            //     USERNAME : res.data.username,
+            //     PASSWORD : res.data.password,
+            //     CARTLENGTH : res.data.CartLength,
+            //     ROLE : res.data.userrole
+            // }
+            // console.log(objuser)
+          
+            dispatch({
+                type : LOGIN,
+                payload : res.data
+            })
+        
+            Axios.get(URLAPI+'/cart/getcart?user='+res.data[0].username, headers)
+            .then((res2)=>{
+                console.log(res2.data)
+                dispatch({
+                    type : ADDITEM,
+                    payload : res2.data
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 }

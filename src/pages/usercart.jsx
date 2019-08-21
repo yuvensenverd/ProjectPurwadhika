@@ -19,10 +19,6 @@ class UserCart extends React.Component{
     }
    
 
-    componentDidMount(){
-        
-    }
-
     componentWillUnmount(){
         this.updateItemCart()
     }
@@ -67,8 +63,15 @@ class UserCart extends React.Component{
         if(this.props.username !== "" && this.state.finishload === false){
             console.log(this.props.userdata.CART)
             console.log("masuk getitem")
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            console.log(token)
          
-            Axios.get(URLAPI+'/cart/getcart?user='+this.props.username)
+            Axios.get(URLAPI+'/cart/getcart?user='+this.props.username, headers)
             .then((res)=>{
                 this.setState({
                     cart_user : res.data,

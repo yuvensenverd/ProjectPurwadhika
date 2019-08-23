@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight, faProjectDiagram } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
@@ -22,7 +22,10 @@ class userStore extends React.Component{
         imagenum : [true],
         userStore : [],
         storeProduct : [],
-        categorylist : []
+        categorylist : [],
+        editnum : null,
+        modaleditPic : false,
+        editpicnum : null
     }
 
     componentDidMount(){
@@ -56,7 +59,13 @@ class userStore extends React.Component{
         
         if(this.props.userdata.userid){
             console.log(this.props.userdata.userid)
-            Axios.get(URLAPI+'/shop/getshopinfo/'+this.props.userdata.userid)
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI+'/shop/getshopinfo/'+this.props.userdata.userid, headers)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({
@@ -72,7 +81,13 @@ class userStore extends React.Component{
         
         if(this.props.userdata.userid){
             console.log(this.props.userdata.userid)
-            Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid)
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid, headers)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({
@@ -95,9 +110,8 @@ class userStore extends React.Component{
     closeModal = () =>{
         this.setState({
             modalOpen : false,
-            imagenum : [true]
-            
-         
+            imagenum : [true],
+            modaleditPic : false
         })
     }
 
@@ -160,6 +174,13 @@ class userStore extends React.Component{
         }
     }
 
+    openEditImage = (index) =>{
+        this.setState({
+            modaleditPic : true,
+            editpicnum : index
+        })
+    }
+
     // RENDER TABLE PRODUCT 
 
     renderProductTable = () =>{
@@ -167,29 +188,62 @@ class userStore extends React.Component{
         console.log(this.state.storeProduct.length)
         if(this.state.storeProduct.length !== 0){
             var jsx = this.state.storeProduct.map((prd, i)=>{
-                return(
-                    <tr>
-                        <th scope="row">{i+1}</th>
-                        <td>
-                            <img
-                             src={prd.images ?
-                                URLAPI+ prd.images.split(',')[0]
-                                :
-                                URLAPI + PATHDEFAULTPRD
-                                } 
+                if(i !== this.state.editnum){
+
+                    return(
+                        <tr>
+                            <th scope="row">{i+1}</th>
+                            <td>
+                              
+                                <img
+                                 src={prd.images ?
+                                    URLAPI+ prd.images.split(',')[0]
+                                    :
+                                    URLAPI + PATHDEFAULTPRD
+                                    } 
+                                 
+                                 alt="" width='100px'></img>
                              
-                             alt="" width='100px'></img>
-                        </td>
-                        <td>{prd.name}</td>
-                        <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
-                        <td>{prd.cat}</td>
-                        <td>{prd.rating+"/5"}</td>
-                        <td>
-                            <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
-                            <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
-                        </td>
-                    </tr>
-                )
+                            </td>
+                            <td>{prd.name}</td>
+                            <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
+                            <td>{prd.cat}</td>
+                            <td>{prd.rating+"/5"}</td>
+                            <td>
+                                <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
+                                <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}} onClick={()=>this.setState({editnum : i})}/>
+                            </td>
+                        </tr>
+                    )
+                }else {
+                    return (
+                        <tr>
+                            <th scope="row">{i+1}</th>
+                            <td>
+                                <div className="d-flex flex-column">
+                                    <img
+                                    src={prd.images ?
+                                        URLAPI+ prd.images.split(',')[0]
+                                        :
+                                        URLAPI + PATHDEFAULTPRD
+                                        } 
+                                    
+                                    alt="" width='100px'>
+                                    </img>
+                                    <input type="button" className="btn btn-success mr-3" value="Edit" onClick={()=>this.openEditImage(i)} />
+                                </div>
+                            </td>
+                            <td><input type="text" className="form-control" defaultValue={prd.name} ref="editnameproduct" /></td>
+                            <td><input type="number" className="form-control" defaultValue={prd.price} ref="editpriceproduct" /> </td>
+                            <td>{prd.cat}</td>
+                            <td>{prd.rating+"/5"}</td>
+                            <td>
+                                <input type="button" className="btn btn-info mr-3 navbartext" value="Save" style={{width : "95px"}}/>
+                                <input type="button" className="btn btn-danger navbartext" value="Cancel" style={{width : "95px"}} onClick={()=>this.setState({editnum : null})}/>
+                            </td>
+                        </tr>
+                    )
+                }
             })
             return jsx
         }
@@ -287,9 +341,13 @@ class userStore extends React.Component{
 
         if(images){
             var formData = new FormData()
+            const token = localStorage.getItem('token')
             var headers ={
                 headers : 
-                {'Content-Type' : 'multipart/form-data'}
+                {
+                    'Content-Type' : 'multipart/form-data',
+                    'Authorization' : `${token}`
+                }
             }
             for(var y = 0; y<images.length; y++){
                 console.log(images[y])
@@ -303,7 +361,7 @@ class userStore extends React.Component{
             .then((res)=>{
                 console.log(res.data)
                 this.closeModal()
-                Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid)
+                Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid, headers)
                 .then((res)=>{
                     console.log(res.data)
                     this.setState({
@@ -324,10 +382,16 @@ class userStore extends React.Component{
 
     onDeleteProduct = (id) =>{
         console.log(id)
-        var confirm = window.confirm("Are you sure you want to delete this item ?")
+        var confirm = window.confirm("Are you sure you want to delete this item from your store ?")
         if(confirm){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
 
-            Axios.get(URLAPI + '/product/deleteproduct/' + id)
+            Axios.get(URLAPI + '/product/deleteproduct/' + id, headers)
             .then((res)=>{
                 console.log(res.data)
                 window.alert("Delete Product Success!")
@@ -337,6 +401,15 @@ class userStore extends React.Component{
                 console.log(err)
             })
         }
+    }
+
+    printeditpic = () =>{
+        var i = this.state.editpicnum
+        return (
+            <div>
+                <p>  {i} </p>
+            </div>
+        )
     }
 
     
@@ -399,6 +472,16 @@ class userStore extends React.Component{
                             <input type="button" className="btn btn-lg btn-danger navbartext mb-2 p-2" value=" - Cancel" onClick={()=>this.closeModal()}/>
                             <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Submit Product" onClick={()=>this.onClickAddProduct()}/>
                         </ModalFooter>
+                    </Modal>
+                    <Modal isOpen={this.state.modaleditPic} toggle={this.closeModal} size="lg" style={{maxWidth: '1600px', width: '80%'}}>
+                        <ModalBody>
+                            {this.state.editpicnum !== null 
+                            ?
+                            this.printeditpic()
+                        :
+                        null
+                        }
+                        </ModalBody>
                     </Modal>
                    
                     {this.renderShopHeader()}

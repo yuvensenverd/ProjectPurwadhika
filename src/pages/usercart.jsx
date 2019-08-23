@@ -33,12 +33,18 @@ class UserCart extends React.Component{
                 var updatedqty = statecart[i].qty 
                 console.log("updatedqty menjadi " + updatedqty)
                 console.log("Masuk ubah produk " + updatecart[i].productid + "qty menjadi " + updatedqty)
+                const token = localStorage.getItem('token')
+                const headers = {
+                    headers: {
+                        'Authorization' : `${token}`
+                    }
+                }
 
                 Axios.post(URLAPI + '/cart/updatecart', {
                     qtyupdated : updatedqty,
                     userid : this.props.userdata.userid ,
                     productid : updatecart[i].productid
-                })
+                }, headers)
                 .then((res)=>{
                     console.log("Berhasil update cart willunmount")
                 })
@@ -143,44 +149,48 @@ class UserCart extends React.Component{
             var statecart = this.state.cart_user
             var updatecart = this.state.updatedproduct
             console.log(statecart)
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            // UPDATE BARANG YG DIUBAH DI STATE DULU
             for(var i = 0; i<updatecart.length; i++){
                 if(updatecart[i].value !== 0){
                     var updatedqty = statecart[i].qty 
                     console.log("updatedqty menjadi " + updatedqty)
                     console.log("Masuk ubah produk " + updatecart[i].productid + "qty menjadi " + updatedqty)
-    
+                   
                     Axios.post(URLAPI + '/cart/updatecart', {
                         qtyupdated : updatedqty,
                         userid : this.props.userdata.userid ,
                         productid : updatecart[i].productid
-                    })
+                    }, headers)
                     .then((res)=>{
                         console.log("Berhasil update cart willunmount")
-                        Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid)
-                        .then((res)=>{
-                            console.log("berhasil delete")
-                            window.alert("berhasil delete product")
-                            console.log(res.data)
-                            var cartupdate = this.state.updatedproduct
-                            cartupdate.splice(index, 1)
-                            this.setState({
-                                finishload : false, // supaya nge-get ulang
-                                updatedproduct : cartupdate
-                            })
-                            this.getItemCartUser()
-                
-                        })
-                        .catch((err)=>{
-                            console.log(err)
-                        })
+
                     })
                     .catch((err)=>{
                         console.log(err)
                     })
-                }else{
-                    console.log("Gak ada perubahan")
                 }
             }
+            Axios.get(URLAPI + '/cart/deletecart/'+id+'/'+this.props.userdata.userid, headers)
+            .then((res)=>{
+                console.log("berhasil delete")
+                window.alert("berhasil delete product")
+                console.log(res.data)
+                var cartupdate = this.state.updatedproduct
+                cartupdate.splice(index, 1)
+                this.setState({
+                    finishload : false // supaya nge-get ulang
+                })
+    
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
         }
     }
 
@@ -241,6 +251,7 @@ class UserCart extends React.Component{
                     this.setState({
                         updatedproduct : productobj
                     })
+                    console.log(this.state.updatedproduct)
                 }
                 
                 

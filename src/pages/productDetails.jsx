@@ -138,10 +138,17 @@ class productDetails extends React.Component{
             this.props.addItemCart(newcart)
 
             // SQL INSERT (Coz New)
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+        
             Axios.post(URLAPI+'/cart/addcart?user='+this.props.username, {
                 qty : this.state.jumlah,
                 productid : this.props.location.search.replace("?pid=", "")
-            })
+            }, headers)
             .then((res)=>{
               
                 // OPEN MODAL NOTIFICATION
@@ -160,11 +167,17 @@ class productDetails extends React.Component{
             this.props.addItemCart(newcart) // sama aja krn redux diupdate seluruh isi cart
 
             //SQL UPDATE
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
             Axios.post(URLAPI + '/cart/updatecart', {
                 qtyupdated : updatedqty,
                 userid : this.props.userdata.userid ,
                 productid : this.props.location.search.replace("?pid=", "")
-            })
+            }, headers)
             .then((res)=>{
                 console.log("Berhasil update cart")
                 this.setState({

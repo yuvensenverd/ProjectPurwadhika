@@ -209,7 +209,38 @@ class editProfile extends React.Component{
       }
 
     onSaveChangePassword = () =>{
+
+    }
+
+    onClickSaveResidence = () =>{
         // PASSWORD CHANGE
+        var newres = this.refs.inputresidence.value
+
+        if(this.props.userdata.RESIDENCE !== newres){
+            const token = localStorage.getItem('token')
+            var headers ={
+                headers : 
+                {
+                    'Authorization' : `${token}`
+                }
+            }
+            //
+            Axios.put(URLAPI + '/user/changeresidence', {
+                id : this.props.userdata.userid,
+                residence : newres
+            }, headers)
+            .then((res)=>{
+                window.alert("Change Residence Success!")
+                this.props.updateUser(res.data[0])
+                this.setState({modalOpenResidence : false})
+
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }else{
+            window.alert("Residence Tidak berubah!")
+        }
     }
       
     render(){
@@ -261,7 +292,7 @@ class editProfile extends React.Component{
                                 <div className="p-r-140">
 
                                     <input type="button" className="btn btn-danger navbartext mr-5" value="CANCEL" onClick={()=>this.setState({modalOpenResidence : false})} />
-                                    <input type="button" className="btn btn-success navbartext" value="CHANGE"/>
+                                    <input type="button" className="btn btn-success navbartext" value="CHANGE" onClick={()=>this.onClickSaveResidence()}/>
                                 </div>
                             </center>
                         </ModalFooter>

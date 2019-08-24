@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 import numeral from 'numeral'
+import { thisExpression } from '@babel/types';
 
 // NANTI KALAU ADD PRODUCT DI LOOPING 
 
@@ -25,7 +26,8 @@ class userStore extends React.Component{
         categorylist : [],
         editnum : null,
         modaleditPic : false,
-        editpicnum : null
+        editpicnum : null,
+        productidedit : null
     }
 
     componentDidMount(){
@@ -111,7 +113,9 @@ class userStore extends React.Component{
         this.setState({
             modalOpen : false,
             imagenum : [true],
-            modaleditPic : false
+            modaleditPic : false,
+            productidedit : null,
+            editnum : null
         })
     }
 
@@ -174,10 +178,11 @@ class userStore extends React.Component{
         }
     }
 
-    openEditImage = (index) =>{
+    openEditImage = (index, prid) =>{
         this.setState({
             modaleditPic : true,
-            editpicnum : index
+            editpicnum : index,
+            productidedit : prid
         })
     }
 
@@ -211,7 +216,7 @@ class userStore extends React.Component{
                             <td>{prd.rating+"/5"}</td>
                             <td>
                                 <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
-                                <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}} onClick={()=>this.setState({editnum : i})}/>
+                                <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}} onClick={()=>this.setState({editnum : i, productidedit : prd.id})}/>
                             </td>
                         </tr>
                     )
@@ -230,16 +235,16 @@ class userStore extends React.Component{
                                     
                                     alt="" width='100px'>
                                     </img>
-                                    <input type="button" className="btn btn-success mr-3" value="Edit" onClick={()=>this.openEditImage(i)} />
+                                    <input type="button" className="btn btn-success mr-3" value="Edit" onClick={()=>this.openEditImage(i, prd.id)} />
                                 </div>
                             </td>
                             <td><input type="text" className="form-control" defaultValue={prd.name} ref="editnameproduct" /></td>
                             <td><input type="number" className="form-control" defaultValue={prd.price} ref="editpriceproduct" /> </td>
-                            <td>{prd.cat}</td>
-                            <td>{prd.rating+"/5"}</td>
+                            <td></td>
+                            <td><textarea  defaultValue={prd.description} ref="editdescproduct" /></td>
                             <td>
-                                <input type="button" className="btn btn-info mr-3 navbartext" value="Save" style={{width : "95px"}}/>
-                                <input type="button" className="btn btn-danger navbartext" value="Cancel" style={{width : "95px"}} onClick={()=>this.setState({editnum : null})}/>
+                                <input type="button" className="btn btn-info mr-3 navbartext" value="Save" style={{width : "95px"}} onClick={()=>this.editProduct()}/>
+                                <input type="button" className="btn btn-danger navbartext" value="Cancel" style={{width : "95px"}} onClick={()=>this.setState({editnum : null, productidedit : null})}/>
                             </td>
                         </tr>
                     )
@@ -248,10 +253,27 @@ class userStore extends React.Component{
             return jsx
         }
     }
+    previewEditFile = (index) =>{
+        var preview = document.getElementById('srcimg'+index); // img src
+        var file    = document.getElementById('editimage'+index).files[0]; //input file
+        var reader  = new FileReader();
+        console.log(reader)
+      
+        reader.onloadend = function () {
+          preview.src = reader.result;
+        }
+      
+        if (file) {
+          reader.readAsDataURL(file);
+          
+        } else {
+          preview.src = "";
+        }
+    }
 
     previewFile = (index) => {
-        var preview = document.getElementById('primg'+index);
-        var file    = document.getElementById('productimage'+index).files[0];
+        var preview = document.getElementById('primg'+index); // img src
+        var file    = document.getElementById('productimage'+index).files[0]; //input file
   
        
         var reader  = new FileReader();
@@ -405,11 +427,123 @@ class userStore extends React.Component{
 
     printeditpic = () =>{
         var i = this.state.editpicnum
-        return (
-            <div>
-                <p>  {i} </p>
-            </div>
-        )
+        var output = this.state.storeProduct[i].images.split(',').map((val, index)=>{
+
+            return (
+                <div className="d-flex flex-column">
+                    <img
+                    id={"srcimg"+index}
+                    src={val ?
+                    URLAPI+ val
+                    :
+                    URLAPI + PATHDEFAULTPRD
+                    } 
+                    
+                    alt="" width='200px'>
+
+                    </img>
+                    <input type="file" id={`editimage${index}`} ref={"editimageref"+index} className=" mb-3 " onChange={()=>this.previewEditFile(index)}/>
+                </div>
+            )
+        })
+        return output
+    }
+
+    editSavedImage = () =>{
+        var index = this.state.editpicnum
+        var images = []
+        var data = {
+            id : this.state.productidedit
+        }
+        var arrayno = []
+     
+        for(var i = 0; i<this.state.storeProduct[index].images.split(',').length; i++){
+            if(document.getElementById(`editimage${i}`).files[0]){
+                images.push(document.getElementById(`editimage${i}`).files[0])
+                arrayno.push(i)
+                data.index = arrayno
+            }else{
+                images.push(null)
+            }
+        }
+        console.log(images)
+       
+        var formData = new FormData()
+        const token = localStorage.getItem('token')
+        var headers ={
+            headers : 
+            {
+                'Content-Type' : 'multipart/form-data',
+                'Authorization' : `${token}`
+            }
+        }
+        for(var y = 0; y<images.length; y++){
+            console.log(images[y])
+            console.log("Masuk images"+y)
+            formData.append('image', images[y]) 
+        }
+        // Data 
+        console.log(data)
+        formData.append('data', JSON.stringify(data))
+
+        console.log(formData)
+        Axios.post(URLAPI + '/product/editimage', formData, headers)
+        .then((res)=>{
+            console.log(res.data)
+            window.alert("Berhasil Edit Product Image")
+            this.closeModal()
+            this.getProductStore()
+            // this.closeModal()
+            // Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid, headers)
+            // .then((res)=>{
+            //     console.log(res.data)
+            //     this.setState({
+            //         storeProduct : res.data
+            //     })
+            // })
+            // .catch((err)=>{
+            //     console.log(err)
+            // })
+            
+            // return window.alert("Add Product Berhasil")
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    
+    }
+
+    editProduct = () =>{
+        var name = this.refs.editnameproduct.value
+        var price = parseInt(this.refs.editpriceproduct.value)
+        var description = this.refs.editdescproduct.value
+        var data = {
+            name,
+            price,
+            description
+        }
+        console.log(data)
+        const token = localStorage.getItem('token')
+        var headers ={
+            headers : 
+            {
+                'Authorization' : `${token}`
+            }
+        }
+        console.log(this.state.productidedit)
+        Axios.put(URLAPI + '/product/editproduct/' + this.state.productidedit, data , headers)
+        .then((res)=>{
+            console.log(res.data)
+            window.alert("Product Edit Success")
+            this.getProductStore()
+            this.setState({
+                editnum : null,
+                productidedit : null
+            })
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 
     
@@ -474,14 +608,24 @@ class userStore extends React.Component{
                         </ModalFooter>
                     </Modal>
                     <Modal isOpen={this.state.modaleditPic} toggle={this.closeModal} size="lg" style={{maxWidth: '1600px', width: '80%'}}>
+                        <ModalHeader>
+                                <h1>Edit Product Images</h1>
+                        </ModalHeader>
                         <ModalBody>
+                            <div className="d-flex flex-row">
                             {this.state.editpicnum !== null 
                             ?
                             this.printeditpic()
-                        :
-                        null
-                        }
+                            :
+                            null
+                            }
+                            </div>
                         </ModalBody>
+                        <ModalFooter>
+
+                            <input type="button" className="btn btn-lg btn-danger navbartext mb-2 p-2" value=" - Cancel" onClick={()=>this.closeModal()}/>
+                            <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Finsih Edit Image" onClick={()=>this.editSavedImage()} />
+                        </ModalFooter>
                     </Modal>
                    
                     {this.renderShopHeader()}

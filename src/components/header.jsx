@@ -16,7 +16,7 @@ import { connect } from 'react-redux'
 import { logoutUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { faShoppingCart, faBell} from '@fortawesome/free-solid-svg-icons'
+import { faShoppingCart, faBell, faStore} from '@fortawesome/free-solid-svg-icons'
 import { URLAPI, PATHDEFAULTPICT } from '../redux/actions/types';
 import numeral from 'numeral'
 
@@ -169,6 +169,23 @@ import numeral from 'numeral'
             </div>
             :
             null
+          }
+          { this.props.username !== ""
+           ?
+          
+           
+           <div className="navbartext mr-3">
+          
+             <Link to='/confirmorder'>
+             <div className="shopnum">0</div>
+             <FontAwesomeIcon size="2x"  icon={faStore} style={{color : "lightblue"}}>
+            
+             </FontAwesomeIcon>
+             </Link>
+             
+           </div>
+           :
+           null
           }
           { this.props.username !== ""
            ?

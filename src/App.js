@@ -11,7 +11,9 @@ import productPage from './pages/productpage'
 import promoDetails from './pages/promoDetails'
 import createStore from './pages/createstore'
 import userStore from './pages/userstore'
-import userHistory from './pages/userhistory'
+import shophistory from './pages/shophistory'
+
+
 import editProfile from './pages/editprofile'
 import productDetails from './pages/productDetails'
 import PageNotFound from './pages/pagenotfound'
@@ -25,6 +27,7 @@ import { connect } from 'react-redux'
 import { loginToken } from './redux/actions/index'
 import Axios from 'axios';
 import { URLAPI } from './redux/actions/types';
+import userhistory from './pages/userhistory';
 
 
 
@@ -84,7 +87,8 @@ class App extends React.Component{
         <Route path='/product' component={productPage}></Route>
         <Route path='/createstore' component={createStore}></Route>
         <Route path='/userstore' component={userStore}></Route>
-        <Route path='/userhistory' component={userHistory}></Route>
+        <Route path='/shophistory' component={shophistory}></Route>
+        <Route path='/userhistory' component={userhistory}></Route>
         <Route path='/editprofile' component={editProfile}></Route>
         <Route path='/productdetails' component={productDetails}></Route>
         <Route path='/usercart' component={cartPage}></Route>

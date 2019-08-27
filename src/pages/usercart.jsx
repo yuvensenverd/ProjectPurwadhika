@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Card, Button,  CardText, Row,  } from 'reactstrap';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { addItemCart } from './../redux/actions/index'
+import { addItemCart, updateNotification } from './../redux/actions/index'
 import Footer from '../components/footer'
 import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -319,6 +319,7 @@ class UserCart extends React.Component{
         Axios.post(URLAPI + '/cart/addtransaction', data, headers)
         .then((res)=>{
             this.props.addItemCart([]) // set cart empty in redux
+            this.props.updateNotification(this.props.userdata.NOTIFLEN + arr.length)
             this.setState({
                 modaltransaction : true,
                 cart_user : []
@@ -451,4 +452,4 @@ const mapStateToProps= (state)=>{
 }
 
 
-export default connect(mapStateToProps, {addItemCart})(UserCart)
+export default connect(mapStateToProps, {addItemCart, updateNotification})(UserCart)

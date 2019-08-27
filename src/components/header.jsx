@@ -132,7 +132,7 @@ import numeral from 'numeral'
                             </DropdownItem>
                             </Link>
                             <DropdownItem  style={{padding : "0px", margin : "0px"}}>
-                            <div className="btn bg-primary form-control"><Link to="/promo" className="navbartext " style={{color : "white", border : "none"}}>Check Coupon / Promo   </Link></div>
+                            <div className="btn bg-primary form-control"><Link to="/userhistory" className="navbartext " style={{color : "white", border : "none"}}>Transaction History   </Link></div>
                             </DropdownItem>
                             <DropdownItem  style={{padding : "0px", margin : "0px"}}>
                             <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><Link to="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </Link></div>

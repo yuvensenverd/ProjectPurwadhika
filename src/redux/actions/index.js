@@ -92,6 +92,13 @@ export const addItemCart = (item) =>{
     }
 }
 
+export const updateNotification = (val) =>{
+    return{
+        type : "UPDATE_NOTIFICATION",
+        payload : val //this.props.userdata.NOTIFLEN - 1 dsbdbsdbs
+    }
+}
+
 export const updateUser = (data) =>{
     return {
         type : "UPDATE_USER",

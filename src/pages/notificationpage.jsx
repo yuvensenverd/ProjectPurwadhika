@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { updateNotification } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import StarRatings from 'react-star-ratings';
 
@@ -191,6 +192,7 @@ class NotificationPage extends React.Component{
                 finishload : true,
                 datatype : 'Unconfirmed'
             })
+            this.props.updateNotification(this.props.userdata.NOTIFLEN - 1)
             this.getConfirmedOrder()
         })
         .catch((err)=>{
@@ -277,4 +279,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, null)(NotificationPage);
+export default connect(mapStateToProps, {updateNotification})(NotificationPage);

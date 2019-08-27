@@ -158,7 +158,7 @@ class userStore extends React.Component{
                         </div>
                         <div className="col-md-3 subtitletext  p-3 text-center">
                             <div className="mb-2"> <FontAwesomeIcon size="2x"  icon={faHourglassHalf} ></FontAwesomeIcon></div>
-                            <Link to="/userhistory">
+                            <Link to="/shophistory">
                             <input type="button" className="btn form-control btn-primary navbartext" value="$ Transaction "/>
                             </Link>
                         </div>

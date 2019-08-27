@@ -146,6 +146,7 @@ class Homepage extends React.Component{
                 starRatedColor="orange"
                 // changeRating={this.changeRating.bind(this)}
                 numberOfStars={5}
+                starDimension="20px"
                 name='rating' // BERBEDA NANTI
                 />
 

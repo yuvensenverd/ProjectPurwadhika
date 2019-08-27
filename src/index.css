@@ -5,7 +5,13 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+    min-width: 1685px; 
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+    /* Nanti DIGANTI */
 }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

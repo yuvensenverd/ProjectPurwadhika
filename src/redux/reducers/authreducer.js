@@ -17,7 +17,8 @@ const Initial_state =
   EMAIL : "",
   PROFILEIMG : '',
   STATUS : '',
-  TOKEN : ''
+  TOKEN : '',
+  NOTIFLEN : 0
 }
 
 export default(state = Initial_state, action)=>{
@@ -47,6 +48,12 @@ export default(state = Initial_state, action)=>{
                  userid : action.payload.userid, HAVESHOP : !isNull(action.payload.shopname),
                 SALDO : parseInt(action.payload.saldo), PHONENUMBER : action.payload.phonenumber,
                  RESIDENCE : action.payload.residence, EMAIL : action.payload.email, PROFILEIMG :action.payload.profileimg}
+        case "UPDATE_NOTIFICATION" :
+            console.log("Masuk Auth Reeduce")
+            console.log(action.payload)
+            return {
+                ...state, NOTIFLEN : action.payload
+            }
             
         default : 
             console.log("default")

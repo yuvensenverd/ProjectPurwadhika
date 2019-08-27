@@ -186,6 +186,7 @@ class productPage extends React.Component{
                     starRatedColor="orange"
                     // changeRating={this.changeRating}
                     numberOfStars={5}
+                    starDimension="20px"
                     name='rating'
                     />
                 

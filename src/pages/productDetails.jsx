@@ -246,6 +246,7 @@ class productDetails extends React.Component{
                             rating={this.state.productdetail[0].rating}
                             starRatedColor="orange"
                             // changeRating={this.changeRating}
+                            starDimension="20px"
                             numberOfStars={5}
                             name='rating'
                             

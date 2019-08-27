@@ -170,7 +170,7 @@ import numeral from 'numeral'
             :
             null
           }
-          { this.props.username !== ""
+          { this.props.username !== "" && this.props.userdata.HAVESHOP
            ?
           
            
@@ -194,7 +194,7 @@ import numeral from 'numeral'
            <div className="navbartext mr-3">
           
              <Link to='/notification'>
-             <div className="bellnum">0</div>
+             <div className="bellnum">{this.props.userdata.NOTIFLEN}</div>
              <FontAwesomeIcon size="2x"  icon={faBell} style={{color : "orange"}}>
             
              </FontAwesomeIcon>

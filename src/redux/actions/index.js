@@ -39,6 +39,19 @@ export const loginUser = (value) =>{
             .catch((err)=>{
                 console.log(err)
             })
+            Axios.get(URLAPI + '/transaction/getnotiflen/' + res.data[0].userid)
+            .then((result)=>{
+                console.log("Masuk SElesai Notif")
+                console.log(result.data)
+                dispatch({
+                    type : "UPDATE_NOTIFICATION",
+                    payload : result.data[0].NOTIFLEN
+                })
+                
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
         })
         .catch((err)=>{
             console.log(err)
@@ -124,6 +137,20 @@ export const loginToken = () =>{
                     type : ADDITEM,
                     payload : res2.data
                 })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+
+            Axios.get(URLAPI + '/transaction/getnotiflen/' + res.data[0].userid)
+            .then((result)=>{
+                console.log("Masuk SElesai Notif")
+                console.log(result.data)
+                dispatch({
+                    type : "UPDATE_NOTIFICATION",
+                    payload : result.data[0].NOTIFLEN
+                })
+                
             })
             .catch((err)=>{
                 console.log(err)

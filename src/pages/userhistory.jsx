@@ -65,6 +65,28 @@ class userhistory extends React.Component{
         })
     }
 
+    deleteTransaction =(id) =>{
+        var confirm = window.confirm("Are you sure you want to delete this transaction ?")
+        if(confirm){
+
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI + `/transaction/deletetransaction/${id}`, headers)
+            .then((res)=>{
+                console.log(res.data)
+                console.log("Berhasil status delete")
+                this.getTransactionData()
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
     renderData = () =>{
  
         if(this.state.data.length !== 0){
@@ -76,7 +98,8 @@ class userhistory extends React.Component{
                         <td>{trx.transactiondate.split('T')[0]}</td>
                         <td>{'Rp ' +numeral(trx.totalprice).format(0,0)}</td>
                         <td>
-                            <input type="button" className="btn btn-info" value="DETAILS" onClick={()=>this.getDetailTransaction(trx.transid)}/>
+                            <input type="button" className="btn btn-info mr-3" value="DETAILS" onClick={()=>this.getDetailTransaction(trx.transid)}/>
+                            <input type="button" className="btn btn-danger" value="DELETE" onClick={()=>this.deleteTransaction(trx.transid)}/>
                         </td>
                     </tr>
                 )

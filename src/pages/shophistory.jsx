@@ -38,6 +38,26 @@ class shophistory extends React.Component{
         })
     }
 
+    shopHistoryDelete = (id) =>{
+        var confirm = window.confirm("Are you sure you want to delete this transaction?")
+        if(confirm){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI + `/transaction/tidelete/${id}`, headers)
+            .then((res)=>{
+                window.alert("Delete Transaction Success")
+                this.getShopHistory()
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
     renderData = () =>{
         if(this.state.data.length !== 0 ){
             var jsx = this.state.data.map((item, i)=>{
@@ -50,10 +70,10 @@ class shophistory extends React.Component{
                         <td>{'Rp ' +numeral(item.price).format(0,0)}</td>
                         <td>{item.qty}</td>
                         <td>{item.buyer}</td>
-                        <td>{item.status}</td>
+                        <td className={item.status}>{item.status}</td>
                         <td className="text-success">{'Rp ' +numeral(item.qty * item.price).format(0,0)}</td>
                         <td>
-                            <input type='button' className="btn btn-danger" value="DELETE"/>
+                            <input type='button' className="btn btn-danger" value="DELETE" onClick={()=>this.shopHistoryDelete(item.transid)}/>
                         </td>
                     </tr>
                 )

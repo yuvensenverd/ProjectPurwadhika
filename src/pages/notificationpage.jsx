@@ -1,7 +1,7 @@
 import React from 'react'
 import numeral from 'numeral'
 import Axios from 'axios';
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -97,81 +97,102 @@ class NotificationPage extends React.Component{
 
     renderData = () =>{
         if(this.state.finishload === true && this.state.datatype === 'Unconfirmed'){
-            var jsx = this.state.data.map((item, i)=>{
-                return (
-                    <div>
-                        <div className="storecard p-3 mb-0 " style={{height : "130px"}}>
-                            <div className="row">
-                                
-                                <div className="col-md-1  pr-5 pb-2" >
-                                    <img src={URLAPI + item.images.split(',')[0]} alt="userprofile" className="" width="80px" height="80px"/>
-                                </div>
-                                <div className="col-md-4 pt-3 pl-5 d-flex flex-column">
-                                    <h4 className="font-weight-bold subtitletext">{item.shop}</h4>
-                                    <h5>{item.name + ` x ${item.qty} pcs`}</h5>
-                                </div>
-                                <div className="col-md-2 pt-4 d-flex flex-column">
-                                   
-                                        {/* <div>{item.name}</div> */}
-                                        <h5 className="font-weight-bold  text-secondary">{"Total Price :"}</h5>
-                                        <div className="itempricecart">{'Rp ' +numeral(item.qty * item.price).format(0,0)}</div>
-                        
-                                </div>
+            if(this.state.data.length > 0){
 
-                                <div className="col-md-3 subtitletext  text-center pt-4 d-flex flex-row ">
-                                 
-                                    <input type="text" className="form-control" value="Waiting for confirmation..."/>
-                                </div>
-                                <div className="col-md-2 subtitletext  text-center pt-3 d-flex flex-column ">
-                                    <p>{"transaction date"}</p>
-                                    <h5>{item.transactiondate.split('T')[0]}</h5>
+                var jsx = this.state.data.map((item, i)=>{
+                    return (
+                        <div>
+                            <div className="storecard p-3 mb-0 " style={{height : "130px"}}>
+                                <div className="row">
+                                    
+                                    <div className="col-md-1  pr-5 pb-2" >
+                                        <img src={URLAPI + item.images.split(',')[0]} alt="userprofile" className="" width="80px" height="80px"/>
+                                    </div>
+                                    <div className="col-md-4 pt-3 pl-5 d-flex flex-column">
+                                        <h4 className="font-weight-bold subtitletext">{item.shop}</h4>
+                                        <h5>{item.name + ` x ${item.qty} pcs`}</h5>
+                                    </div>
+                                    <div className="col-md-2 pt-4 d-flex flex-column">
+                                       
+                                            {/* <div>{item.name}</div> */}
+                                            <h5 className="font-weight-bold  text-secondary">{"Total Price :"}</h5>
+                                            <div className="itempricecart">{'Rp ' +numeral(item.qty * item.price).format(0,0)}</div>
+                            
+                                    </div>
+    
+                                    <div className="col-md-3 subtitletext  text-center pt-4 d-flex flex-row ">
+                                     
+                                        <input type="text" className="form-control" value="Waiting for confirmation..."/>
+                                    </div>
+                                    <div className="col-md-2 subtitletext  text-center pt-3 d-flex flex-column ">
+                                        <p>{"transaction date"}</p>
+                                        <h5>{item.transactiondate.split('T')[0]}</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    )
+                })
+                return jsx
+            }else{
+                return (
+                    <div className="p-t-100 text-center">
+                        <h1>Product Waiting Confirmation Empty </h1>
+                        <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
                     </div>
                 )
-            })
-            return jsx
+            }
         }
         if(this.state.finishload === true && this.state.datatype === 'Confirmed'){
-            var jsx = this.state.data.map((item, i)=>{
-                return (
-                    <div>
-                        <div className="storecard p-3 mb-0 " style={{height : "130px"}}>
-                            <div className="row">
-                                
-                                <div className="col-md-1  pr-5 pb-2" >
-                                    <img src={URLAPI + item.images.split(',')[0]} alt="userprofile" className="" width="80px" height="80px"/>
-                                </div>
-                                <div className="col-md-4 pt-3 pl-5 d-flex flex-column">
-                                    <h4 className="font-weight-bold subtitletext">{item.shop}</h4>
-                                    <h5>{item.name + ` x ${item.qty} pcs`}</h5>
-                                </div>
-                                <div className="col-md-3 subtitletext  text-center pt-4 d-flex flex-row ">
-                                 
-                                    <input type="text" className="form-control" value="Confirmed by Shop"/>
-                                </div>
-                                <div className="col-md-2 subtitletext  text-center pt-3 d-flex flex-column ">
-                                    <p>{"transaction date"}</p>
-                                    <h5>{item.transactiondate.split('T')[0]}</h5>
-                                </div>
-                                <div className="col-md-2 subtitletext  text-center  d-flex flex-column  ">
-                                    <h5> Product Recieved ?</h5>
-                                    <div>
-                                    <input type="button" className="btn btn-secondary mr-3" value="Yes" onClick={()=>this.setState({
-                                        itemindex : i,
-                                        modalOpen : true
-                                    })}/>
-                           
+            if(this.state.data.length > 0){
+                
+                var jsx = this.state.data.map((item, i)=>{
+                    return (
+                        <div>
+                            <div className="storecard p-3 mb-0 " style={{height : "130px"}}>
+                                <div className="row">
+                                    
+                                    <div className="col-md-1  pr-5 pb-2" >
+                                        <img src={URLAPI + item.images.split(',')[0]} alt="userprofile" className="" width="80px" height="80px"/>
                                     </div>
-
+                                    <div className="col-md-4 pt-3 pl-5 d-flex flex-column">
+                                        <h4 className="font-weight-bold subtitletext">{item.shop}</h4>
+                                        <h5>{item.name + ` x ${item.qty} pcs`}</h5>
+                                    </div>
+                                    <div className="col-md-3 subtitletext  text-center pt-4 d-flex flex-row ">
+                                     
+                                        <input type="text" className="form-control" value="Confirmed by Shop"/>
+                                    </div>
+                                    <div className="col-md-2 subtitletext  text-center pt-3 d-flex flex-column ">
+                                        <p>{"transaction date"}</p>
+                                        <h5>{item.transactiondate.split('T')[0]}</h5>
+                                    </div>
+                                    <div className="col-md-2 subtitletext  text-center  d-flex flex-column  ">
+                                        <h5> Product Recieved ?</h5>
+                                        <div>
+                                        <input type="button" className="btn btn-secondary mr-3" value="Yes" onClick={()=>this.setState({
+                                            itemindex : i,
+                                            modalOpen : true
+                                        })}/>
+                               
+                                        </div>
+    
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    )
+                })
+                return jsx
+            }else{
+                return(
+
+                <div className="p-t-100 text-center">
+                    <h1>Product Confirmed Empty </h1>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                </div>
                 )
-            })
-            return jsx
+            }
         }
     }
 

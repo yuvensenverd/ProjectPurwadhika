@@ -395,6 +395,18 @@
   display: block;
 }
 
+.Success {
+  color: green
+}
+
+.Confirmed {
+  color: orange
+}
+
+.Cancelled {
+  color: #c02c3a
+}
+
 
 
 /*  USER HISTORY  */

@@ -48,7 +48,7 @@ export default class Example extends React.Component {
                       starDimension="15px"
                       name='rating'
                   />
-                  <h3 className="mt-2 mb-3">{`By ${item.username}`}</h3>
+                  <h5 className="mt-2 mb-3">{`By ${item.username}`}</h5>
                   <div>{item.description}</div>
               </div>
             )

@@ -9,6 +9,7 @@ import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { updateNotification } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import StarRatings from 'react-star-ratings';
+import queryString from 'query-string'
 
 
 
@@ -34,12 +35,37 @@ class NotificationPage extends React.Component{
 
     componentWillReceiveProps(){
     
-        this.getWaitingConfirmation()
+        const values = queryString.parse(this.props.location.search)
+        console.log(values)
+        if(values.type){
+            if(values.type === "confirmation"){
+                this.getWaitingConfirmation()
+            }else if(values.type === "confirmed"){
+                this.getConfirmedOrder()
+            }else{
+                this.getWaitingConfirmation()
+            }
+        }else{
+            this.getWaitingConfirmation()
+        }
         
     }
     
     componentDidMount(){
-        this.getWaitingConfirmation()
+        const values = queryString.parse(this.props.location.search)
+        console.log(values)
+        if(values.type){
+            if(values.type === "confirmation"){
+                this.getWaitingConfirmation()
+            }else if(values.type === "confirmed"){
+                this.getConfirmedOrder()
+            }else{
+                this.getWaitingConfirmation()
+            }
+        }else{
+            this.getWaitingConfirmation()
+        }
+       
     }
 
     getConfirmedOrder = () =>{
@@ -207,11 +233,18 @@ class NotificationPage extends React.Component{
                 'Authorization' : `${token}`
             }
         }
-        
-        var description = this.refs.reviewref.value
-        description = description.replace(/\s+/, "")
-        if(description === ""){
-            description = 'No Description'
+        console.log(this.state.starrating)
+        if(this.state.starrating !== 0){
+
+            var description = this.refs.reviewref.value
+            description = description.replace(/\s+/, "")
+            if(description === ""){
+                description = 'No Description'
+            }
+           
+            
+        }else{
+           var description = null
         }
         var userid = this.props.userdata.userid
         var rating = this.state.starrating
@@ -304,10 +337,16 @@ class NotificationPage extends React.Component{
                 </Modal>
                <div className="row mb-5 p-0 m-0">
                     <div className="col-md-6 text-center p-0 m-0 ">
-                        <input type="button" className="btn btn-info navbartext form-control" value="Waiting Confirmation" onClick={()=>this.getWaitingConfirmation()} />
+                        <a href="/notification?type=confirmation">
+                            <input type="button" className="btn btn-info navbartext form-control" value="Waiting Confirmation"   />
+                        </a>
+                        
                     </div>
                     <div className="col-md-6 text-center p-0 m-0 ">
-                        <input type="button" className="btn btn-success navbartext form-control" value="Confirmed Orders" onClick={()=>this.getConfirmedOrder()} />
+                        <a href="/notification?type=confirmed">
+                            <input type="button" className="btn btn-success navbartext form-control" value="Confirmed Orders" />
+                        </a>
+                        
                     </div>
                 </div>
                 <div>

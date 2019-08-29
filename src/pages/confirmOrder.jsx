@@ -3,6 +3,7 @@ import numeral from 'numeral'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { connect } from 'react-redux'
+import {updateShopNotification} from '../redux/actions/index'
 
 
 
@@ -63,6 +64,8 @@ class confirmOrder extends React.Component{
                 finishload : false,
                 datatype : 'Unconfirmed'
             })
+            this.props.updateShopNotification(this.props.userdata.SHOPNOTIF - 1)
+
             this.getWaitingConfirmation()
         })
         .catch((err)=>{
@@ -88,6 +91,7 @@ class confirmOrder extends React.Component{
                     finishload : false,
                     datatype : 'Unconfirmed'
                 })
+                this.props.updateShopNotification(this.props.userdata.SHOPNOTIF - 1)
                 this.getWaitingConfirmation()
             })
             .catch((err)=>{
@@ -174,4 +178,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, null)(confirmOrder);
+export default connect(mapStateToProps, {updateShopNotification})(confirmOrder);

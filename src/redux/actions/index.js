@@ -10,8 +10,7 @@ export const loginUser = (value) =>{
             pass : value.PASSWORD
         })
         .then((res)=>{
-            console.log(res.data)
-            console.log(res.data[1])
+          
             localStorage.removeItem('token')
             localStorage.setItem('token', res.data[1])
             res.data[0].token = res.data[1]
@@ -27,6 +26,7 @@ export const loginUser = (value) =>{
                     'Authorization' : `${token}`
                 }
             }
+            
         
             Axios.get(URLAPI+'/cart/getcart?user='+res.data[0].username, headers)
             .then((res2)=>{
@@ -39,6 +39,7 @@ export const loginUser = (value) =>{
             .catch((err)=>{
                 console.log(err)
             })
+            
             Axios.get(URLAPI + '/transaction/getnotiflen/' + res.data[0].userid)
             .then((result)=>{
                 console.log("Masuk SElesai Notif")
@@ -48,10 +49,23 @@ export const loginUser = (value) =>{
                     payload : result.data[0].NOTIFLEN
                 })
                 
+                
             })
             .catch((err)=>{
                 console.log(err)
             })
+
+            Axios.get(URLAPI + '/transaction/shopnotiflen' + res.data[0].userid)
+            .then((res)=>{
+                console.log("MAsuK?")
+                console.log(res.data)
+                dispatch({
+                    type : 'UPDATE_SHOP_NOTIFICATION',
+                    payload : res.data[0].SHOPNOTIFLEN
+                })
+            })
+            
+            
         })
         .catch((err)=>{
             console.log(err)
@@ -96,6 +110,12 @@ export const updateNotification = (val) =>{
     return{
         type : "UPDATE_NOTIFICATION",
         payload : val //this.props.userdata.NOTIFLEN - 1 dsbdbsdbs
+    }
+}
+export const updateShopNotification = (val) =>{
+    return{
+        type : "UPDATE_SHOP_NOTIFICATION",
+        payload : val //this.props.userdata.SHOPNOTIF - 1 dsbdbsdbs
     }
 }
 
@@ -161,6 +181,16 @@ export const loginToken = () =>{
             })
             .catch((err)=>{
                 console.log(err)
+            })
+
+            Axios.get(URLAPI + '/transaction/shopnotiflen/' + res.data[0].userid)
+            .then((res)=>{
+                console.log("MAsuK?")
+                console.log(res.data)
+                dispatch({
+                    type : 'UPDATE_SHOP_NOTIFICATION',
+                    payload : res.data[0].SHOPNOTIFLEN
+                })
             })
         })
         .catch((err)=>{

@@ -173,22 +173,18 @@ class productPage extends React.Component{
                 {/* {"Rp. " + numeral(val.name).format(0,0)} */}
                 {"Rp. " + numeral(val.price).format(0,0)}
                 </div>
-                {/* <StarRatingComponent 
-                   
-                    name="rate1" // INGAT KASIH ID BERBEDA 
-                    starCount={5}
-                    value={this.state.rating}
-                    onStarClick={()=> this.onStarClick()}
-                    
-                /> */}
+                <div className="d-flex flex-row justify-content-center">
+
                  <StarRatings
-                    rating={val.rating}
+                    rating={val.avgrating ? val.avgrating : 0}
                     starRatedColor="orange"
                     // changeRating={this.changeRating}
                     numberOfStars={5}
-                    starDimension="20px"
+                    starDimension="16px"
                     name='rating'
                     />
+                    <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
+                </div>
                 
                 <p className="mt-3">
                     <button>

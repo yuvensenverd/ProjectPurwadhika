@@ -241,16 +241,18 @@ class productDetails extends React.Component{
                             <div className="mb-5 ">
                             <h3 className="">Product Rating</h3>
                             <div>
-                            <StarRatings
-                            // rating={this.state.productdetail[0].rating} //2.5
-                            rating={this.state.productdetail[0].rating}
-                            starRatedColor="orange"
-                            // changeRating={this.changeRating}
-                            starDimension="20px"
-                            numberOfStars={5}
-                            name='rating'
-                            
-                            />
+                            <div className="d-flex flex-row ">
+
+                                <StarRatings
+                                rating={this.state.productdetail[0].avgrating ? this.state.productdetail[0].avgrating : 0}
+                                starRatedColor="orange"
+                                // changeRating={this.changeRating}
+                                numberOfStars={5}
+                                starDimension="20px"
+                                name='rating'
+                                />
+                            <p className="pl-2" style={{fontSize : '20px'}}>{`(${this.state.productdetail[0].ReviewCount})`}</p>
+                            </div>
                             </div>
                             </div>
                             <h3 className="mb-3">Total Price</h3>
@@ -265,7 +267,7 @@ class productDetails extends React.Component{
                      <div className=" p-5">
                      {/* <div className="mb-4"><h1>Product Description</h1></div>
                      <div className="subtitletext" style={{fontSize : "17px"}}>  ayayayayasdfasdf</div> */}
-                     <Tab datatabone={this.state.productdetail[0].description} datatabtwo={this.state.productdetail[0].shopdesc}></Tab>
+                     <Tab productid={this.props.location.search.replace("?pid=", "")} datatabone={this.state.productdetail[0].description} datatabtwo={this.state.productdetail[0].shopdesc}></Tab>
                     </div>
                     </div>
             )

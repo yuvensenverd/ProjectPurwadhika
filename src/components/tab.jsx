@@ -1,18 +1,72 @@
 import React from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink,  Row, Col } from 'reactstrap';
 import classnames from 'classnames';
+import Axios from 'axios'
+import { URLAPI } from '../redux/actions/types';
+import StarRatings from 'react-star-ratings';
 
 export default class Example extends React.Component {
-    componentDidMount(){
-      console.log(this.props.datatabone)
-    }
+  
+   
     constructor(props) {
       super(props);
   
       this.toggle = this.toggle.bind(this);
       this.state = {
-        activeTab: '1'
+        activeTab: '1',
+        data : []
       };
+    }
+    componentDidMount(){
+      console.log(this.props.datatabone)
+      Axios.get(URLAPI + '/product/getreview/' + this.props.productid)
+      .then((res)=>{
+        console.log(res.data)
+        this.setState({
+          data : res.data
+        })
+        console.log(this.state.data)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+    }
+
+    renderReview = () =>{
+      if(this.state.data.length !== 0){
+        var review = false
+        var jsx = this.state.data.map((item)=>{
+          if(item.description !== 'No Description'){
+            review = true
+            return(
+              <div className="d-flex flex-column mb-3 reviewcard border border-secondary p-3">
+                <StarRatings
+                      rating={item.rating}
+                      starRatedColor="orange"
+                      // changeRating={this.changeRating}
+                      numberOfStars={5}
+                      starDimension="15px"
+                      name='rating'
+                  />
+                  <h3 className="mt-2 mb-3">{`By ${item.username}`}</h3>
+                  <div>{item.description}</div>
+              </div>
+            )
+          }
+        })
+        if(review === false){
+          return(
+
+            <h5> No Reviews Available From This Product</h5>
+          )
+        }
+        
+        return jsx
+      }else{
+        return (
+          <h5> No Reviews Available From This Product</h5>
+        )
+      }
     }
   
     toggle(tab) {
@@ -39,7 +93,7 @@ export default class Example extends React.Component {
                 className={classnames({ active: this.state.activeTab === '2' })}
                 onClick={() => { this.toggle('2'); }}
               >
-                Shop Description
+                Product Reviews
               </NavLink>
             </NavItem>
           </Nav>
@@ -54,7 +108,7 @@ export default class Example extends React.Component {
             <TabPane tabId="2">
               <Row>
                 <Col sm="12" className="pt-4">
-                  <h4>{!this.props.datatabtwo ? "No  Shop Description Available for this Product" : this.props.datatabtwo}</h4>
+                  {this.renderReview()}
                 </Col>
               </Row>
             </TabPane>

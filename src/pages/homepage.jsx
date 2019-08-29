@@ -141,14 +141,18 @@ class Homepage extends React.Component{
                     // onStarClick={()=> this.onStarClick()}
                     
                 /> */}
-            <StarRatings
-                rating={this.state.rating} // GAK PAKE STATE NANTI
+           <div className="d-flex flex-row justify-content-center">
+
+                <StarRatings
+                rating={val.avgrating ? val.avgrating : 0}
                 starRatedColor="orange"
-                // changeRating={this.changeRating.bind(this)}
+                // changeRating={this.changeRating}
                 numberOfStars={5}
-                starDimension="20px"
-                name='rating' // BERBEDA NANTI
+                starDimension="16px"
+                name='rating'
                 />
+             <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
+            </div>
 
             <p className="mt-3">
                     <button>

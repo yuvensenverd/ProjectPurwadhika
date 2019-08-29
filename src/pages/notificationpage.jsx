@@ -19,14 +19,16 @@ class NotificationPage extends React.Component{
         status : '',
         modalOpen : false,
         itemindex : null,
-        starrating : 0
+        starrating : 0,
+        idproductSelected : null
     }
 
     closeModal = () =>{
         this.setState({
             modalOpen : false,
             starrating : 0,
-            itemindex : null
+            itemindex : null,
+            idproductSelected : null
         })
     }
 
@@ -172,7 +174,8 @@ class NotificationPage extends React.Component{
                                         <div>
                                         <input type="button" className="btn btn-secondary mr-3" value="Yes" onClick={()=>this.setState({
                                             itemindex : i,
-                                            modalOpen : true
+                                            modalOpen : true,
+                                            idproductSelected : item.productid
                                         })}/>
                                
                                         </div>
@@ -204,7 +207,23 @@ class NotificationPage extends React.Component{
                 'Authorization' : `${token}`
             }
         }
-        Axios.get(URLAPI + '/transaction/successproduct/' + id, headers)
+        
+        var description = this.refs.reviewref.value
+        description = description.replace(/\s+/, "")
+        if(description === ""){
+            description = 'No Description'
+        }
+        var userid = this.props.userdata.userid
+        var rating = this.state.starrating
+        var productid = this.state.idproductSelected
+        var data = {
+            userid,
+            productid,
+            description,
+            rating
+        }
+        console.log(data)
+        Axios.post(URLAPI + '/transaction/successproduct/' + id,data, headers)
         .then((res)=>{
             this.setState({
                 modalOpen : false,
@@ -260,7 +279,12 @@ class NotificationPage extends React.Component{
                         {this.state.starrating !== 0 
                         ?
                         <center>
-                        <h5> Thanks For Your Feedback !</h5>
+                        <div>
+                    
+                            <h5> Thanks For Your Feedback !</h5>
+                            <textarea id="textareareview" className="form-control border border-dark" ref="reviewref" placeholder="(Optional) Write Your Reviews about this product ..."/>
+                     
+                        </div>
                         </center>
                         :
                         null

@@ -18,7 +18,6 @@ const Initial_state =
   PROFILEIMG : '',
   STATUS : '',
   TOKEN : '',
-  SHOPNOTIF : 0,
   NOTIFLEN : 0
 }
 
@@ -55,12 +54,7 @@ export default(state = Initial_state, action)=>{
             return {
                 ...state, NOTIFLEN : action.payload
             }
-        case "UPDATE_SHOP_NOTIFICATION" :
-            console.log("Masuk Auth Reeducer")
-            console.log(action.payload)
-            return {
-                ...state, SHOPNOTIF : action.payload
-            }
+     
             
         default : 
             console.log("default")

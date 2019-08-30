@@ -177,7 +177,7 @@ import numeral from 'numeral'
            <div className="navbartext mr-3">
           
              <Link to='/confirmorder'>
-             <div className="shopnum">{this.props.userdata.SHOPNOTIF}</div>
+        
              <FontAwesomeIcon size="2x"  icon={faStore} style={{color : "lightblue"}}>
             
              </FontAwesomeIcon>

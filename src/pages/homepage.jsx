@@ -5,6 +5,8 @@ import Responsive from './../components/responsiveslider'
 import Centered from './../components/centerslide'
 import numeral from 'numeral'
 import Footer from './../components/footer';
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Redirect } from 'react-router'
 
 // ROUTE 
 
@@ -19,44 +21,54 @@ import { loginUser } from './../redux/actions/index'
 // import StarRatingComponent from 'react-star-rating-component';
 import StarRatings from 'react-star-ratings';
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
+import queryString from 'query-string'
 
 class Homepage extends React.Component{
     state = {
         productlist  : [],
         rating : 1,
-        bannerimgpath : []
+        bannerimgpath : [],
+        productcount : 0,
+        currentPage : null,
+        totalPage : 0,
+        finishload : false
 
       }
    
     componentDidMount=()=>{
-        // Axios.get('http://localhost:1998/getproduct')
-        // .then((res)=>{
-        //     console.log("Masuk")
-        //     this.setState({
-        //     productlist : res.data
 
-        //     })
-        //     console.log(this.state.productlist)
-        
-        // })
-        // .catch((err)=>{
-        //     console.log("Error")
-        //     console.log(err)
-        // })
-    
+        const values = queryString.parse(this.props.location.search)
+        console.log(values)
+        if(!values.pagenumber){
+            values.pagenumber=1
+        }
+        this.setState({
+            currentPage : parseInt(values.pagenumber)
+        })
         
 
         this.getProduct()
         this.getBannerPath()
+        this.getNumberItem()
 
     }
 
+    componentDidUpdate(){
+        this.getProduct()
+    }
+
     getProduct = () =>{
-        Axios.get(URLAPI+'/product/getproduct')
+        const values = queryString.parse(this.props.location.search)
+        console.log(values)
+        if(!values.pagenumber){
+            values.pagenumber=1
+        }
+        Axios.get(URLAPI+`/product/getproduct?pagenumber=${values.pagenumber}`)
         .then((res)=>{
             console.log(res.data)
             this.setState({
-                productlist : res.data
+                productlist : res.data,
+                
     
             })
          
@@ -83,14 +95,31 @@ class Homepage extends React.Component{
         })
     }
 
+    getNumberItem = () =>{
+        Axios.get(URLAPI + `/product/productcount`)
+        .then((res)=>{
+            console.log("ini count ")
+            console.log(res.data)
+            this.setState({
+                productcount : res.data[0].count
+            })
+
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+
+
+    }
+
     onStarClick(nextValue, prevValue, name) {
         this.setState({rating: nextValue});
       }
 
     changeRating( newRating, name ) {
-    this.setState({
-        rating: newRating
-    });
+        this.setState({
+            rating: newRating
+        });
     }
 
     renderName = (text) => {
@@ -108,7 +137,38 @@ class Homepage extends React.Component{
     }
     
 
+    printPaginationButton = () =>{
+        var jsx = []
+        if(this.state.productcount !== 0){
+            var x = this.state.productcount
+            var page = 1
+            while(x > 0){
+                jsx.push(
+                    <PaginationItem >
+                    <PaginationLink href={`?pagenumber=${page}`} className="text-dark">
+                    {page}
+                    </PaginationLink>
+                    </PaginationItem>
+                )
+                page ++ 
 
+                x = x-15 // 15 per page
+                // if(x === 0){
+                //     console.log("masuk")
+                //     break;
+                // }
+            }
+            if(this.state.totalPage === 0){
+
+                this.setState({
+                    totalPage : page-1,
+                    finishload : true
+                })
+            }
+            
+            return jsx
+        }
+    }
 
   
     
@@ -175,7 +235,20 @@ class Homepage extends React.Component{
 
 
     render(){
-        const { rating } = this.state;
+        // const { totalPage, currentPage } = this.state;
+        // if(this.state.finishload === true){
+
+        //     if(currentPage > totalPage){
+        //         return(
+        //             <Redirect to={`?pagenumber=${totalPage}`}/>
+        //         )
+        //     }
+        //     else if (currentPage < 0){
+        //         return(
+        //             <Redirect to={`/`}/>
+        //         )
+        //     }
+        // }
         return(
             <div className="col p-0">
                 <div className="row-md-3 mb-5 p-t-58">
@@ -228,6 +301,9 @@ class Homepage extends React.Component{
 
 
                 </div>
+                <div className="d-flex flex-row justify-content-center p-t-100">
+                        
+                </div>
 
                 {/* BANNER */}
                 <div className="container mt-5 mb-5">
@@ -255,6 +331,37 @@ class Homepage extends React.Component{
                     
                       
                     </div>
+                </div>
+                <div className="d-flex flex-row justify-content-center">
+                <Pagination aria-label="Page navigation example" size="lg" >
+                <PaginationItem >
+                    <PaginationLink first href={`?pagenumber=1`} className="text-dark"/>
+                </PaginationItem>
+                <PaginationItem>
+                    <PaginationLink previous
+                     href={this.state.currentPage ===1 ?
+                        `?pagenumber=${this.state.currentPage}`
+                        :
+                        `?pagenumber=${this.state.currentPage-1}`
+                    } 
+                     className="text-dark" />
+                </PaginationItem>
+                
+                {this.printPaginationButton()}
+                    
+                <PaginationItem>
+                    <PaginationLink next 
+                    href={this.state.currentPage === this.state.totalPage ?
+                        `?pagenumber=${this.state.currentPage}`
+                        :
+                        `?pagenumber=${this.state.currentPage+1}`
+                     } 
+                     className="text-dark" />
+                </PaginationItem>
+                <PaginationItem>
+                    <PaginationLink last href={`?pagenumber=${this.state.totalPage}`}  className="text-dark"/>
+                </PaginationItem>
+                </Pagination>
                 </div>
                 <Footer/>
                 

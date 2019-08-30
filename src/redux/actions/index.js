@@ -55,15 +55,6 @@ export const loginUser = (value) =>{
                 console.log(err)
             })
 
-            Axios.get(URLAPI + '/transaction/shopnotiflen' + res.data[0].userid)
-            .then((res)=>{
-                console.log("MAsuK?")
-                console.log(res.data)
-                dispatch({
-                    type : 'UPDATE_SHOP_NOTIFICATION',
-                    payload : res.data[0].SHOPNOTIFLEN
-                })
-            })
             
             
         })
@@ -183,15 +174,7 @@ export const loginToken = () =>{
                 console.log(err)
             })
 
-            Axios.get(URLAPI + '/transaction/shopnotiflen/' + res.data[0].userid)
-            .then((res)=>{
-                console.log("MAsuK?")
-                console.log(res.data)
-                dispatch({
-                    type : 'UPDATE_SHOP_NOTIFICATION',
-                    payload : res.data[0].SHOPNOTIFLEN
-                })
-            })
+         
         })
         .catch((err)=>{
             console.log(err)

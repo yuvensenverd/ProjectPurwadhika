@@ -57,7 +57,6 @@ export default(state = Initial_state, action)=>{
      
             
         default : 
-            console.log("default")
             return state
     }
 }

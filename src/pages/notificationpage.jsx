@@ -237,8 +237,8 @@ class NotificationPage extends React.Component{
         if(this.state.starrating !== 0){
 
             var description = this.refs.reviewref.value
-            description = description.replace(/\s+/, "")
-            if(description === ""){
+            
+            if(description.replace(/\s+/, "") === ""){
                 description = 'No Description'
             }
            

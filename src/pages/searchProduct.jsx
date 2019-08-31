@@ -6,6 +6,7 @@ import Centered from './../components/centerslide'
 import numeral from 'numeral'
 import Footer from './../components/footer';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import {onChangeFilter} from '../redux/actions/textactions'
 import { Redirect } from 'react-router'
 
 // ROUTE 
@@ -20,10 +21,10 @@ import { loginUser } from './../redux/actions/index'
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
 import StarRatings from 'react-star-ratings';
-import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import queryString from 'query-string'
 
-class Homepage extends React.Component{
+class searchProduct extends React.Component{
     state = {
         productlist  : [],
         rating : 1,
@@ -33,12 +34,14 @@ class Homepage extends React.Component{
         totalPage : 0,
         finishload : false,
         finishloadproduct : false,
-        filtertext : '',
+     
         
 
       }
    
     componentDidMount=()=>{
+
+        console.log(this.props.location)
 
         const values = queryString.parse(this.props.location.search)
         console.log(values)
@@ -51,7 +54,7 @@ class Homepage extends React.Component{
         
 
         this.getProduct()
-        this.getBannerPath()
+   
         this.getNumberItem()
 
     }
@@ -68,13 +71,12 @@ class Homepage extends React.Component{
             if(!values.pagenumber){
                 values.pagenumber=1
             }
-            Axios.get(URLAPI+`/product/getproduct?pagenumber=${values.pagenumber}`)
+            Axios.get(URLAPI+`/product/getproduct?pagenumber=${values.pagenumber}&keyword=${values.keyword}`)
             .then((res)=>{
                 console.log(res.data)
                 this.setState({
                     productlist : res.data,
                     finishloadproduct : true
-        
                 })
              
                 console.log(this.state.productlist)
@@ -87,22 +89,14 @@ class Homepage extends React.Component{
     
         }
 
-    getBannerPath = () => {
-        Axios.get(URLAPI + '/banner/getpathbanner')
-        .then((res)=>{
-            console.log(res.data)
-            this.setState({
-                bannerimgpath : res.data
-            })
-            console.log(this.state.bannerimgpath)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-    }
 
     getNumberItem = () =>{
-        Axios.get(URLAPI + `/product/productcount`)
+        const values = queryString.parse(this.props.location.search)
+        // console.log(values)
+        // if(!values.pagenumber){
+        //     values.pagenumber=1
+        // }
+        Axios.get(URLAPI + `/product/productcount?keyword=${values.keyword}`)
         .then((res)=>{
             console.log("ini count ")
             console.log(res.data)
@@ -144,7 +138,7 @@ class Homepage extends React.Component{
 
     onButtonFilterClick = () =>{
         console.log(this.state.filtertext)
-
+        
     }
     
 
@@ -184,63 +178,73 @@ class Homepage extends React.Component{
   
     
     renderProduct = () => {
-  
+        
+    if(this.state.productlist.length > 0){
 
-    var output = this.state.productlist.map((val, index )=>{
-        // console.log(index)
-        // console.log(arr)
-        return( 
-
-        <div className="card d-inline-block m-r-21 m-b-25 " >
-            <img  className="mb-3" 
-            src={val.images ?
-                URLAPI+ val.images.split(',')[0]
-                :
-                URLAPI + PATHDEFAULTPRD
-                } 
-            alt="image" width="100%" height="175px"/>
-            <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
-            <p className="price">
-            {"Rp. " + numeral(val.price).format(0,0)}
+        var output = this.state.productlist.map((val, index )=>{
+            // console.log(index)
+            // console.log(arr)
+            return( 
+    
+            <div className="card d-inline-block m-r-21 m-b-25 " >
+                <img  className="mb-3" 
+                src={val.images ?
+                    URLAPI+ val.images.split(',')[0]
+                    :
+                    URLAPI + PATHDEFAULTPRD
+                    } 
+                alt="image" width="100%" height="175px"/>
+                <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
+                <p className="price">
+                {"Rp. " + numeral(val.price).format(0,0)}
+                    </p>
+                <p>Some text about the Product.</p>
+                {/* <StarRatingComponent 
+                       
+                        name="rate1"  // RATING INDEX / PRODUCT ID
+                        starCount={5}
+                        value={2} // PRODUCT RATING
+                        // onStarClick={()=> this.onStarClick()}
+                        
+                    /> */}
+               <div className="d-flex flex-row justify-content-center">
+    
+                    <StarRatings
+                    rating={val.avgrating ? val.avgrating : 0}
+                    starRatedColor="orange"
+                    // changeRating={this.changeRating}
+                    numberOfStars={5}
+                    starDimension="16px"
+                    name='rating'
+                    />
+                 <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
+                </div>
+    
+                <p className="mt-3">
+                        <button>
+                            <Link to={"/productdetails?pid=" + val.id}>
+                            <p className="navbartext">ADD TO CART </p>
+                            </Link>
+                        </button>
                 </p>
-            <p>Some text about the Product.</p>
-            {/* <StarRatingComponent 
-                   
-                    name="rate1"  // RATING INDEX / PRODUCT ID
-                    starCount={5}
-                    value={2} // PRODUCT RATING
-                    // onStarClick={()=> this.onStarClick()}
-                    
-                /> */}
-           <div className="d-flex flex-row justify-content-center">
-
-                <StarRatings
-                rating={val.avgrating ? val.avgrating : 0}
-                starRatedColor="orange"
-                // changeRating={this.changeRating}
-                numberOfStars={5}
-                starDimension="16px"
-                name='rating'
-                />
-             <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
+          
             </div>
-
-            <p className="mt-3">
-                    <button>
-                        <Link to={"/productdetails?pid=" + val.id}>
-                        <p className="navbartext">Add to Cart</p>
-                        </Link>
-                    </button>
-            </p>
-      
+    
+    
+    
+            )
+        })
+       
+        return output
+    }else{
+        return(
+            <div className="p-t-100 text-center mb-5">
+            <h1>No Product Found :(</h1>
+            <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
         </div>
-
-
-
         )
-    })
-   
-    return output
+    }
+
     }
 
 
@@ -261,52 +265,23 @@ class Homepage extends React.Component{
         //     }
         // }
         return(
-            <div className="col p-0">
-                <div className="row-md-3 mb-5 p-t-58">
-                    {this.state.bannerimgpath.length !== 0 
-                    ?
-                    <Carousel slideheight={'330px'} items={this.state.bannerimgpath[0].images}/> 
-                    :
-                    null //loading
-                    }
-                    
- 
-                </div>
-                
-
-               
-           
-                <div className="p-0" style={{height : "90px"}} >
-             
-                    <Responsive></Responsive>
-                  
-
-            
-
-
-                </div>
-                <div className="d-flex flex-row justify-content-center p-t-100">
-                        
-                </div>
-
-                {/* BANNER */}
-                <div className="container mt-5 mb-5">
-                    <div className="mt-5 mb-4">
-                        <input type="button" style={{height : "100px", fontWeight: "bolder", fontSize : "18px", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
-                    </div>
-                </div>
+            <div>
+            <div className="col p-t-100">
+              
                 
                 <div className="d-flex flex-row justify-content-center p-5" >
                     <input type="text" 
                     ref="filtertextref"
-                    value={this.state.filtertext}
+                 
+                
+                    defaultValue={queryString.parse(this.props.location.search).keyword}
                     className="form-control form-control-lg text-center"
                      placeholder="Search Items.." 
                      style={{ alignSelf: "center", borderRadius : "3px"}}
-                     onChange={()=>this.setState({ filtertext : this.refs.filtertextref.value})}
+                     onChange={()=>this.props.onChangeFilter(this.refs.filtertextref.value)}
                     ></input>
-                    <a href={`/search?keyword=${this.state.filtertext}`}>
-                    <input type="button" className="btn" value="FILTER" style={{height : "50px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder", color : "white"}} onClick={()=>this.onButtonFilterClick()}/>
+                    <a href={`?keyword=${this.props.textfilter}`}>
+                    <input type="button" className="btn" value="FILTER" style={{height : "50px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder", color : "white"}}/>
                     </a>
                 </div>
         
@@ -316,9 +291,12 @@ class Homepage extends React.Component{
                     </div>
                     <div className="col-md-10 p-0">
                         {/* <div className="d-flex flex-row justify-content-center"> */}
-                        <center>
+                        {this.state.productcount !== 0 ? 
+                        <h5>{this.state.productcount + ' Product Found'}</h5>
+                    :
+                    null}
                         {this.renderProduct()}
-                        </center>
+                       
                         {/* </div> */}
                  
                     </div>
@@ -327,8 +305,12 @@ class Homepage extends React.Component{
                       
                     </div>
                 </div>
+             
+
+                {this.state.productcount > 0
+                ?
                 <div className="d-flex flex-row justify-content-center">
-                <Pagination aria-label="Page navigation example" size="lg" >
+                    <Pagination aria-label="Page navigation example" size="lg" >
                 <PaginationItem >
                     <PaginationLink first href={`?pagenumber=1`} className="text-dark"/>
                 </PaginationItem>
@@ -358,9 +340,17 @@ class Homepage extends React.Component{
                 </PaginationItem>
                 </Pagination>
                 </div>
-                <Footer/>
+                :
+                null
+            }
                 
+
+
+               
               
+            </div>
+            <Footer/>
+                
             </div>
         )
     }
@@ -368,9 +358,8 @@ class Homepage extends React.Component{
 
 const mapStateToProps= (state)=>{
     return{ 
-        testredux : state.pikachu,
-        keren : state.text
+        textfilter : state.filtertext.text
     }
 }
 
-export default connect(mapStateToProps,{ loginUser })(Homepage);
+export default connect(mapStateToProps,{onChangeFilter})(searchProduct);

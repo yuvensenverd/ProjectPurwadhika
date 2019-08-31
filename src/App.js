@@ -21,6 +21,7 @@ import WaitingVerification from './pages/waitingverification'
 import confirmOrder from './pages/confirmOrder'
 import NotificationPage from './pages/notificationpage'
 import Verified from './pages/verified'
+import SearchProduct from './pages/searchProduct'
 import cartPage from './pages/usercart'
 import AdminPage from './pages/adminpage'
 import { connect } from 'react-redux'
@@ -28,6 +29,7 @@ import { loginToken } from './redux/actions/index'
 import Axios from 'axios';
 import { URLAPI } from './redux/actions/types';
 import userhistory from './pages/userhistory';
+import searchProduct from './pages/searchProduct';
 
 
 
@@ -92,6 +94,7 @@ class App extends React.Component{
         <Route path='/editprofile' component={editProfile}></Route>
         <Route path='/productdetails' component={productDetails}></Route>
         <Route path='/usercart' component={cartPage}></Route>
+        <Route path='/search' component={searchProduct}></Route>
         <Route path='/confirmorder' component={confirmOrder}></Route>
         <Route path='/notification' component={NotificationPage}></Route>
         <Route path='/waitingverification' component={WaitingVerification}></Route>

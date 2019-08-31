@@ -64,7 +64,6 @@ class confirmOrder extends React.Component{
                 finishload : false,
                 datatype : 'Unconfirmed'
             })
-            this.props.updateShopNotification(this.props.userdata.SHOPNOTIF - 1)
 
             this.getWaitingConfirmation()
         })

@@ -8,3 +8,4 @@ export const APIWILAYAHURL = "https://x.rajaapi.com/MeP7c5ne"
 export const PATHDEFAULTPICT = "/post/image/user/defaultpicture.png"
 export const PATHDEFAULTPRD = "/post/image/product/not-available.jpg"
 export const PATHDEFAULTCARTEMPTY = "/post/image/appimage/shopping.png"
+export const ON_CHANGE_FILTER = 'CHANGE_FILTER_TEXT'

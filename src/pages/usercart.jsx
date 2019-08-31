@@ -26,7 +26,10 @@ class UserCart extends React.Component{
    
 
     componentWillUnmount(){
-        this.updateItemCart()
+        if(this.state.cart_user.length !== 0 && this.state.updatedproduct.length !== 0){
+
+            this.updateItemCart()
+        }
     }
 
     updateItemCart = () =>{

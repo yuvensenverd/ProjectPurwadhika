@@ -1,10 +1,13 @@
-import { LOGIN, LOGOUT, URLAPI, ADDITEM } from './types'
+import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE } from './types'
 import Axios from 'axios'
 
 
 
 export const loginUser = (value) =>{
     return  (dispatch) =>{
+        dispatch({
+            type : LOADING
+        })
         Axios.post(URLAPI+'/user/getuser', {
             name : value.USERNAME,
             pass : value.PASSWORD
@@ -53,13 +56,20 @@ export const loginUser = (value) =>{
             })
             .catch((err)=>{
                 console.log(err)
+                dispatch({
+                    type : LOADINGFALSE
+                })
             })
 
             
             
         })
         .catch((err)=>{
-            console.log(err)
+          
+            dispatch({
+                type : LOADINGFALSE
+            })
+            window.alert(err.response.data.err)
         })
     }
 }
@@ -120,6 +130,9 @@ export const updateUser = (data) =>{
 export const loginToken = () =>{
     return  (dispatch) =>{
         console.log("Masuk login Token")
+        dispatch({
+            type : LOADING
+        })
         const token = localStorage.getItem('token')
         const headers = {
             headers: {
@@ -177,7 +190,12 @@ export const loginToken = () =>{
          
         })
         .catch((err)=>{
-            console.log(err)
+            
+            dispatch({
+                type : LOADINGFALSE // LOADING TO FALSE
+            })
+            window.alert("User Token Not Authorized, Please Login via login page")
+         
         })
     }
 }

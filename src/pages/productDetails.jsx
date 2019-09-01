@@ -14,6 +14,7 @@ import { URLAPI } from '../redux/actions/types';
 import { Redirect } from 'react-router'
 import { isNull } from 'util';
 import Carousel from './../components/carousel'
+import ReactLoading from 'react-loading';
 
 
 class productDetails extends React.Component{
@@ -335,7 +336,8 @@ class productDetails extends React.Component{
                 </div>
                
             </div>
-             <Footer/>
+            {this.state.productdetail.length !== 0 ?   <Footer/> : null}  
+           
              </div>
         )
     }

@@ -3,6 +3,8 @@ import numeral from 'numeral'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import ReactLoading from 'react-loading'
 
 
 
@@ -11,7 +13,8 @@ class confirmOrder extends React.Component{
     state = {
         data : [],
         finishload : false,
-        status : ''
+        status : '',
+        datatype : ''
     }
 
     componentDidMount(){
@@ -100,6 +103,14 @@ class confirmOrder extends React.Component{
     }
 
     renderData = () =>{
+        // if(this.state.finishload === true && this.state.data.length === 0){
+        //     return(
+        //         <div className="p-t-100 d-flex flex-column align-items-center" >
+        //         <h1 className="mb-5">Loading Product Please Wait</h1>
+        //         <ReactLoading type="spin" color="#afb9c9"  />
+        //     </div>
+        //     )
+        // }
         if(this.state.finishload === true && this.state.datatype === 'Unconfirmed'){
             if(this.state.data.length > 0){
 
@@ -143,12 +154,12 @@ class confirmOrder extends React.Component{
                 })
                 return jsx
             }else{
-                return(
-                <div className="p-t-100 text-center">
-                    <h1>No Product to Confirm.. </h1>
-                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
-                </div>
-                )
+                    return(
+                    <div className="p-t-100 text-center">
+                        <h1>No Product to Confirm.. </h1>
+                        <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                    </div>
+                    )
             }
         }
     }
@@ -156,11 +167,24 @@ class confirmOrder extends React.Component{
 
 
     render(){
+        if(this.state.data.length === 0 && this.state.finishload === false){
+            return(
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
+                </div>
+            )
+        }
         return(
             <div className="mycontainer p-t-100">
                <div className="row mb-5 p-0 m-0">
                     <div className="col-md-3 text-center p-0 m-0 ">
                         <input type="button" className="btn btn-dark navbartext form-control" value="Unconfirmed Orders" onClick={()=>this.getWaitingConfirmation()} />
+                    </div>
+                    <div className="col-md-3 text-center p-0 m-0 ">
+                        <Link to='/userstore'>
+                        <input type="button" className="btn btn-dark navbartext form-control" value="View Your Store"  />
+                        </Link>
                     </div>
                 </div>
                 <div>

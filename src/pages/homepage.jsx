@@ -7,6 +7,7 @@ import numeral from 'numeral'
 import Footer from './../components/footer';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { Redirect } from 'react-router'
+import ReactLoading from 'react-loading';
 
 // ROUTE 
 
@@ -260,14 +261,23 @@ class Homepage extends React.Component{
         //         )
         //     }
         // }
+        if(this.state.bannerimgpath.length === 0 || this.state.productlist.length === 0){
+            return(
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
+                </div>
+            )
+        }
         return(
             <div className="col p-0">
                 <div className="row-md-3 mb-5 p-t-58">
                     {this.state.bannerimgpath.length !== 0 
                     ?
                     <Carousel slideheight={'330px'} items={this.state.bannerimgpath[0].images}/> 
+                    
                     :
-                    null //loading
+                        null
                     }
                     
  
@@ -316,9 +326,9 @@ class Homepage extends React.Component{
                     </div>
                     <div className="col-md-10 p-0">
                         {/* <div className="d-flex flex-row justify-content-center"> */}
-                        <center>
+                       
                         {this.renderProduct()}
-                        </center>
+                       
                         {/* </div> */}
                  
                     </div>

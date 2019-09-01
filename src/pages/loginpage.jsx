@@ -13,7 +13,6 @@ import { URLAPI } from '../redux/actions/types';
 
 class LoginPage extends React.Component{
     state ={
-      redirect : false,
       userdata : []
     }
 
@@ -54,30 +53,22 @@ class LoginPage extends React.Component{
     //     }
     //   }
     
-     checkDatabaseUser = (username, password) => {
+    //  checkDatabaseUser = (username, password) => {
       
-      var data = {
-        name : username,
-        pass : password
-      }
+    //   var data = {
+    //     name : username,
+    //     pass : password
+    //   }
 
-      Axios.post(URLAPI+'/user/getuser', data)
-      .then((res)=>{
-        if(res.data[0].username){
-
-          console.log(res.data)
-          // TEMPORARY
-          localStorage.setItem('password', data.pass)
-          return this.log(username, password)
-        }else{
-          console.log("Gak dapaet")
-          return window.alert("Username / Password Tidak Valid!")
-        }
-      })
-      .catch((err)=>{
-        console.log(err)
-      })
-    }
+    //   Axios.post(URLAPI+'/user/getuser', data)
+    //   .then((res)=>{
+    //       return this.log(username, password)
+        
+    //   })
+    //   .catch((err)=>{
+    //     window.alert(err.response.data.err)
+    //   })
+    // }
     
 
     log = (username, password) => {
@@ -87,9 +78,6 @@ class LoginPage extends React.Component{
       }
 
       this.props.loginUser(data)
-      return this.setState({
-        redirect : true
-      })
     }
 
 
@@ -108,19 +96,8 @@ class LoginPage extends React.Component{
           window.alert("Password dan Username minimal 8 karakter")
         )
       }
-      this.checkDatabaseUser(username, password)
+      this.log(username, password)
 
-      // var test =  this.checkDatabaseUser(username, password)
-      // console.log(test)
-      // if(test){
-          // LOGIN
-        
-
-      // }else{
-
-      //   return (
-      //     window.alert("Username / Password Tidak Valid!")
-      //   )
 
       }
 
@@ -131,7 +108,7 @@ class LoginPage extends React.Component{
 
 
     render(){
-      if(this.state.redirect === true){
+      if(this.props.userdata.USERNAME !== ''){
         return(
           <Redirect to="/"></Redirect>
         )
@@ -162,19 +139,6 @@ class LoginPage extends React.Component{
                   <input className="input100" ref="inputpassword" type="password" id="inputpass" />
                   <span className="focus-input100" />
                 </div>
-                {/* <div className="flex-sb-m w-full p-b-48">
-                  <div className="contact100-form-checkbox">
-                    <input className="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" />
-                    <label className="label-checkbox100" htmlFor="ckb1">
-                      Remember me
-                    </label>
-                  </div>
-                  <div>
-                    <a href="#" className="txt3">
-                      Forgot Password?
-                    </a>
-                  </div>
-                </div> */}
                 <div className="container-login100-form-btn mt-4" >
                   <button className="login100-form-btn btn-block" id="buttonlog" onClick={() => this.ValidateLogin()}>
                     Login
@@ -189,4 +153,10 @@ class LoginPage extends React.Component{
         )
     }
 }
-export default connect(null,{ loginUser })(LoginPage);
+const mapStateToProps= (state)=>{
+  return{ 
+    userdata : state.userdata
+  }
+}
+
+export default connect(mapStateToProps, {loginUser})(LoginPage);

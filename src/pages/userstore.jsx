@@ -84,6 +84,7 @@ class userStore extends React.Component{
     getProductStore = () => {
         
         if(this.props.userdata.userid){
+            console.log("GETPRODUCTSTORE")
             console.log(this.props.userdata.userid)
             const token = localStorage.getItem('token')
             const headers = {
@@ -368,8 +369,8 @@ class userStore extends React.Component{
             price,
             cat_name,
             shop_id,
-            description,
-            rating : 5 //default rating
+            description
+        
         }
 
 

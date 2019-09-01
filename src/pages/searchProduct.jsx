@@ -34,6 +34,8 @@ class searchProduct extends React.Component{
         totalPage : 0,
         finishload : false,
         finishloadproduct : false,
+        pageperitem : 15
+        
      
         
 
@@ -71,6 +73,9 @@ class searchProduct extends React.Component{
             if(!values.pagenumber){
                 values.pagenumber=1
             }
+            if(!values.keyword){
+                values.keyword = ''
+            }
             Axios.get(URLAPI+`/product/getproduct?pagenumber=${values.pagenumber}&keyword=${values.keyword}`)
             .then((res)=>{
                 console.log(res.data)
@@ -95,7 +100,11 @@ class searchProduct extends React.Component{
         // console.log(values)
         // if(!values.pagenumber){
         //     values.pagenumber=1
+        
         // }
+        if(!values.keyword){
+            values.keyword = ''
+        }
         Axios.get(URLAPI + `/product/productcount?keyword=${values.keyword}`)
         .then((res)=>{
             console.log("ini count ")
@@ -150,7 +159,7 @@ class searchProduct extends React.Component{
             while(x > 0){
                 jsx.push(
                     <PaginationItem >
-                    <PaginationLink href={`?pagenumber=${page}`} className="text-dark">
+                    <PaginationLink href={this.printHref(`pagenumber=${page}`)} className="text-dark">
                     {page}
                     </PaginationLink>
                     </PaginationItem>
@@ -247,6 +256,15 @@ class searchProduct extends React.Component{
 
     }
 
+    printHref = (query)=>{
+        const values = queryString.parse(this.props.location.search)
+        if(values.keyword){
+            return `?keyword=${values.keyword}&${query}`
+        }else{
+            return `?${query}`
+        }
+    }
+
 
 
     render(){
@@ -292,7 +310,10 @@ class searchProduct extends React.Component{
                     <div className="col-md-10 p-0">
                         {/* <div className="d-flex flex-row justify-content-center"> */}
                         {this.state.productcount !== 0 ? 
-                        <h5>{this.state.productcount + ' Product Found'}</h5>
+                        <div className="mb-5">
+                        {this.state.productcount + ` Product Found, Showing (${((this.state.currentPage-1)*this.state.pageperitem)+1}
+                         -${this.state.productlist.length+((this.state.currentPage-1)*this.state.pageperitem)})`}
+                        </div>
                     :
                     null}
                         {this.renderProduct()}
@@ -312,14 +333,15 @@ class searchProduct extends React.Component{
                 <div className="d-flex flex-row justify-content-center">
                     <Pagination aria-label="Page navigation example" size="lg" >
                 <PaginationItem >
-                    <PaginationLink first href={`?pagenumber=1`} className="text-dark"/>
+                    <PaginationLink first href={this.printHref(`pagenumber=1`)} className="text-dark"/>
                 </PaginationItem>
                 <PaginationItem>
                     <PaginationLink previous
                      href={this.state.currentPage ===1 ?
-                        `?pagenumber=${this.state.currentPage}`
+                        this.printHref(`pagenumber=${this.state.currentPage}`)
                         :
-                        `?pagenumber=${this.state.currentPage-1}`
+                        this.printHref(`pagenumber=${this.state.currentPage-1}`)
+                       
                     } 
                      className="text-dark" />
                 </PaginationItem>
@@ -329,14 +351,14 @@ class searchProduct extends React.Component{
                 <PaginationItem>
                     <PaginationLink next 
                     href={this.state.currentPage === this.state.totalPage ?
-                        `?pagenumber=${this.state.currentPage}`
+                        this.printHref(`pagenumber=${this.state.currentPage}`)
                         :
-                        `?pagenumber=${this.state.currentPage+1}`
+                        this.printHref(`pagenumber=${this.state.currentPage+1}`)
                      } 
                      className="text-dark" />
                 </PaginationItem>
                 <PaginationItem>
-                    <PaginationLink last href={`?pagenumber=${this.state.totalPage}`}  className="text-dark"/>
+                    <PaginationLink last href={this.printHref(`pagenumber=${this.state.totalPage}`)}  className="text-dark"/>
                 </PaginationItem>
                 </Pagination>
                 </div>

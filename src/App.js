@@ -38,7 +38,11 @@ class App extends React.Component{
 
   // LOCAL STORAGE FOR LOGIN
   componentDidMount(){
-    this.props.loginToken()
+    const token = localStorage.getItem('token')
+    if(token){
+
+      this.props.loginToken()
+    }
   }
 
   // checkDatabaseUser = (username, password) => {

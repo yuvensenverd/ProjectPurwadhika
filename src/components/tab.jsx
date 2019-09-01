@@ -15,6 +15,7 @@ export default class Example extends React.Component {
       this.state = {
         activeTab: '1',
         data : []
+
       };
     }
     componentDidMount(){
@@ -38,6 +39,7 @@ export default class Example extends React.Component {
         var jsx = this.state.data.map((item)=>{
           if(item.description !== 'No Description'){
             review = true
+            
             return(
               <div className="d-flex flex-column mb-3 reviewcard border border-secondary p-3">
                 <StarRatings
@@ -93,7 +95,7 @@ export default class Example extends React.Component {
                 className={classnames({ active: this.state.activeTab === '2' })}
                 onClick={() => { this.toggle('2'); }}
               >
-                Product Reviews
+                Product Reviews 
               </NavLink>
             </NavItem>
           </Nav>
@@ -108,6 +110,7 @@ export default class Example extends React.Component {
             <TabPane tabId="2">
               <Row>
                 <Col sm="12" className="pt-4">
+                  {/* {this.state.message === true ? <h5>Latest 5 Reviews from this Product</h5> : null} */}
                   {this.renderReview()}
                 </Col>
               </Row>

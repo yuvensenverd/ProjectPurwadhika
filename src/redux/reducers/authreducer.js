@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADDITEM } from "../actions/types";
+import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE } from "../actions/types";
 import { isNull } from "util";
 
 
@@ -18,7 +18,8 @@ const Initial_state =
   PROFILEIMG : '',
   STATUS : '',
   TOKEN : '',
-  NOTIFLEN : 0
+  NOTIFLEN : 0, 
+  LOADING : false
 }
 
 export default(state = Initial_state, action)=>{
@@ -30,7 +31,9 @@ export default(state = Initial_state, action)=>{
                      userid : action.payload[0].userid, HAVESHOP : !isNull(action.payload[0].shopname),
                     SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
                      RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email,
-                      PROFILEIMG :action.payload[0].profileimg, STATUS : action.payload[0].status, TOKEN : action.payload[0].token}
+                      PROFILEIMG :action.payload[0].profileimg, STATUS : action.payload[0].status, TOKEN : action.payload[0].token,
+                      LOADING : false
+                    }
         case LOGOUT :
             localStorage.removeItem('token')
             return Initial_state
@@ -54,7 +57,17 @@ export default(state = Initial_state, action)=>{
             return {
                 ...state, NOTIFLEN : action.payload
             }
-     
+        case LOADING :
+            console.log("Masuk Auth Reeduce")
+            console.log(action.payload)
+            return {
+                ...state, LOADING : true
+            }
+        case LOADINGFALSE:
+            return{
+                ...state, LOADING : false
+            }
+    
             
         default : 
             return state

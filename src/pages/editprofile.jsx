@@ -6,6 +6,7 @@ import { updateUser } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import numeral from 'numeral'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
 class editProfile extends React.Component{
@@ -163,14 +164,14 @@ class editProfile extends React.Component{
                         
                         <div className="subtitletext mb-3 mt-3"> Name  </div>      
                         <input type="text" className="form-control form-control-lg mb-3" ref="name" value={this.props.userdata.USERNAME} readOnly></input>
-                        <div className="subtitletext mb-3"> Your Phone Number <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE"/></div>
+                        {/* <div className="subtitletext mb-3"> Your Phone Number <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE"/></div> */}
                         <input type="number" className="form-control form-control-lg mb-3" ref="phone" value={this.props.userdata.PHONENUMBER} readOnly></input>
-                        <div className="subtitletext mb-3"> Your Email Address <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE"/></div>
+                        {/* <div className="subtitletext mb-3"> Your Email Address <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE"/></div> */}
                         <input type="text" className="form-control form-control-lg mb-3" ref="email" value={this.props.userdata.EMAIL} readOnly></input>
                         <div className="subtitletext mb-3"> Your Location <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE" onClick={()=>this.setState({modalOpenResidence : true})}/></div>
                         <input type="text" className="form-control form-control-lg mb-5" ref="location" value={this.props.userdata.RESIDENCE} readOnly></input>
                         <div className="subtitletext mb-3 "> Saldo </div>
-                        <input type="number" className="form-control form-control-lg mb-3" value={this.props.userdata.SALDO} readOnly></input>
+                        <input type="text" className="form-control form-control-lg mb-3" value={"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)} readOnly></input>
                         <div className="d-flex flex-row justify-content-center mb-5">
                             {/* <input type="button" className="btn btn-success navbartext mr-5" onClick={()=>this.setState({isEdit : true})} value="EDIT PROFILE"/> */}
                             <input type="button" className="btn btn-info navbartext mr-5 mt-3" value="CHANGE PASSWORD" onClick={()=>this.setState({modalOpen : true})}/>
@@ -209,7 +210,33 @@ class editProfile extends React.Component{
       }
 
     onSaveChangePassword = () =>{
-
+        var oldpass = this.refs.oldpw.value
+        var newpass = this.refs.newpw.value
+        var confirm = this.refs.confirmnewpw.value
+        if(newpass === confirm){
+            const token = localStorage.getItem('token')
+            var headers ={
+                headers : 
+                {
+                    'Authorization' : `${token}`
+                }
+            }
+            const data = {
+                oldpass,
+                password : newpass,
+                userid : this.props.userdata.userid
+            }
+            Axios.put(URLAPI+'/user/onchangepass', data, headers)
+            .then((res)=>{
+                console.log(res.data)
+                window.alert("Update Password Success")
+                this.props.updateUser(res.data[0])
+                this.closeModal()
+            })
+            .catch((err)=>{
+                window.alert(err.response.data.err)
+            })
+        }
     }
 
     onClickSaveResidence = () =>{

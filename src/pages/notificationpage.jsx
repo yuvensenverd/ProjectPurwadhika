@@ -9,6 +9,7 @@ import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { updateNotification } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import StarRatings from 'react-star-ratings';
+import ReactLoading from 'react-loading'
 import queryString from 'query-string'
 
 
@@ -124,8 +125,16 @@ class NotificationPage extends React.Component{
       }
 
     renderData = () =>{
+        // if(this.state.finishload === true && this.state.data.length === 0){
+        //     return(
+        //         <div className="p-t-100 d-flex flex-column align-items-center" >
+        //         <h1 className="mb-5">Loading Product Please Wait</h1>
+        //         <ReactLoading type="spin" color="#afb9c9"  />
+        //     </div>
+        //     )
+        // }
         if(this.state.finishload === true && this.state.datatype === 'Unconfirmed'){
-            if(this.state.data.length > 0){
+            if(this.state.data.length > 0 ){
 
                 var jsx = this.state.data.map((item, i)=>{
                     return (
@@ -164,7 +173,7 @@ class NotificationPage extends React.Component{
                 return jsx
             }else{
                 return (
-                    <div className="p-t-100 text-center">
+                    <div className="p-t-100 text-center">                      
                         <h1>Product Waiting Confirmation Empty </h1>
                         <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
                     </div>
@@ -172,7 +181,7 @@ class NotificationPage extends React.Component{
             }
         }
         if(this.state.finishload === true && this.state.datatype === 'Confirmed'){
-            if(this.state.data.length > 0){
+            if(this.state.data.length > 0 ){
                 
                 var jsx = this.state.data.map((item, i)=>{
                     return (
@@ -277,7 +286,14 @@ class NotificationPage extends React.Component{
 
 
     render(){
-        console.log(this.state.itemindex)
+        if(this.state.data.length === 0 && this.state.finishload === false){
+            return(
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
+                </div>
+            )
+        }
         return(
             <div className="mycontainer p-t-100">
                   <Modal isOpen={this.state.modalOpen} toggle={this.closeModal} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>

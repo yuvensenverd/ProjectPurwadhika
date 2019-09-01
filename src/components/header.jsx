@@ -13,12 +13,14 @@ import {
   DropdownItem } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logoutUser } from '../redux/actions/index'
+import { logoutUser, updateUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faShoppingCart, faBell, faStore} from '@fortawesome/free-solid-svg-icons'
 import { URLAPI, PATHDEFAULTPICT } from '../redux/actions/types';
 import numeral from 'numeral'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Axios from 'axios';
 
 
 
@@ -30,7 +32,8 @@ import numeral from 'numeral'
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      modalOpen : false
     };
   }
   toggle() {
@@ -48,15 +51,70 @@ import numeral from 'numeral'
     this.setState({dropdownOpen: false});
   }
 
+  onClickTopUp = () =>{
+    
+    var topup = parseInt(this.refs.topup.value)
+    if(topup < 10000){
+      return window.alert('Minimal Rp 10,000,00 untuk Top Up')
+    }
+    const token = localStorage.getItem('token')
+    const headers = {
+        headers: {
+            'Authorization' : `${token}`
+        }
+    }
+    var data = {
+      userid : this.props.userdata.userid,
+      topup : this.refs.topup.value
+
+    }
+    Axios.put(URLAPI + `/user/onusertopup`, data, headers)
+    .then((res)=>{
+      window.alert("topup berhasil")
+      this.props.updateUser(res.data[0])
+      this.setState({
+        modalOpen : false
+      })
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+  }
+
   closeNav = () =>{
-  
     this.setState({
       isOpen : false
     })
   }
   render() {
+    if(this.props.userdata.LOADING === true){
+      return(
+        <Navbar  style={{backgroundColor : "#1f2533", height : '60px'}}  fixed dark expand="md" ></Navbar>
+      )
+    }
     return (
       <div className="navbarheader d-flex flex-column">
+         <Modal isOpen={this.state.modalOpen} toggle={()=>this.setState({modalOpen : false})} size="lg" style={{width: '1000px', position : 'absolute', top : '20%', left : '30%'}}>
+                        <ModalHeader>
+                            <div className="subtitletext" style={{fontSize : "26px"}}>ADD BALANCES</div>
+                        </ModalHeader>
+                        <ModalBody >
+                           
+                                  <h5>Your Current Balance</h5>
+                                  <input type="text" value={"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)} className="form-control mb-3" readOnly />
+                                  <h5>TOP UP Amount</h5>
+                                  <input type="number" ref="topup" className="form-control mb-3"  />
+                                
+                            
+                        </ModalBody>
+                        <ModalFooter>
+                        
+                                <input type="button" value="PROCEED" className="btn btn-danger btn-lg navbartext" onClick={()=>this.onClickTopUp()} />
+                          
+                              
+                        </ModalFooter>
+                </Modal>
         <div>
         <Navbar  style={{backgroundColor : "#1f2533"}}  fixed dark expand="md">
           <Link to="/" className="navbartext">
@@ -125,7 +183,10 @@ import numeral from 'numeral'
                         </div>
                         <div className="col-md-8 subtitletext p-0" style={{fontSize : "15px"}}>
                             <div className="mb-2 text-light">{this.props.username}</div>
-                            <div  className="mb-2 text-light"> {"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)}</div>
+                            <div className="d-flex flex-row mb-3">
+                            <div  className="mb-2 text-light mr-3" style={{fontSize : '20px'}}> {"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)}</div>
+                            <input type="button" className="btn btn-danger " value="ADD BALANCE" style={{height : '40px'}} onClick={()=>this.setState({modalOpen :true})}/>
+                            </div>
                             <Link to="/editprofile" className="subtitletext">
                             <DropdownItem  style={{padding : "0px", border : "none"}}>
                             <div className="text-light"><input type="button" className="btn btn-success form-control" value="Edit Profile"/></div>
@@ -260,4 +321,4 @@ const mapStateToProps= (state)=>{
 }
 
 
-export default connect(mapStateToProps, {logoutUser})(Header);
+export default connect(mapStateToProps, {logoutUser, updateUser})(Header);

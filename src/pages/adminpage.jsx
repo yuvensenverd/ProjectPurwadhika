@@ -4,6 +4,7 @@ import { Table } from 'reactstrap'
 import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
+import numeral from 'numeral'
 
 
 class AdminPage extends React.Component{
@@ -82,7 +83,7 @@ class AdminPage extends React.Component{
     adminGetProduct = () =>{
         if(this.state.change === true){
 
-            Axios.get(URLAPI + '/product/getproduct')
+            Axios.get(URLAPI + '/product/getproduct?pagenumber=all')
             .then((res)=>{
                 console.log(res.data)
                 this.setState({
@@ -90,6 +91,32 @@ class AdminPage extends React.Component{
                     change : false
      
                 })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
+    onDeleteProduct = (id) =>{
+        console.log(id)
+        var confirm = window.confirm("Are you sure you want to delete this item from your store ?")
+        if(confirm){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+
+            Axios.get(URLAPI + '/product/deleteproduct/' + id, headers)
+            .then((res)=>{
+                console.log(res.data)
+                this.setState({
+                    change : true
+                })
+                window.alert("Delete Product Success!")
+                this.adminGetProduct()
             })
             .catch((err)=>{
                 console.log(err)
@@ -109,7 +136,7 @@ class AdminPage extends React.Component{
                     <tr>
                         <td>{i+1}</td>
                         <td>{prd.name}</td>
-                        <td>{prd.price}</td>
+                        <td> {"Rp. " + numeral(prd.price).format(0,0)}</td>
                         <td>
                             <img
                              src={prd.images ?
@@ -122,12 +149,14 @@ class AdminPage extends React.Component{
                              </img>
                         </td>
                         <td>{prd.category}</td>
-                        <td>{prd.description}</td>
                         <td>{prd.shopname}</td>
-                        <td>{prd.rating+"/5"}</td>
+                        <td>{prd.avgrating ? prd.avgrating+"/5" : 'Not Reviewed Yet'}</td>
+                        <td>{prd.ReviewCount}</td>
+                 
+                        
                         <td>
-                            <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
-                            <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
+                            <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}} onClick={()=>this.onDeleteProduct(prd.id)}/>
+                           
                         </td>
                     </tr>
                 )
@@ -235,11 +264,12 @@ class AdminPage extends React.Component{
                     <td>NO</td>
                     <td>NAME</td>
                     <td>PRICE</td>
+                    <td>IMAGE</td>
                     <td>CATEGORY</td>
-                    <td>DESC</td>
                     <td>SHOPNAME</td>
                     <td>RATING</td>
-                    <td>IMAGE</td>
+                    <td>NO OF REVIEW</td>
+                  
                     <td>SETTINGS</td>
                 </tr>
             )
@@ -494,7 +524,7 @@ class AdminPage extends React.Component{
 
     render(){
         return(
-            <div className="p-t-100 p-l-5 p-r-5 ">
+            <div className="p-t-100 p-l-3 p-r-3 ">
                 <div className="row mb-5">
                     <div className="col-md-3 text-center">
                         <input type="button" className="btn btn-info navbartext" value="PRODUCTS" style={{width : "200px"}} onClick={()=>this.changeTable(1)}/>
@@ -509,7 +539,7 @@ class AdminPage extends React.Component{
                         <input type="button" className="btn btn-success navbartext" value="USER" style={{width : "200px"}} onClick={()=>this.changeTable(4)}/>
                     </div>
                 </div>
-                <div className="mycontainer">
+                <div className="mycontainer p-l-80 p-r-80">
                     <Table hover style={{fontSize : "15px"}}>
                         <thead>
                             {this.renderTableHead()}

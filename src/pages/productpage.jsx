@@ -1,12 +1,14 @@
 import React from 'react'
 import Carousel from './../components/carousel'
 import Axios from 'axios'
-import { URLAPI, PATHDEFAULTPRD } from "../redux/actions/types";
+import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from "../redux/actions/types";
 import { connect } from "react-redux";
 import { getListCategory } from "./../redux/actions/index"
 import numeral from 'numeral'
 import { Link } from 'react-router-dom'
 import Footer from './../components/footer';
+import ReactLoading from 'react-loading';
+
 
 // Star 
 // import StarRatingComponent from 'react-star-rating-component';
@@ -18,10 +20,11 @@ class productPage extends React.Component{
     state = {
         productlist  : [],
         rating : 0,
-        bannerimgpath : []
-        
-    
-    
+        bannerimgpath : [],
+        currentgenre : this.props.location.search.replace("?cat=", ""),
+        reload : false,
+        finishload : false
+
       }
 
 
@@ -34,19 +37,34 @@ class productPage extends React.Component{
         var currentgenre = this.props.location.search.replace("?cat=", "")
         if(!currentgenre){
             // PRINT ALL 
-            console.log(this.props.location)
-            console.log("Nda ada query, Select ALL")
             this.getProduct()
-            console.log(this.state.productlist)
-          
         }
         else{
-        
             this.getProduct(currentgenre)
         }
        //pathname, search, hash, state
 
   
+    }
+
+    componentDidUpdate (){
+        if(this.state.reload === true){
+
+            console.log("Update")
+            var currentgenre = this.state.currentgenre
+            console.log(currentgenre)
+            if(!currentgenre){
+    
+                this.getProduct()
+            }
+            else{
+            
+                this.getProduct(currentgenre)
+            }
+        }
+      
+
+        
     }
     getBannerPath = () => {
         Axios.get(URLAPI + '/banner/getpathbanner')
@@ -62,19 +80,25 @@ class productPage extends React.Component{
         })
     }
 
-    getProduct = (category = "") =>{
-        console.log("masuk")
-        console.log(category)
-        Axios.get(URLAPI+'/product/getproduct?cat=' + category)
+    getProduct = (category = "Fashion") =>{
+        if(category === ''){
+            this.setState({
+                currentgenre : 'Fashion'
+            })
+          
+        }
+
+        Axios.get(URLAPI+'/product/getproduct?cat=' + category + '&pagenumber=all') // get all no limit
         .then((res)=>{
             
             this.setState({
-            productlist : res.data
-    
+            productlist : res.data,
+            reload : false,
+            finishload : true
             })
             var select_box = document.getElementById("catlist");
             select_box.selectedIndex = 0;
-            console.log(this.state.productlist)
+     
        
         })
         .catch((err)=>{
@@ -85,9 +109,9 @@ class productPage extends React.Component{
 
     filterProduct = (filterby) =>{
         console.log(filterby)
-        if(filterby === "No Filter"){
-            this.getProduct(this.props.location.search.replace("?cat=", ""))
-        }
+        // if(filterby === "No Filter"){
+        //     this.getProduct(this.props.location.search.replace("?cat=", ""))
+        // }
         if(filterby === "price low"){
             var sorted=  this.state.productlist.sort(function(a,b){
                 return a.price - b.price
@@ -151,6 +175,7 @@ class productPage extends React.Component{
                 <div className="pt-5">
                 <center>
                 <h1>Product Not Found</h1>
+                <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
                 </center>
                 </div>
             )
@@ -209,7 +234,10 @@ class productPage extends React.Component{
         var jsx = this.props.listcategory.map((val)=>{
             return (
                 <Link to={"/product?cat=" + val.name}>
-                <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}}>
+                <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}} onClick={()=>this.setState({
+                    currentgenre : val.name,
+                    reload : true
+                })}>
                     <img src={URLAPI + val.image} alt="logo"  height="75px"></img>
                     <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
                 
@@ -225,7 +253,15 @@ class productPage extends React.Component{
 
 
     render(){
-
+        if(this.state.productlist.length === 0 && this.state.finishload === false){
+            return(
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
+                </div>
+            )
+        }
+ 
         return(
 
             <div className="p-t-58">
@@ -246,7 +282,7 @@ class productPage extends React.Component{
                             <div>
                                 <div className="d-flex flex-column align-items-center justify-content-center mb-4" style={{backgroundColor : "#BDC1C9"}}>
                                     {/* <img src="xd" alt="logo" height ="50%"></img> */}
-                                    <input type="button" className="btn navbartext btn-secondary form-control" value="All Product" onClick={() => this.getProduct()} ></input>
+                                   {/* <h1>a</h1> */}
                                 </div>
                                 {this.printCategory()}
                             </div>
@@ -254,7 +290,8 @@ class productPage extends React.Component{
                         <div class="col-md-9">
                             <div className="row">
                                 <div className="col-md-8">
-                                    <h1>Product Genre</h1>
+                                    <h1>{this.state.currentgenre ? this.state.currentgenre : 'Fashion'}</h1>
+                            
                                     <div>{this.state.productlist.length === 0 ? null : this.state.productlist.length + "  Products Found"}</div>
                                 </div>
                                 <div className="col-md-4">

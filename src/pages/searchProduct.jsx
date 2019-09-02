@@ -8,7 +8,7 @@ import Footer from './../components/footer';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import {onChangeFilter} from '../redux/actions/textactions'
 import { Redirect } from 'react-router'
-
+import ReactLoading from 'react-loading';
 // ROUTE 
 
 import { Link } from 'react-router-dom'
@@ -216,26 +216,26 @@ class searchProduct extends React.Component{
                         // onStarClick={()=> this.onStarClick()}
                         
                     /> */}
-               <div className="d-flex flex-row justify-content-center">
-    
+                <div className="d-flex flex-row justify-content-center mt-2">
+
                     <StarRatings
-                    rating={val.avgrating ? val.avgrating : 0}
-                    starRatedColor="orange"
-                    // changeRating={this.changeRating}
-                    numberOfStars={5}
-                    starDimension="16px"
-                    name='rating'
+                        rating={val.avgrating ? val.avgrating : 0}
+                        starRatedColor="orange"
+                        // changeRating={this.changeRating}
+                        numberOfStars={5}
+                        starDimension="16px"
+                        name='rating'
                     />
-                 <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
+                    <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
                 </div>
-    
-                <p className="mt-3">
-                        <button>
-                            <Link to={"/productdetails?pid=" + val.id}>
-                            <p className="navbartext">ADD TO CART </p>
-                            </Link>
-                        </button>
-                </p>
+                    <h5 className="mb-3 badge badge-dark">{val.shopname}</h5>
+
+                    
+                    <Link to={"/productdetails?pid=" + val.id}> 
+                        <input type='text' value="View Product" className="form-control btn btn-dark navbartext pt-4 pb-4"/>
+
+
+                    </Link>
           
             </div>
     
@@ -273,7 +273,7 @@ class searchProduct extends React.Component{
 
         //     if(currentPage > totalPage){
         //         return(
-        //             <Redirect to={`?pagenumber=${totalPage}`}/>
+        //             <Redirect to={`/search?pagenumber=${totalPage}`}/>
         //         )
         //     }
         //     else if (currentPage < 0){

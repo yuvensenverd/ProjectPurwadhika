@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Card, Button,  CardText, Row,  } from 'reactstrap';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { addItemCart, updateNotification } from './../redux/actions/index'
+import { addItemCart, updateNotification, updateUser } from './../redux/actions/index'
 import Footer from '../components/footer'
 import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -264,8 +264,11 @@ class UserCart extends React.Component{
                         <div>
                             <h1 className="m-t-120">Your Cart is still empty! Start Shopping Now!</h1>
                             <Link to="/product">
+                            <input type="button" value="Start Shopping" className="btn btn-danger btn-lg navbartext"/>
+                            </Link>   
+                         
                             <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
-                            </Link>
+                          
                         </div>
                     )
                 }
@@ -321,12 +324,30 @@ class UserCart extends React.Component{
 
         Axios.post(URLAPI + '/cart/addtransaction', data, headers)
         .then((res)=>{
-            this.props.addItemCart([]) // set cart empty in redux
-            this.props.updateNotification(this.props.userdata.NOTIFLEN + arr.length)
-            this.setState({
-                modaltransaction : true,
-                cart_user : []
-            })
+            
+            
+           
+
+            //
+            var data = {
+                userid : this.props.userdata.userid,
+                balance : -(this.state.totalprice)
+              }
+              Axios.put(URLAPI + `/user/onusertransaction`, data, headers)
+              .then((res)=>{
+           
+                this.props.updateUser(res.data[0])
+                this.props.addItemCart([]) // set cart empty in redux
+                this.props.updateNotification(this.props.userdata.NOTIFLEN + arr.length)
+                this.setState({
+                    modaltransaction : true,
+                    cart_user : []
+                })
+              
+              })
+              .catch((err)=>{
+                console.log(err)
+              })
 
         })
         .catch((err)=>{
@@ -401,7 +422,7 @@ class UserCart extends React.Component{
                                 {
                                     this.props.userdata.SALDO < this.state.totalprice 
                                     ?
-                                    <input type="button" className="btn btn-secondary navbartext" value="PAY NOW" onClick={()=>this.onPayClick()}/>
+                                    <input type="button" className="btn btn-secondary navbartext" value="PAY NOW" disabled/>
                                     :
                                     <input type="button" className="btn btn-success navbartext" value="PAY NOW" onClick={()=>this.onPayClick()}/>
                                 } 
@@ -455,4 +476,4 @@ const mapStateToProps= (state)=>{
 }
 
 
-export default connect(mapStateToProps, {addItemCart, updateNotification})(UserCart)
+export default connect(mapStateToProps, {addItemCart, updateNotification, updateUser})(UserCart)

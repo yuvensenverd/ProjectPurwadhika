@@ -178,12 +178,12 @@ class confirmOrder extends React.Component{
         return(
             <div className="mycontainer p-t-100">
                <div className="row mb-5 p-0 m-0">
-                    <div className="col-md-3 text-center p-0 m-0 ">
+                    <div className="col-md-6 text-center p-0 ">
                         <input type="button" className="btn btn-dark navbartext form-control" value="Unconfirmed Orders" onClick={()=>this.getWaitingConfirmation()} />
                     </div>
-                    <div className="col-md-3 text-center p-0 m-0 ">
+                    <div className="col-md-6 text-center p-0 m-0 ">
                         <Link to='/userstore'>
-                        <input type="button" className="btn btn-dark navbartext form-control" value="View Your Store"  />
+                        <input type="button" className="btn btn-info navbartext form-control" value="View Your Store"  />
                         </Link>
                     </div>
                 </div>

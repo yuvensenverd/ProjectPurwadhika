@@ -65,10 +65,10 @@ import Axios from 'axios';
     }
     var data = {
       userid : this.props.userdata.userid,
-      topup : this.refs.topup.value
+      balance : this.refs.topup.value
 
     }
-    Axios.put(URLAPI + `/user/onusertopup`, data, headers)
+    Axios.put(URLAPI + `/user/onusertransaction`, data, headers)
     .then((res)=>{
       window.alert("topup berhasil")
       this.props.updateUser(res.data[0])
@@ -184,6 +184,7 @@ import Axios from 'axios';
                         <div className="col-md-8 subtitletext p-0" style={{fontSize : "15px"}}>
                             <div className="mb-2 text-light">{this.props.username}</div>
                             <div className="d-flex flex-row mb-3">
+                        
                             <div  className="mb-2 text-light mr-3" style={{fontSize : '20px'}}> {"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)}</div>
                             <input type="button" className="btn btn-danger " value="ADD BALANCE" style={{height : '40px'}} onClick={()=>this.setState({modalOpen :true})}/>
                             </div>

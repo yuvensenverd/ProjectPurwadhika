@@ -242,7 +242,7 @@ class productDetails extends React.Component{
                             <div className="mb-5 ">
                             <h3 className="">Product Rating</h3>
                             <div>
-                            <div className="d-flex flex-row ">
+                            <div className="d-flex flex-column mb-2">
 
                                 <StarRatings
                                 rating={this.state.productdetail[0].avgrating ? this.state.productdetail[0].avgrating : 0}
@@ -252,7 +252,7 @@ class productDetails extends React.Component{
                                 starDimension="20px"
                                 name='rating'
                                 />
-                            <p className="pl-2" style={{fontSize : '20px'}}>{`(${this.state.productdetail[0].ReviewCount})`}</p>
+                            <p style={{fontSize : '20px', marginTop : '10px'}}>{`(${this.state.productdetail[0].ReviewCount} User Rated This Product)`}</p>
                             </div>
                             </div>
                             </div>

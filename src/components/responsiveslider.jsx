@@ -23,12 +23,12 @@ class Responsive extends Component {
           return (
             <div className="bg-light shadow" style={{width : "255px"}} >
               <center>
-                <Link to={'/product?cat=' + val.name}> 
+                <a href={'/product?cat=' + val.name}> 
                 {/* Lanjut */}
                   <img  className="p-0" src={URLAPI + val.image} height="75px"/>
               
                 <span className="caption"> {val.name}</span>
-                </Link>
+                </a>
                 </center>
             </div>
           )

@@ -9,8 +9,7 @@ import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 import numeral from 'numeral'
-import { thisExpression } from '@babel/types';
-import { isNull } from 'util';
+import ReactLoading from 'react-loading';
 
 // NANTI KALAU ADD PRODUCT DI LOOPING 
 
@@ -29,21 +28,23 @@ class userStore extends React.Component{
         modaleditPic : false,
         editpicnum : null,
         productidedit : null,
-        modaladdPic : false
+        modaladdPic : false,
+        productsold : 0
     }
 
     componentDidMount(){
         // KETIKA MASUK LEWAT LINK
         this.getCategoryList()
         this.getStoreInfo()
+        this.getProductSold()
         this.getProductStore()
     }
 
     componentWillReceiveProps(){
-        console.log("MASUK")
         // KETIKA RELOG f5
         this.getStoreInfo()
         this.getProductStore()
+        this.getProductSold()
         
     }
     getCategoryList = () =>{
@@ -51,6 +52,25 @@ class userStore extends React.Component{
         .then((res)=>{
             this.setState({
                 categorylist : res.data
+            })
+         
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }
+
+    getProductSold = () =>{
+        const token = localStorage.getItem('token')
+        const headers = {
+            headers: {
+                'Authorization' : `${token}`
+            }
+        }
+        Axios.get(URLAPI + '/transaction/getproductsold/' + this.props.userdata.userid, headers)
+        .then((res)=>{
+            this.setState({
+                productsold : res.data[0].productSold
             })
          
         })
@@ -174,9 +194,16 @@ class userStore extends React.Component{
                         <div className="col-md-2 subtitletext  text-center p-3"style={{fontSize : "17px"}}>
                         <div className="mb-2"><FontAwesomeIcon size="2x"  icon={faStoreAlt} ></FontAwesomeIcon></div>
                             <div className="mb-1" style={{color : '#83897D'}}> Product Sold</div>
-                            <div> 0 </div>
+                            <div> {this.state.productsold} </div>
                         </div>
                     </div>
+                </div>
+            )
+        }else{
+            return (
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
                 </div>
             )
         }
@@ -196,6 +223,18 @@ class userStore extends React.Component{
             editpicnum : index,
             productidedit : prid
         })
+    }
+
+    printProductName = (text) =>{
+        var product = text.split(' ')
+        var arr = []
+        for(var i = 0 ; i<4 ; i++){
+            arr.push(product[i])
+        }
+        if(product.length >= 5){
+            arr.push('...')
+        }
+        return arr.join(' ')
     }
 
     // RENDER TABLE PRODUCT 
@@ -222,10 +261,13 @@ class userStore extends React.Component{
                                  alt="" width='100px'></img>
                              
                             </td>
-                            <td>{prd.name}</td>
+                            <td>{this.printProductName(prd.name)}</td>
                             <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
                             <td>{prd.cat}</td>
-                            <td>{prd.rating+"/5"}</td>
+                            <td>
+                            {prd.avgrating ? `${prd.avgrating}/5  (${prd.ReviewCount} Reviews)` : 'Not Reviewed Yet '}
+                            </td>
+                            
                             <td>
                                 <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
                                 <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}} onClick={()=>this.setState({editnum : i, productidedit : prd.id})}/>
@@ -253,8 +295,14 @@ class userStore extends React.Component{
                             </td>
                             <td><input type="text" className="form-control" defaultValue={prd.name} ref="editnameproduct" /></td>
                             <td><input type="number" className="form-control" defaultValue={prd.price} ref="editpriceproduct" /> </td>
-                            <td></td>
-                            <td><textarea  defaultValue={prd.description} ref="editdescproduct" /></td>
+                            <td className="d-flex flex-column">
+                                <h5>Product Description</h5>
+                                <textarea  defaultValue={prd.description} ref="editdescproduct" rows="6" />
+                            </td>
+                            <td>
+                            {prd.avgrating ? `${prd.avgrating}/5  (${prd.ReviewCount} Reviews)` : 'Not Reviewed Yet '}
+                            </td>
+                          
                             <td>
                                 <input type="button" className="btn btn-info mr-3 navbartext" value="Save" style={{width : "95px"}} onClick={()=>this.editProduct()}/>
                                 <input type="button" className="btn btn-danger navbartext" value="Cancel" style={{width : "95px"}} onClick={()=>this.setState({editnum : null, productidedit : null})}/>
@@ -264,6 +312,23 @@ class userStore extends React.Component{
                 }
             })
             return jsx
+        }else{
+            return(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <center>
+                    <div className="p-t-100 d-flex flex-column align-items-center justify-content-center" >
+                        <h1 className="mb-5">Loading... Please Wait</h1>
+                        <ReactLoading type="spin" color="#afb9c9"  />
+                    </div>
+                    </center>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            )
         }
     }
     previewEditFile = (index) =>{

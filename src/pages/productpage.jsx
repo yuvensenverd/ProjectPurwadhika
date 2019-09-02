@@ -23,7 +23,8 @@ class productPage extends React.Component{
         bannerimgpath : [],
         currentgenre : this.props.location.search.replace("?cat=", ""),
         reload : false,
-        finishload : false
+        finishload : false,
+        filtertext : ''
 
       }
 
@@ -157,11 +158,11 @@ class productPage extends React.Component{
         var judul = text.split(" ")
         var arr = []
         
-        for(var i = 0; i<5; i++){
+        for(var i = 0; i<4; i++){
             arr.push(judul[i])
             
         }
-        if(judul.length > 5){
+        if(judul.length >= 4){
             arr.push("...")
         }
         return arr.join(" ")
@@ -182,7 +183,14 @@ class productPage extends React.Component{
         }
 
 
-        var output = this.state.productlist.map((val)=>{
+        var output = this.state.productlist
+        .filter((val)=> {
+            return val.name.toLowerCase().indexOf(this.state.filtertext.toLowerCase()) !== -1
+
+        })
+        
+        
+        .map((val)=>{
             return( 
     
             <div className="cardpr d-inline-block mr-3 mb-4" >
@@ -198,26 +206,26 @@ class productPage extends React.Component{
                 {/* {"Rp. " + numeral(val.name).format(0,0)} */}
                 {"Rp. " + numeral(val.price).format(0,0)}
                 </div>
-                <div className="d-flex flex-row justify-content-center">
+                <div className="d-flex flex-row justify-content-center mt-2">
 
-                 <StarRatings
-                    rating={val.avgrating ? val.avgrating : 0}
-                    starRatedColor="orange"
-                    // changeRating={this.changeRating}
-                    numberOfStars={5}
-                    starDimension="16px"
-                    name='rating'
+                    <StarRatings
+                        rating={val.avgrating ? val.avgrating : 0}
+                        starRatedColor="orange"
+                        // changeRating={this.changeRating}
+                        numberOfStars={5}
+                        starDimension="16px"
+                        name='rating'
                     />
                     <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
                 </div>
-                
-                <p className="mt-3">
-                    <button>
-                        <Link to={"/productdetails?pid=" + val.id}>
-                        <p className="navbartext">Add to Cart</p>
-                        </Link>
-                    </button>
-                </p>
+                    <h5 className="mb-3 badge badge-dark">{val.shopname}</h5>
+
+                    
+                <Link to={"/productdetails?pid=" + val.id}> 
+                    <input type='text' value="View Product" className="form-control btn btn-dark navbartext pt-4 pb-4"/>
+
+
+                </Link>
 
             
             </div>
@@ -228,16 +236,22 @@ class productPage extends React.Component{
         })
         return output
         }
+
+    onClickChange = (genre) =>{
+        this.refs.filtertextref.value = '' // KOSONG TExt filter
+        this.setState({
+            currentgenre : genre,
+            reload : true,
+            filtertext : ''
+        })
+    }
     
     
     printCategory = () =>{
         var jsx = this.props.listcategory.map((val)=>{
             return (
                 <Link to={"/product?cat=" + val.name}>
-                <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}} onClick={()=>this.setState({
-                    currentgenre : val.name,
-                    reload : true
-                })}>
+                <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}} onClick={()=>this.onClickChange(val.name)}>
                     <img src={URLAPI + val.image} alt="logo"  height="75px"></img>
                     <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
                 
@@ -289,10 +303,12 @@ class productPage extends React.Component{
                         </div>
                         <div class="col-md-9">
                             <div className="row">
-                                <div className="col-md-8">
+                                <div className="col-md-8 d-flex flex-column ">
                                     <h1>{this.state.currentgenre ? this.state.currentgenre : 'Fashion'}</h1>
                             
-                                    <div>{this.state.productlist.length === 0 ? null : this.state.productlist.length + "  Products Found"}</div>
+                                    <div className="mb-3">{this.state.productlist.length === 0 ? null : this.state.productlist.length + "  Products Found"}</div>
+
+                                   
                                 </div>
                                 <div className="col-md-4">
                                     <select  id = "catlist" ref="inputgenre" className="form-control mt-2" placeholder="Filter By" onChange={()=>this.filterProduct(this.refs.inputgenre.value)}>
@@ -305,6 +321,21 @@ class productPage extends React.Component{
                                         
                                     </select>
                                 </div>
+                            </div>
+                            <div className="d-flex flex-row ">
+                                <input type="text" 
+                                ref="filtertextref"
+                                
+                                className="form-control text-center"
+                                placeholder="Search Product Name..." 
+                              
+                                style={{ alignSelf: "center", borderRadius : "3px"}}
+                                />
+                                <input type="button"
+                                 className="btn" value="SEARCH" 
+                                 style={{height : "40px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder", color : "white"}} 
+                                 onClick={()=>this.setState({ filtertext : this.refs.filtertextref.value.replace(/^\s+|\s+$/g, '')})}
+                                 />
                             </div>
 
                             <div className="pl-2 pr-2 pt-3">

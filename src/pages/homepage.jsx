@@ -133,7 +133,7 @@ class Homepage extends React.Component{
         var judul = text.split(" ")
         var arr = []
         
-        for(var i = 0; i<5; i++){
+        for(var i = 0; i<4; i++){
             arr.push(judul[i])
             
         }
@@ -200,11 +200,12 @@ class Homepage extends React.Component{
                 URLAPI + PATHDEFAULTPRD
                 } 
             alt="image" width="100%" height="175px"/>
-            <div className="cardprtext pl-4 pr-4 mb-3" style={{height : "50px"}}>{this.renderName(val.name)}</div>
+            <div className="cardprtext pl-4 pr-4 mb-2" style={{height : "50px"}}>{this.renderName(val.name)}</div>
+           
             <p className="price">
             {"Rp. " + numeral(val.price).format(0,0)}
                 </p>
-            <p>Some text about the Product.</p>
+  
             {/* <StarRatingComponent 
                    
                     name="rate1"  // RATING INDEX / PRODUCT ID
@@ -213,7 +214,7 @@ class Homepage extends React.Component{
                     // onStarClick={()=> this.onStarClick()}
                     
                 /> */}
-           <div className="d-flex flex-row justify-content-center">
+           <div className="d-flex flex-row justify-content-center mt-2">
 
                 <StarRatings
                 rating={val.avgrating ? val.avgrating : 0}
@@ -225,14 +226,14 @@ class Homepage extends React.Component{
                 />
              <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
             </div>
-
-            <p className="mt-3">
-                    <button>
-                        <Link to={"/productdetails?pid=" + val.id}>
-                        <p className="navbartext">Add to Cart</p>
-                        </Link>
-                    </button>
-            </p>
+            <h5 className="mb-3 badge badge-dark">{val.shopname}</h5>
+            <Link to={"/productdetails?pid=" + val.id}> 
+            <input type='text' value="View Product" className="form-control btn btn-dark navbartext pt-4 pb-4"/>
+             
+              
+            </Link>
+            
+          
       
         </div>
 
@@ -313,10 +314,10 @@ class Homepage extends React.Component{
                     className="form-control form-control-lg text-center"
                      placeholder="Search Items.." 
                      style={{ alignSelf: "center", borderRadius : "3px"}}
-                     onChange={()=>this.setState({ filtertext : this.refs.filtertextref.value})}
-                    ></input>
+                     onChange={()=>this.setState({ filtertext : this.refs.filtertextref.value})}/>
+                    
                     <a href={`/search?keyword=${this.state.filtertext}`}>
-                    <input type="button" className="btn" value="FILTER" style={{height : "50px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder", color : "white"}} onClick={()=>this.onButtonFilterClick()}/>
+                    <input type="button" className="btn" value="SEARCH" style={{height : "50px", alignSelf : "center", width : "200px", backgroundColor : "black", fontWeight : "bolder", color : "white"}} onClick={()=>this.onButtonFilterClick()}/>
                     </a>
                 </div>
         

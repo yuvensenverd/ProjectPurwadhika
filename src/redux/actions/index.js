@@ -40,7 +40,9 @@ export const loginUser = (value) =>{
                 })
             })
             .catch((err)=>{
-                console.log(err)
+                dispatch({
+                    type : LOADINGFALSE
+                })
             })
             
             Axios.get(URLAPI + '/transaction/getnotiflen/' + res.data[0].userid)
@@ -170,7 +172,9 @@ export const loginToken = () =>{
                 })
             })
             .catch((err)=>{
-                console.log(err)
+                dispatch({
+                    type : LOADINGFALSE
+                })
             })
 
             Axios.get(URLAPI + '/transaction/getnotiflen/' + res.data[0].userid)
@@ -184,7 +188,9 @@ export const loginToken = () =>{
                 
             })
             .catch((err)=>{
-                console.log(err)
+                dispatch({
+                    type : LOADINGFALSE
+                })
             })
 
          
@@ -197,5 +203,16 @@ export const loginToken = () =>{
             window.alert("User Token Not Authorized, Please Login via login page")
          
         })
+    }
+}
+
+export const loading = () =>{
+    return {
+        type : LOADING
+    }
+}
+export const loadingFalse = () =>{
+    return {
+        type : LOADINGFALSE
     }
 }

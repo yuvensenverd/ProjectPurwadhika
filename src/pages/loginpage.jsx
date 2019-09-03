@@ -1,7 +1,8 @@
 import React from 'react'
 import './../assets/Templates/Login_v14/css/main.css'
 import './../assets/Templates/Login_v14/css/util.css'
-import { loginUser } from './../redux/actions/index'
+import { loginUser,  loading, loadingFalse } from './../redux/actions/index'
+import ReactLoading from 'react-loading';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import Axios from 'axios';
@@ -82,16 +83,19 @@ class LoginPage extends React.Component{
 
 
     ValidateLogin = () => {
+      this.props.loading()
       var username = this.refs.inputuser.value
       var password = this.refs.inputpassword.value
       
        
       if(username.replace(/\s/g, "") === "" || password.replace(/\s/g, "") === ""){
+        this.props.loadingFalse()
         return (
           window.alert("Password dan Username harus diisi")
         )
       }
       if(username.replace(/\s/g, "").length <= 7 || password.replace(/\s/g, "").length <= 7){
+        this.props.loadingFalse()
         return (
           window.alert("Password dan Username minimal 8 karakter")
         )
@@ -140,9 +144,13 @@ class LoginPage extends React.Component{
                   <span className="focus-input100" />
                 </div>
                 <div className="container-login100-form-btn mt-4" >
-                  <button className="login100-form-btn btn-block" id="buttonlog" onClick={() => this.ValidateLogin()}>
-                    Login
-                  </button>
+                {this.props.userdata.LOADING === true ?
+                <span className="text-center" style={{fontSize : '25px', marginBottom : '10px'}}>Loading, Please Wait..<ReactLoading type="spin" color="#afb9c9"  /></span> 
+                  : 
+                <button className="login100-form-btn btn-block" id="buttonlog" onClick={() => this.ValidateLogin()}>
+                  Login
+                </button>}
+                 
                 </div>
               </div>
             </div>
@@ -159,4 +167,4 @@ const mapStateToProps= (state)=>{
   }
 }
 
-export default connect(mapStateToProps, {loginUser})(LoginPage);
+export default connect(mapStateToProps, {loginUser, loading, loadingFalse})(LoginPage);

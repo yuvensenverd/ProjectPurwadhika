@@ -12,7 +12,7 @@ const Initial_state =
   userid : null  ,
   HAVESHOP : false,
   SALDO : null,
-  PHONENUMBER : null,
+  PHONENUMBER : '',
   RESIDENCE : "",
   EMAIL : "",
   PROFILEIMG : '',

@@ -24,7 +24,8 @@ class productPage extends React.Component{
         currentgenre : this.props.location.search.replace("?cat=", ""),
         reload : false,
         finishload : false,
-        filtertext : ''
+        filtertext : '',
+        prlengthdisplay : 0
 
       }
 
@@ -229,11 +230,19 @@ class productPage extends React.Component{
 
             
             </div>
+            
+            
     
     
     
             )
         })
+        if(output.length !== this.state.prlengthdisplay){
+            this.setState({
+                prlengthdisplay : output.length
+            })
+        }
+        
         return output
         }
 
@@ -306,7 +315,7 @@ class productPage extends React.Component{
                                 <div className="col-md-8 d-flex flex-column ">
                                     <h1>{this.state.currentgenre ? this.state.currentgenre : 'Fashion'}</h1>
                             
-                                    <div className="mb-3">{this.state.productlist.length === 0 ? null : this.state.productlist.length + "  Products Found"}</div>
+                                    <div className="mb-3">{this.state.prlengthdisplay === 0 ? null : this.state.prlengthdisplay + "  Products Found"}</div>
 
                                    
                                 </div>

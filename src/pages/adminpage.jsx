@@ -230,26 +230,54 @@ class AdminPage extends React.Component{
                 this.adminGetUser()
                 console.log("masuk")
                 return this.state.data.map((user, i)=>{
-                    return (
-                        <tr>
-                            <td>{i+1}</td>
-                            <td>{user.username}</td>
-                            <td>{user.email}</td>
-                            <td>{user.role}</td>
-                            <td>{user.saldo}</td>
-                            <td>{user.status}</td>
-                            <td>
-                                <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
-                                <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
-                            </td>
-                        </tr>
-                    )
-                })
-                
-            
-            
-            
-        }
+                    if(i !== this.state.editnum){
+
+                        return (
+                            <tr>
+                                <td>{i+1}</td>
+                                <td>{user.username}</td>
+                                <td>{user.email}</td>
+                                <td>{user.role}</td>
+                                <td>{user.saldo}</td>
+                                <td>{user.status}</td>
+                                <td>
+                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
+                                    <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}  onClick={()=>this.setState({editnum : i})}/>
+                                </td>
+                            </tr>
+                        )
+                    }else {
+                        return (
+                            <tr>
+                                <td>{i+1}</td>
+                                <td>{user.username}</td>
+                                <td>{user.email}</td>
+                                <td>
+                                <select  className="mb-5" required id = "myList" ref="edituserrole" className="form-control mb-2" placeholder="Status">
+                                {user.role === 'Admin' ? <option value="Admin" selected >Admin</option> : <option value="Admin" >Admin</option>}
+                                {user.role === 'User' ? <option value="User" selected >User</option> : <option value="User" >User</option>}
+                                </select>
+                                </td>
+                                <td>
+                                <input type="number" defaultValue={user.saldo} ref="editusersaldo" className="form-control"/>
+                                </td>
+                                <td>
+                                <select  className="mb-5" required id = "myList" ref="edituserstatus" className="form-control mb-2" placeholder="Status">
+                                {user.status === 'Verified' ? <option value="Verified" selected >Verified</option> : <option value="Verified" >Verified</option>}
+                                {user.status === 'Unverified' ? <option value="Unverified" selected >Unverified</option> : <option value="Unverified" >Unverified</option>}
+                                    
+                                    
+                                </select>
+                                </td>
+                                <td>
+                                    <input type="button" className="btn btn-success mr-3 navbartext" value="save" style={{width : "95px"}} onClick={()=>this.onClickSaveUser(user.userid)}/>
+                                    <input type="button" className="btn btn-danger navbartext" value="cancel" style={{width : "95px"}}  onClick={()=>this.setState({editnum : null})} />
+                                </td>
+                            </tr>
+                        )
+                    }
+                }   
+                )}
         return (
             <h1>No Table Are Selected!</h1>
         )
@@ -372,7 +400,8 @@ class AdminPage extends React.Component{
         if(i !== this.state.showTable){
             this.setState({
                 change : true,
-                showTable : i
+                showTable : i,
+                editnum : null
             })
         }
     }
@@ -520,6 +549,37 @@ class AdminPage extends React.Component{
                 console.log(err)
             })
         }
+    }
+
+    onClickSaveUser = (id) =>{
+        var saldo = parseInt(this.refs.editusersaldo.value)
+        var role = this.refs.edituserrole.value
+        var status = this.refs.edituserstatus.value
+        console.log(id)
+        const data = {
+            saldo,
+            role, 
+            status
+        }
+        console.log(data)
+        const token = localStorage.getItem('token')
+        const headers = {
+            headers: {
+                'Authorization' : `${token}`
+            }
+        }
+        Axios.put(URLAPI+`/user/adminedit/${id}`, data, headers)
+        .then((res)=>{
+            this.setState({
+                change : true,
+                // data : res.data,
+                editnum : null
+            })
+            window.alert('Edit User Success')
+        })
+        .catch((err)=>{
+            console.log(err.response)
+        })
     }
 
     render(){

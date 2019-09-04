@@ -80,6 +80,29 @@ class AdminPage extends React.Component{
         }
     }
 
+    adminGetTransfer = () =>{
+        if(this.state.change === true){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI + '/transaction/manualtransfer', headers)
+            .then((res)=>{
+                console.log(res.data)
+                this.setState({
+                    data : res.data,
+                    change : false
+     
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    }
+
     adminGetProduct = () =>{
         if(this.state.change === true){
 
@@ -234,7 +257,7 @@ class AdminPage extends React.Component{
 
                         return (
                             <tr>
-                                <td>{i+1}</td>
+                                <td>{user.userid}</td>
                                 <td>{user.username}</td>
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
@@ -278,6 +301,29 @@ class AdminPage extends React.Component{
                     }
                 }   
                 )}
+        if(this.state.showTable === 5){
+            this.adminGetTransfer()
+            console.log("masuk")
+            var jsx =  this.state.data.map((trx, i)=>{
+                return (
+                    <tr>
+                        <td>{i+1}</td>
+                        <td>{trx.transactiondate.split('T')[0]}</td>
+                        <td>{"Rp. " + numeral(trx.totalprice).format(0,0)}</td>
+                        <td>{trx.userid}</td>
+                        <td>
+                            <img src={URLAPI + trx.imagepath} width="200px" alt="image"/>
+                        </td>
+                        <td>
+                            <input type="button" className="btn btn-info mr-3 navbartext" value="APPROVE" style={{width : "120px"}} onClick={()=>this.approveTransaction(trx.id)}/>
+                            <input type="button" className="btn btn-danger mr-3 navbartext" value="REJECT" style={{width : "95px"}} onClick={()=>this.rejectTransaction(trx.id)}/>
+                        </td>
+                    </tr>
+                )
+            })
+            
+            return jsx   
+    }
         return (
             <h1>No Table Are Selected!</h1>
         )
@@ -324,7 +370,7 @@ class AdminPage extends React.Component{
         if(this.state.showTable === 4){
             return(
                 <tr className="font-weight-bold">
-                    <td>NO</td>
+                    <td>USERID</td>
                     <td>USERNAME</td>
                     <td>EMAIL</td>
                     <td>ROLE</td>
@@ -334,9 +380,22 @@ class AdminPage extends React.Component{
                 </tr>
             )
         }
+        if(this.state.showTable === 5){
+            return(
+                <tr className="font-weight-bold">
+                    <td>NO</td>
+                    <td>TRANSACTION DATE</td>
+                    <td>TOTAL PRICE</td>
+                    <td>USERID</td>
+                    <td>IMAGE</td>
+                    <td>ACTION</td>
+                </tr>
+            )
+        }
         return (
             <h1>No Table Are Selected!</h1>
         )
+        
     }
 
     renderTableFoot = () =>{
@@ -582,21 +641,71 @@ class AdminPage extends React.Component{
         })
     }
 
+    approveTransaction = (id) =>{
+        var confirm = window.confirm("Are you sure you want to approve the transaction ? ")
+        if(confirm){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI + '/transaction/adminapprove/' + id, headers)
+            .then((res)=>{
+                this.setState({
+                    change : true,
+                    editnum : null
+                })
+                window.alert('Transaction Approved')
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+    } 
+
+    rejectTransaction = (id) =>{
+        var confirm = window.confirm("Are you sure you want to reject the transaction ? ")
+        if(confirm){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI + '/transaction/adminreject/' + id, headers)
+            .then((res)=>{
+                this.setState({
+                    change : true,
+                    editnum : null
+                })
+                window.alert('Transaction Rejected Success')
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+            
+        }
+    }
+
     render(){
         return(
             <div className="p-t-100 p-l-3 p-r-3 ">
-                <div className="row mb-5">
-                    <div className="col-md-3 text-center">
+                <div className="row mb-5 ml-5">
+                    <div className="col-md-2 text-center mr-2 ">
                         <input type="button" className="btn btn-info navbartext" value="PRODUCTS" style={{width : "200px"}} onClick={()=>this.changeTable(1)}/>
                     </div>
-                    <div className="col-md-3 text-center">
+                    <div className="col-md-2 text-center mr-2">
                         <input type="button" className="btn btn-danger navbartext" value="BANNER" style={{width : "200px"}} onClick={()=>this.changeTable(2)}/>
                     </div>
-                    <div className="col-md-3 text-center">
+                    <div className="col-md-2 text-center mr-2">
                         <input type="button" className="btn btn-primary navbartext" value="CATEGORIES" style={{width : "200px"}} onClick={()=>this.changeTable(3)}/>
                     </div>
-                    <div className="col-md-3 text-center">
+                    <div className="col-md-2 text-center mr-2">
                         <input type="button" className="btn btn-success navbartext" value="USER" style={{width : "200px"}} onClick={()=>this.changeTable(4)}/>
+                    </div>
+                    <div className="col-md-2 text-center mr-2">
+                        <input type="button" className="btn btn-dark navbartext" value="CONFIRM TRANSACTION" style={{width : "350px"}} onClick={()=>this.changeTable(5)}/>
                     </div>
                 </div>
                 <div className="mycontainer p-l-80 p-r-80">

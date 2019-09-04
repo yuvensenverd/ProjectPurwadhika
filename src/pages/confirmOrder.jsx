@@ -123,26 +123,26 @@ class confirmOrder extends React.Component{
                                     <div className="col-md-1  pr-5 pb-2" >
                                         <img src={URLAPI + item.images.split(',')[0]} alt="userprofile" className="" width="80px" height="80px"/>
                                     </div>
-                                    <div className="col-md-2 pt-3 pl-5 d-flex flex-column">
+                                    <div className="col-md-2  d-flex flex-column">
                                       
                                         <h5>{item.productname + ` x ${item.qty} pcs`}</h5>
                                     </div>
-                                    <div className="col-md-2 pt-3 d-flex flex-column pl-5">
+                                    <div className="col-md-2 d-flex flex-column pl-5">
                                        
                                             {/* <div>{item.name}</div> */}
                                             <h5 className="font-weight-bold  text-secondary">{"Total Price :"}</h5>
                                             <div className="itempricecart">{'Rp ' +numeral(item.qty * item.price).format(0,0)}</div>
                             
                                     </div>
-                                    <div className="col-md-2 subtitletext   pt-3 d-flex flex-column">
+                                    <div className="col-md-2 subtitletext    d-flex flex-column">
                                         <p>{"Buyer"}</p>
                                         <div className="pr-5 ">{item.buyer}</div>
                                     </div>
-                                    <div className="col-md-2 subtitletext  text-center pt-3 d-flex flex-column ">
+                                    <div className="col-md-2 subtitletext  text-center  d-flex flex-column ">
                                         <p>{"transaction date"}</p>
                                         <h5>{item.transactiondate.split('T')[0]}</h5>
                                     </div>
-                                    <div className="col-md-3 subtitletext  text-center pt-4 d-flex flex-row  ">
+                                    <div className="col-md-3 subtitletext  text-center d-flex flex-row  ">
                                         <input type="button" className="btn btn-dark mr-3" value="CONFIRM" onClick={()=>this.onConfirmProductClick(item.transactionid)}/>
                                         <input type="button" className="btn btn-danger " value="CANCEL" onClick={()=>this.onCancelProductClick(item.transactionid)} />
     

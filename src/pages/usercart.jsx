@@ -21,7 +21,9 @@ class UserCart extends React.Component{
         updatedproduct : [],
         paymentmodal : false,
         // redirect : false,
-        modaltransaction : false
+        modaltransaction : false,
+        manualtransfer : false,
+        imageFile : null
     }
    
 
@@ -31,6 +33,35 @@ class UserCart extends React.Component{
             this.updateItemCart()
         }
     }
+
+    previewFile = (event) => {
+        var preview = document.getElementById('imgpreview')
+        var file    = document.getElementById('imgtransferinput').files[0];
+        console.log(event.target.files[0])
+
+        var imgfile = event.target.files[0]
+
+       
+        var reader  = new FileReader();
+      
+        reader.onloadend = function () {
+          preview.src = reader.result;
+        }
+      
+        if (file) {
+          reader.readAsDataURL(file);
+          this.setState({
+              imageFile : imgfile
+          })
+          console.log("image terisi")
+        } else {
+          preview.src = "";
+          this.setState({
+            imageFile : null
+        })
+        console.log("balik state null")
+        }
+      }
 
     updateItemCart = () =>{
         console.log(this.props.userdata.userid)
@@ -314,6 +345,7 @@ class UserCart extends React.Component{
             arr.push([val.id, val.price, val.qty])
         })
         data.listproduct = arr
+        data.gopay = true
         
         const token = localStorage.getItem('token')
         const headers = {
@@ -324,11 +356,6 @@ class UserCart extends React.Component{
 
         Axios.post(URLAPI + '/cart/addtransaction', data, headers)
         .then((res)=>{
-            
-            
-           
-
-            //
             var data = {
                 userid : this.props.userdata.userid,
                 balance : -(this.state.totalprice)
@@ -353,6 +380,48 @@ class UserCart extends React.Component{
         .catch((err)=>{
 
         })
+    }
+
+    onPayManualClick = () =>{
+        if(this.state.imageFile){
+            var formData = new FormData()
+            const token = localStorage.getItem('token')
+            var headers ={
+                headers : 
+                {
+                    'Content-Type' : 'multipart/form-data',
+                    'Authorization' : `${token}`
+                }
+            }
+            console.log(this.state.imageFile)
+
+            var data = {
+                userid : this.props.userdata.userid,
+                totalprice : this.state.totalprice
+            }
+            var arr = []
+            this.state.cart_user.map((val)=>{
+                arr.push([val.id, val.price, val.qty])
+            })
+            data.listproduct = arr
+
+            formData.append('image', this.state.imageFile) 
+            formData.append('data', JSON.stringify(data))
+
+            Axios.post(URLAPI + '/cart/addtransaction', formData, headers)
+            .then((res)=>{
+                this.props.addItemCart([]) // set cart empty in redux
+                this.props.updateNotification(this.props.userdata.NOTIFLEN + arr.length)
+                this.setState({
+                    modaltransaction : true,
+                    cart_user : []
+                })
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+         
+        }
     }
 
     printPaymentDetails = () =>{
@@ -408,7 +477,7 @@ class UserCart extends React.Component{
                     {
                         this.props.userdata.SALDO < this.state.totalprice 
                         ?
-                        <div className="subtitletext mb-2 mt-5 text-danger"> Your Balance is not sufficient ! Please Top Up  </div>  
+                        <div className="subtitletext mb-2 mt-5 text-danger"> Your Balance is not sufficient for GOPAY! Please Top Up  </div>  
                         :
                         null
                     }    
@@ -416,17 +485,31 @@ class UserCart extends React.Component{
                     </ModalBody>
                     <ModalFooter>
                         <center>
-                            <div className="p-r-140">
+                            <div className="d-flex flex-row justify-content-center ">
 
-                                <input type="button" className="btn btn-danger navbartext mr-5" value="CANCEL" onClick={()=>this.setState({paymentmodal : false})} />
+                                <input type="button" className="btn btn-danger navbartext " value="CANCEL" onClick={()=>this.setState({paymentmodal : false})} />
                                 {
                                     this.props.userdata.SALDO < this.state.totalprice 
                                     ?
-                                    <input type="button" className="btn btn-secondary navbartext" value="PAY NOW" disabled/>
+                                    <input type="button" className="btn btn-secondary navbartext ml-5" value="GOPAY" disabled/>
                                     :
-                                    <input type="button" className="btn btn-success navbartext" value="PAY NOW" onClick={()=>this.onPayClick()}/>
+                                    <input type="button" className="btn btn-success navbartext ml-5" value="GOPAY" onClick={()=>this.onPayClick()}/>
                                 } 
+                                <input type="button" className="btn btn-info navbartext ml-5 mr-2" value="MANUAL TRANSFER" onClick={()=>this.setState({ manualtransfer : true})} />
                             </div>
+                            {this.state.manualtransfer ? 
+                            <div className=" mt-5 d-flex flex-column pr-5">
+                                <h5>Please Upload Image for Manual Transfer</h5>
+                                <img id="imgpreview" className="mb-4 mt-5 text-center pr-5 "
+                                    src="" width="250px" height="250px" alt="image"/>
+                                        
+
+                                    
+                                <input type="file" className="mt-5 mb-5 btn " id="imgtransferinput" style={{ color : "white", backgroundColor : "black"}} onChange={this.previewFile}></input>
+                                <input type="button" className="btn btn-primary navbartext ml-5 mr-3" value="SUBMIT MANUAL TRANSFER" onClick={()=>this.onPayManualClick()} />
+                            </div>
+
+                             : null}
                         </center>
                     </ModalFooter>
             </Modal>

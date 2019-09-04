@@ -43,6 +43,8 @@ class NotificationPage extends React.Component{
                 this.getWaitingConfirmation()
             }else if(values.type === "confirmed"){
                 this.getConfirmedOrder()
+            }else if(values.type === "cancelled"){
+                this.getCancelledOrder()
             }else{
                 this.getWaitingConfirmation()
             }
@@ -60,6 +62,8 @@ class NotificationPage extends React.Component{
                 this.getWaitingConfirmation()
             }else if(values.type === "confirmed"){
                 this.getConfirmedOrder()
+            }else if(values.type === "cancelled"){
+                this.getCancelledOrder()
             }else{
                 this.getWaitingConfirmation()
             }
@@ -67,6 +71,29 @@ class NotificationPage extends React.Component{
             this.getWaitingConfirmation()
         }
        
+    }
+
+    getCancelledOrder = () =>{
+        console.log('cancelled')
+        const token = localStorage.getItem('token')
+        const headers = {
+            headers: {
+                'Authorization' : `${token}`
+            }
+        }
+        console.log(this.props.userdata.userid)
+        Axios.get(URLAPI + '/transaction/getcancelled/' + this.props.userdata.userid, headers)
+        .then((res)=>{
+            this.setState({
+                data : res.data,
+                finishload : true,
+                datatype : 'Cancelled'
+            })
+            console.log(this.state.data)
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 
     getConfirmedOrder = () =>{
@@ -125,14 +152,6 @@ class NotificationPage extends React.Component{
       }
 
     renderData = () =>{
-        // if(this.state.finishload === true && this.state.data.length === 0){
-        //     return(
-        //         <div className="p-t-100 d-flex flex-column align-items-center" >
-        //         <h1 className="mb-5">Loading Product Please Wait</h1>
-        //         <ReactLoading type="spin" color="#afb9c9"  />
-        //     </div>
-        //     )
-        // }
         if(this.state.finishload === true && this.state.datatype === 'Unconfirmed'){
             if(this.state.data.length > 0 ){
 
@@ -231,7 +250,82 @@ class NotificationPage extends React.Component{
                 </div>
                 )
             }
+            
         }
+        if(this.state.finishload === true && this.state.datatype === 'Cancelled'){
+            if(this.state.data.length > 0 ){
+                
+                var jsx = this.state.data.map((item, i)=>{
+                    return (
+                        <div>
+                            <div className="storecard p-3 mb-0 " style={{height : "130px"}}>
+                                <div className="row">
+                                    
+                                    <div className="col-md-1  pr-5 pb-2" >
+                                        <img src={URLAPI + item.images.split(',')[0]} alt="userprofile" className="" width="80px" height="80px"/>
+                                    </div>
+                                    <div className="col-md-4 pt-3 pl-5 d-flex flex-column">
+                                        <h4 className="font-weight-bold subtitletext">{item.shop}</h4>
+                                        <h5>{item.name + ` x ${item.qty} pcs`}</h5>
+                                    </div>
+                                    <div className="col-md-3 subtitletext  text-center pt-4 d-flex flex-row ">
+                                     
+                                        <input type="text" className="form-control" 
+                                        value={item.status}/>
+                                    </div>
+                                    <div className="col-md-2 subtitletext  text-center pt-3 d-flex flex-column ">
+                                        <p>{"transaction date"}</p>
+                                        <h5>{item.transactiondate.split('T')[0]}</h5>
+                                    </div>
+                                    <div className="col-md-2 subtitletext  text-center  d-flex flex-column pt-3">
+                                     
+                                       
+                                        <input type="button" className="btn btn-danger mr-3" value="OK" onClick={()=>this.onDeleteCancelled(item.transactionid)}/>
+                               
+                                      
+    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })
+                return jsx
+            }else{
+                return(
+
+                <div className="p-t-100 text-center">
+                    <h1>Product Cancelled Empty </h1>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                </div>
+                )
+            }
+            
+        }
+    }
+    onDeleteCancelled = (id) =>{
+        var confirm = window.confirm("Delete this item?")
+        if(confirm){
+            const token = localStorage.getItem('token')
+            const headers = {
+                headers: {
+                    'Authorization' : `${token}`
+                }
+            }
+            Axios.get(URLAPI + `/transaction/tidelete/${id}`, headers)
+            .then((res)=>{
+         
+                this.setState({
+                    finishload : true,
+                    datatype : 'Cancelled'
+                })
+                this.getCancelledOrder()
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+        }
+        
     }
 
     onSubmitButtonClick = (id) =>{
@@ -352,15 +446,21 @@ class NotificationPage extends React.Component{
                         </ModalFooter>
                 </Modal>
                <div className="row mb-5 p-0 m-0">
-                    <div className="col-md-6 text-center p-0 m-0 ">
+                    <div className="col-md-4 text-center p-0 m-0 ">
                         <a href="/notification?type=confirmation">
                             <input type="button" className="btn btn-info navbartext form-control" value="Waiting Confirmation"   />
                         </a>
                         
                     </div>
-                    <div className="col-md-6 text-center p-0 m-0 ">
+                    <div className="col-md-4 text-center p-0 m-0 ">
                         <a href="/notification?type=confirmed">
                             <input type="button" className="btn btn-success navbartext form-control" value="Confirmed Orders" />
+                        </a>
+                        
+                    </div>
+                    <div className="col-md-4 text-center p-0 m-0 ">
+                        <a href="/notification?type=cancelled">
+                            <input type="button" className="btn btn-danger navbartext form-control" value="Cancelled Products" />
                         </a>
                         
                     </div>

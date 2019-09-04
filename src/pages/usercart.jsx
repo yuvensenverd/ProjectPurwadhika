@@ -445,7 +445,7 @@ class UserCart extends React.Component{
         // }
         return(
             <div>
-                <Modal isOpen={this.state.modaltransaction} toggle={()=>this.setState({ modaltransaction : false})} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>
+                <Modal isOpen={this.state.modaltransaction} toggle={()=>this.setState({ modaltransaction : false, manualtransfer : false, imageFile : null})} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>
                     <ModalHeader>
                         <div className="subtitletext text-center p-l-90" style={{fontSize : "26px"}}>Payment Success!!</div>
                     </ModalHeader>
@@ -464,7 +464,7 @@ class UserCart extends React.Component{
                             </Link>    
                     </ModalFooter>
               </Modal>
-              <Modal isOpen={this.state.paymentmodal} toggle={()=>this.setState({paymentmodal : false})} size="lg" style={{width: '550px'}}>
+              <Modal isOpen={this.state.paymentmodal} toggle={()=>this.setState({paymentmodal : false,  manualtransfer : false, imageFile : null})} size="lg" style={{width: '550px'}}>
                     <ModalHeader>
                         <center><div className="subtitletext text-center p-l-110" style={{fontSize : "26px"}}>Payment Details</div></center>
                     </ModalHeader>
@@ -497,7 +497,7 @@ class UserCart extends React.Component{
                                 } 
                                 <input type="button" className="btn btn-info navbartext ml-5 mr-2" value="MANUAL TRANSFER" onClick={()=>this.setState({ manualtransfer : true})} />
                             </div>
-                            {this.state.manualtransfer ? 
+                            {this.state.manualtransfer === true ?
                             <div className=" mt-5 d-flex flex-column pr-5">
                                 <h5>Please Upload Image for Manual Transfer</h5>
                                 <img id="imgpreview" className="mb-4 mt-5 text-center pr-5 "

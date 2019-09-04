@@ -460,7 +460,8 @@ class AdminPage extends React.Component{
             this.setState({
                 change : true,
                 showTable : i,
-                editnum : null
+                editnum : null,
+                data : []
             })
         }
     }

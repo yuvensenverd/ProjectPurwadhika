@@ -325,7 +325,7 @@ class AdminPage extends React.Component{
             return jsx   
     }
         return (
-            <h1>No Table Are Selected!</h1>
+            <div></div>
         )
     }
 

@@ -8,6 +8,7 @@ import numeral from 'numeral'
 import { Link } from 'react-router-dom'
 import Footer from './../components/footer';
 import ReactLoading from 'react-loading';
+import queryString from 'query-string'
 
 
 // Star 
@@ -21,7 +22,7 @@ class productPage extends React.Component{
         productlist  : [],
         rating : 0,
         bannerimgpath : [],
-        currentgenre : this.props.location.search.replace("?cat=", ""),
+        currentgenre : '',
         reload : false,
         finishload : false,
         filtertext : '',
@@ -36,38 +37,44 @@ class productPage extends React.Component{
             this.props.getListCategory()
         }
         
-        var currentgenre = this.props.location.search.replace("?cat=", "")
-        if(!currentgenre){
+        var currentgenre = queryString.parse(this.props.location.search)
+        if(!currentgenre.cat){
+            this.setState({
+                currentgenre : 'Products'
+            })
             // PRINT ALL 
             this.getProduct()
         }
         else{
-            this.getProduct(currentgenre)
+            this.setState({
+                currentgenre : currentgenre.cat
+            })
+            this.getProduct(currentgenre.cat)
         }
        //pathname, search, hash, state
 
   
     }
 
-    componentDidUpdate (){
-        if(this.state.reload === true){
+    // componentDidUpdate (){
+    //     if(this.state.reload === true){
 
-            console.log("Update")
-            var currentgenre = this.state.currentgenre
-            console.log(currentgenre)
-            if(!currentgenre){
+    //         console.log("Update")
+    //         var currentgenre = this.state.currentgenre
+    //         console.log(currentgenre)
+    //         if(!currentgenre){
     
-                this.getProduct()
-            }
-            else{
+    //             this.getProduct()
+    //         }
+    //         else{
             
-                this.getProduct(currentgenre)
-            }
-        }
+    //             this.getProduct(currentgenre.cat)
+    //         }
+    //     }
       
 
         
-    }
+    // }
     getBannerPath = () => {
         Axios.get(URLAPI + '/banner/getpathbanner')
         .then((res)=>{
@@ -82,13 +89,8 @@ class productPage extends React.Component{
         })
     }
 
-    getProduct = (category = "Fashion") =>{
-        if(category === ''){
-            this.setState({
-                currentgenre : 'Fashion'
-            })
-          
-        }
+    getProduct = (category) =>{
+       
 
         Axios.get(URLAPI+'/product/getproduct?cat=' + category + '&pagenumber=all') // get all no limit
         .then((res)=>{
@@ -201,7 +203,8 @@ class productPage extends React.Component{
                     :
                     URLAPI + PATHDEFAULTPRD
                     } 
-                  alt="image" width="100%" height="200px"/>
+                  alt="image" width="100%" height="200px"
+                  />
                 <div className="cardprtext p-3 mb-2" style={{height : "80px"}}>{this.renderName(val.name)}</div>
                 <div className="pricepr mt-1 mb-3">
                 {/* {"Rp. " + numeral(val.name).format(0,0)} */}
@@ -261,7 +264,7 @@ class productPage extends React.Component{
             return (
                 <Link to={"/product?cat=" + val.name}>
                 <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}} onClick={()=>this.onClickChange(val.name)}>
-                    <img src={URLAPI + val.image} alt="logo"  height="75px"></img>
+                    <img src={URLAPI + val.image} alt="logo"  height="75px" onClick={() => this.getProduct(val.name)}/>
                     <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
                 
 
@@ -313,14 +316,14 @@ class productPage extends React.Component{
                         <div class="col-md-9">
                             <div className="row">
                                 <div className="col-md-8 d-flex flex-column ">
-                                    <h1>{this.state.currentgenre ? this.state.currentgenre : 'Fashion'}</h1>
+                                    <h1>{this.state.productlist.length === 0 ? null : this.state.currentgenre}</h1>
                             
                                     <div className="mb-3">{this.state.prlengthdisplay === 0 ? null : this.state.prlengthdisplay + "  Products Found"}</div>
 
                                    
                                 </div>
                                 <div className="col-md-4">
-                                    <select  id = "catlist" ref="inputgenre" className="form-control mt-2" placeholder="Filter By" onChange={()=>this.filterProduct(this.refs.inputgenre.value)}>
+                                    <select  id = "catlist" ref="inputgenre" className="form-control mt-2 mb-2" placeholder="Filter By" onChange={()=>this.filterProduct(this.refs.inputgenre.value)}>
                                         <option value="No Filter" >No Sort</option>
                                         <option value="price low">Price Lowest to Highest</option>
                                         <option value="price high">Price Highest to Lowest</option>

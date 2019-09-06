@@ -245,7 +245,15 @@ class searchProduct extends React.Component{
         })
        
         return output
-    }else{
+    }else if(this.state.finishloadproduct === false && this.state.productlist.length === 0){
+        return(
+            <div className="p-t-100 d-flex flex-column align-items-center" >
+            <h1 className="mb-5">Loading... Please Wait</h1>
+            <ReactLoading type="spin" color="#afb9c9"  />
+        </div>
+        )
+    }
+    else{
         return(
             <div className="p-t-100 text-center mb-5">
             <h1>No Product Found :(</h1>

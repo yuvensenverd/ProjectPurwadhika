@@ -13,6 +13,7 @@ import queryString from 'query-string'
 // ANIMATIONS 
 import { fadeIn, bounce, flip } from 'react-animations'
 import Radium, {StyleRoot} from 'radium';
+// import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 // Star 
 import StarRatings from 'react-star-ratings';
@@ -28,7 +29,9 @@ class productPage extends React.Component{
         reload : false,
         finishload : false,
         filtertext : '',
-        prlengthdisplay : 0
+        prlengthdisplay : 0,
+        inProp : false,
+        setInProp : false
 
       }
 
@@ -231,8 +234,6 @@ class productPage extends React.Component{
                     
                 <Link to={"/productdetails?pid=" + val.id}> 
                     <input type='text' value="View Product" className="form-control btn btn-dark navbartext pt-4 pb-4"/>
-
-
                 </Link>
 
             
@@ -361,7 +362,8 @@ class productPage extends React.Component{
                                          {this.renderProduct()}
                                     </div>
                                 </StyleRoot>
-
+                              
+                         
                                
                             </div>
                             

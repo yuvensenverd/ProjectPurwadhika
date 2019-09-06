@@ -7,6 +7,7 @@ import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 import numeral from 'numeral'
 
 
+
 class AdminPage extends React.Component{
     state = {
         showTable : null,

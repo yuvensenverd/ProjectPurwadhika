@@ -10,9 +10,11 @@ import Footer from './../components/footer';
 import ReactLoading from 'react-loading';
 import queryString from 'query-string'
 
+// ANIMATIONS 
+import { fadeIn, bounce, flip } from 'react-animations'
+import Radium, {StyleRoot} from 'radium';
 
 // Star 
-// import StarRatingComponent from 'react-star-rating-component';
 import StarRatings from 'react-star-ratings';
 
 
@@ -195,6 +197,8 @@ class productPage extends React.Component{
         
         .map((val)=>{
             return( 
+         
+                     
     
             <div className="cardpr d-inline-block mr-3 mb-4" >
                 <img 
@@ -233,6 +237,7 @@ class productPage extends React.Component{
 
             
             </div>
+       
             
             
     
@@ -351,7 +356,13 @@ class productPage extends React.Component{
                             </div>
 
                             <div className="pl-2 pr-2 pt-3">
-                                {this.renderProduct()}
+                                <StyleRoot>
+                                    <div style={styles.fadeIn}>
+                                         {this.renderProduct()}
+                                    </div>
+                                </StyleRoot>
+
+                               
                             </div>
                             
                         </div>
@@ -367,6 +378,17 @@ class productPage extends React.Component{
     }
 
 }
+
+const styles = {
+    fadeIn: {
+      animation: 'x 1s',
+      animationName: Radium.keyframes(fadeIn, 'fadeIn')
+    },
+    flip: {
+        animation: 'x 2s',
+        animationName: Radium.keyframes(flip, 'flip')
+    }
+  }
 
 const mapStateToProps = (state) =>{
     return {

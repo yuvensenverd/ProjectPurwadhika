@@ -2,12 +2,16 @@ import React from 'react'
 import Carousel from './../components/carousel'
 import Axios from 'axios'
 import Responsive from './../components/responsiveslider'
-import Centered from './../components/centerslide'
 import numeral from 'numeral'
 import Footer from './../components/footer';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { Redirect } from 'react-router'
 import ReactLoading from 'react-loading';
+
+// REACT ANIMATIONS
+import { fadeIn, bounce, flip } from 'react-animations'
+import Radium, {StyleRoot} from 'radium';
+
 
 // ROUTE 
 
@@ -191,7 +195,7 @@ class Homepage extends React.Component{
         // console.log(index)
         // console.log(arr)
         return( 
-
+ 
         <div className="card d-inline-block m-r-21 m-b-25 " >
             <img  className="mb-3" 
             src={val.images ?
@@ -236,6 +240,7 @@ class Homepage extends React.Component{
           
       
         </div>
+    
 
 
 
@@ -271,11 +276,16 @@ class Homepage extends React.Component{
             )
         }
         return(
+        
             <div className="col p-0">
+                
                 <div className="row-md-3 mb-5 p-t-58">
                     {this.state.bannerimgpath.length !== 0 
                     ?
-                    <Carousel slideheight={'330px'} items={this.state.bannerimgpath[0].images}/> 
+                        
+                    <Carousel slideheight={'330px'} items={this.state.bannerimgpath[0].images} /> 
+                  
+                   
                     
                     :
                         null
@@ -286,26 +296,25 @@ class Homepage extends React.Component{
                 
 
                
-           
-                <div className="p-0" style={{height : "90px"}} >
-             
-                    <Responsive></Responsive>
-                  
-
             
-
-
+                <div className="p-0" style={{ height : "90px"}} >
+                    <Responsive></Responsive>
                 </div>
+               
+
                 <div className="d-flex flex-row justify-content-center p-t-100">
                         
                 </div>
 
                 {/* BANNER */}
-                <div className="container mt-5 mb-5">
+                <StyleRoot>
+                <div style={styles.fadeIn}>
+                <div className="container mt-5 mb-5" >
                     <div className="mt-5 mb-4">
                         <input type="button" style={{height : "100px", fontWeight: "bolder", fontSize : "18px", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
                     </div>
                 </div>
+               
                 
                 <div className="d-flex flex-row justify-content-center p-5" >
                     <input type="text" 
@@ -327,9 +336,12 @@ class Homepage extends React.Component{
                     </div>
                     <div className="col-md-10 p-0">
                         {/* <div className="d-flex flex-row justify-content-center"> */}
+                   
                        
                         {this.renderProduct()}
-                       
+                   
+                      
+                    
                         {/* </div> */}
                  
                     </div>
@@ -370,18 +382,25 @@ class Homepage extends React.Component{
                 </Pagination>
                 </div>
                 <Footer/>
-                
+                </div>
+                </StyleRoot>
               
             </div>
         )
     }
 }
 
-const mapStateToProps= (state)=>{
-    return{ 
-        testredux : state.pikachu,
-        keren : state.text
+const styles = {
+    fadeIn: {
+      animation: 'x 1s',
+      animationName: Radium.keyframes(fadeIn, 'fadeIn')
+    },
+    flip: {
+        animation: 'x 2s',
+        animationName: Radium.keyframes(flip, 'flip')
     }
-}
+  }
 
-export default connect(mapStateToProps,{ loginUser })(Homepage);
+
+
+export default connect(null,{ loginUser })(Homepage);

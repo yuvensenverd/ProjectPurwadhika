@@ -32,7 +32,6 @@ class productPage extends React.Component{
         prlengthdisplay : 0,
         inProp : false,
         setInProp : false
-
       }
 
 
@@ -262,6 +261,7 @@ class productPage extends React.Component{
             reload : true,
             filtertext : ''
         })
+        this.getProduct(genre)
     }
     
     
@@ -270,8 +270,8 @@ class productPage extends React.Component{
             return (
                 <Link to={"/product?cat=" + val.name}>
                 <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}} onClick={()=>this.onClickChange(val.name)}>
-                    <img src={URLAPI + val.image} alt="logo"  height="75px" onClick={() => this.getProduct(val.name)}/>
-                    <input type="button" className="btn navbartext btn-secondary form-control" value={val.name} onClick={() => this.getProduct(val.name)} ></input>
+                    <img src={URLAPI + val.image} alt="logo"  height="75px" />
+                    <input type="button" className="btn navbartext btn-secondary form-control" value={val.name}  ></input>
                 
 
 

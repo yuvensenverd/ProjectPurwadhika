@@ -10,7 +10,7 @@ import Footer from './../components/footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { URLAPI } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 import { Redirect } from 'react-router'
 import { isNull } from 'util';
 import Carousel from './../components/carousel'
@@ -24,9 +24,14 @@ class productDetails extends React.Component{
         price : 10000,
         totalprice : 0,
         productdetail : [],
+        relatedproduct : [],
         message : "",
+
         modalOpen : false,
-        redirect : false
+        finishloadrelated : false,
+        redirect : false,
+        productid : null,
+        genre : ''
         // productid : null
     }
     
@@ -48,6 +53,13 @@ class productDetails extends React.Component{
      
    
       
+    }
+
+    componentDidUpdate = () =>{
+        if(this.state.genre !== '' && this.state.relatedproduct.length === 0 && this.state.productid){
+            this.getRelatedProducts()
+        }
+        
     }
 
     closeModal = () =>{
@@ -80,9 +92,12 @@ class productDetails extends React.Component{
         Axios.get(URLAPI+'/product/getproduct?id='+id)
         .then((res)=>{
             this.setState({
-                productdetail : res.data
+                productdetail : res.data,
+                genre : res.data[0].category,
+                productid : res.data[0].id
             })
             console.log(this.state.productdetail)
+            console.log(this.state.genre)
         })
         .catch((err)=>{
             this.setState({
@@ -90,6 +105,27 @@ class productDetails extends React.Component{
             })
             console.log(err)
         })
+    }
+
+    getRelatedProducts = () =>{
+        console.log('related')
+        if(this.state.genre !== '' && this.state.productid){
+
+            Axios.get(URLAPI+'/product/getrelated?cat=' + this.state.genre + '&cid=' + this.state.productid)
+            .then((res)=>{
+                this.setState({
+                    relatedproduct : res.data,
+                    finishloadrelated : true
+                })
+                console.log(this.state.relatedproduct)
+            })
+            .catch((err)=>{
+                this.setState({
+                    message : "Product Loading Error..."
+                })
+                console.log(err)
+            })
+        }
     }
 
 
@@ -203,8 +239,38 @@ class productDetails extends React.Component{
         window.history.back();
     }
 
+    printRecommended = () =>{
+        if(this.state.relatedproduct.length !== 0){
+            var jsx = this.state.relatedproduct.map((item)=>{
+                return(
+                
+                <div className="col-md-2">
+                      <a href={"/productdetails?pid=" + item.id} style={{color : 'black', textDecoration : 'none'}}>
+                    <div className="d-flex flex-column">
+                    <img 
+                        src={item.images ?
+                        URLAPI+ item.images
+                        :
+                        URLAPI + PATHDEFAULTPRD
+                        }  
+                    alt="item image" width="100%" height='135px'/>
+                    <div style={{height : '50px'}}> {item.name} </div>
+                    <div className="text text-warning font-weight-bold"> {"Rp. " + numeral(item.price).format(0,0)}</div>
+                    
+                    </div>
+                    </a>
+    
+                </div>
+             
+                    
+                )
+            })
+            return jsx
+        }
+    }
+
     printProductDetails = () =>{
-        if(this.state.productdetail.length === 1){ 
+        if(this.state.productdetail.length === 1 && this.state.finishloadrelated === true){ 
             return (
                 <div className="p-t-100">
                     {/* <div>
@@ -266,9 +332,24 @@ class productDetails extends React.Component{
                         </div>
                     </div>
                      <div className=" p-5">
+                    {this.state.relatedproduct.length !== 0 ? 
+                    <div>
+                    <h5 className="mb-4">Product Reccomendations</h5>
+                    <div className="row mb-5">
+                        
+                        {this.printRecommended()}
+                    </div>
+                    </div>
+                    :
+                    null
+                
+                    }
+                    
                      {/* <div className="mb-4"><h1>Product Description</h1></div>
                      <div className="subtitletext" style={{fontSize : "17px"}}>  ayayayayasdfasdf</div> */}
+                     <div className="mt-5">
                      <Tab productid={this.props.location.search.replace("?pid=", "")} datatabone={this.state.productdetail[0].description} datatabtwo={this.state.productdetail[0].shopdesc}></Tab>
+                     </div>
                     </div>
                     </div>
             )

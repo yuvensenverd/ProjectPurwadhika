@@ -112,7 +112,7 @@ class registerPage extends React.Component{
           window.alert("Email is not Valid!")
         )
       }
-      if(phonenum.replace(/\s/g, "").length <= 8 || phonenum.replace(/\s/g, "").length >= 12){
+      if(phonenum.replace(/\s/g, "").length < 8 || phonenum.replace(/\s/g, "").length > 12){
         this.props.loadingFalse()
         return (
           window.alert("Please enter a valid Phone number! (8-12 numbers long)")

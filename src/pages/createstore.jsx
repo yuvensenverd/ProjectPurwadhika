@@ -87,7 +87,7 @@ class CreateStore extends React.Component{
             )
         }
         if(this.props.userdata.STATUS !== "Verified"){
-            window.alert("please verify your account before creating the storef")
+            window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
             return (
                 <Redirect to="/"> </Redirect> 
             )

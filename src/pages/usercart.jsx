@@ -336,6 +336,9 @@ class UserCart extends React.Component{
     }
 
     onPayClick = () =>{
+        if(this.props.userdata.STATUS === 'Unverified'){
+            return window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
+        }
         var data = {
             userid : this.props.userdata.userid,
             totalprice : this.state.totalprice
@@ -383,6 +386,9 @@ class UserCart extends React.Component{
     }
 
     onPayManualClick = () =>{
+        if(this.props.userdata.STATUS === 'Unverified'){
+            return window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
+        }
         if(this.state.imageFile){
             var formData = new FormData()
             const token = localStorage.getItem('token')

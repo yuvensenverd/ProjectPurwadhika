@@ -52,6 +52,9 @@ import Axios from 'axios';
   }
 
   onClickTopUp = () =>{
+    if(this.props.userdata.STATUS === 'Unverified'){
+      return window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
+    }
     
     var topup = parseInt(this.refs.topup.value)
     if(topup < 10000){

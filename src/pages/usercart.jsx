@@ -294,7 +294,7 @@ class UserCart extends React.Component{
                     return (
                         <div>
                             <h1 className="m-t-120">Your Cart is still empty! Start Shopping Now!</h1>
-                            <Link to="/product">
+                            <Link to="/product?cat=Fashion">
                             <input type="button" value="Start Shopping" className="btn btn-danger btn-lg navbartext"/>
                             </Link>   
                          

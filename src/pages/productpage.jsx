@@ -13,6 +13,7 @@ import queryString from 'query-string'
 // ANIMATIONS 
 import { fadeIn, bounce, flip } from 'react-animations'
 import Radium, {StyleRoot} from 'radium';
+import Fade from 'react-reveal/Fade';
 // import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 // Star 
@@ -268,15 +269,22 @@ class productPage extends React.Component{
     printCategory = () =>{
         var jsx = this.props.listcategory.map((val)=>{
             return (
-                <Link to={"/product?cat=" + val.name}>
-                <div className="d-flex flex-column align-items-center justify-content-center mb-4 " style={{backgroundColor : "#BDC1C9"}} onClick={()=>this.onClickChange(val.name)}>
-                    <img src={URLAPI + val.image} alt="logo"  height="75px" />
-                    <input type="button" className="btn navbartext btn-secondary form-control" value={val.name}  ></input>
-                
+                <Fade>
+                <Link to={"/product?cat=" + val.name} style={{ textDecoration: 'none' }}>
+                <div>
+                    <div className="d-flex flex-column align-items-center justify-content-center imagecat mb-3" onClick={()=>this.onClickChange(val.name)}>
+                        <img src={URLAPI + val.image} alt="logo"  height="50px" />
+                        {/* <input type="button" className="btn navbartext btn-secondary form-control" value={val.name}  ></input> */}
+                        <div class="content text-center ">
+                            <h5>{val.name}</h5>
+                        
+                        </div>
 
 
+                    </div>
                 </div>
                 </Link>
+                </Fade>
                
             )
         })
@@ -357,11 +365,16 @@ class productPage extends React.Component{
                             </div>
 
                             <div className="pl-2 pr-2 pt-3">
-                                <StyleRoot>
+                                {/* <StyleRoot>
                                     <div style={styles.fadeIn}>
                                          {this.renderProduct()}
                                     </div>
-                                </StyleRoot>
+                                </StyleRoot> */}
+                                <Fade>
+                                    <div>
+                                     {this.renderProduct()}
+                                    </div>
+                                </Fade>
                               
                          
                                
@@ -381,16 +394,7 @@ class productPage extends React.Component{
 
 }
 
-const styles = {
-    fadeIn: {
-      animation: 'x 1s',
-      animationName: Radium.keyframes(fadeIn, 'fadeIn')
-    },
-    flip: {
-        animation: 'x 2s',
-        animationName: Radium.keyframes(flip, 'flip')
-    }
-  }
+
 
 const mapStateToProps = (state) =>{
     return {

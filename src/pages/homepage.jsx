@@ -9,8 +9,9 @@ import { Redirect } from 'react-router'
 import ReactLoading from 'react-loading';
 
 // REACT ANIMATIONS
-import { fadeIn, bounce, flip } from 'react-animations'
-import Radium, {StyleRoot} from 'radium';
+// import { fadeIn, bounce, flip } from 'react-animations'
+// import Radium, {StyleRoot} from 'radium';
+import Fade from 'react-reveal/Fade';
 
 
 // ROUTE 
@@ -196,7 +197,7 @@ class Homepage extends React.Component{
         // console.log(arr)
         return( 
  
-        <div className="card d-inline-block m-r-21 m-b-25 " >
+        <div className="card d-inline-block m-r-21 m-b-25 border border-white"   >
             <img  className="mb-3" 
             src={val.images ?
                 URLAPI+ val.images.split(',')[0]
@@ -278,7 +279,7 @@ class Homepage extends React.Component{
         return(
         
             <div className="col p-0">
-                
+                <Fade>
                 <div className="row-md-3 mb-5 p-t-58">
                     {this.state.bannerimgpath.length !== 0 
                     ?
@@ -300,6 +301,7 @@ class Homepage extends React.Component{
                 <div className="p-0" style={{ height : "90px"}} >
                     <Responsive></Responsive>
                 </div>
+                </Fade>
                
 
                 <div className="d-flex flex-row justify-content-center p-t-100">
@@ -307,8 +309,7 @@ class Homepage extends React.Component{
                 </div>
 
                 {/* BANNER */}
-                <StyleRoot>
-                <div style={styles.fadeIn}>
+                <Fade>
                 <div className="container mt-5 mb-5" >
                     <div className="mt-5 mb-4">
                         <input type="button" style={{height : "100px", fontWeight: "bolder", fontSize : "18px", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
@@ -382,24 +383,23 @@ class Homepage extends React.Component{
                 </Pagination>
                 </div>
                 <Footer/>
-                </div>
-                </StyleRoot>
+                </Fade>
               
             </div>
         )
     }
 }
 
-const styles = {
-    fadeIn: {
-      animation: 'x 1s',
-      animationName: Radium.keyframes(fadeIn, 'fadeIn')
-    },
-    flip: {
-        animation: 'x 2s',
-        animationName: Radium.keyframes(flip, 'flip')
-    }
-  }
+// const styles = {
+//     fadeIn: {
+//       animation: 'x 1s',
+//       animationName: Radium.keyframes(fadeIn, 'fadeIn')
+//     },
+//     flip: {
+//         animation: 'x 2s',
+//         animationName: Radium.keyframes(flip, 'flip')
+//     }
+//   }
 
 
 

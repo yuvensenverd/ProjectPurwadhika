@@ -45,8 +45,9 @@ class userStore extends React.Component{
         this.getStoreInfo()
         this.getProductStore()
         this.getProductSold()
-        
     }
+
+    
     getCategoryList = () =>{
         Axios.get(URLAPI + '/category/getcategory')
         .then((res)=>{
@@ -245,7 +246,6 @@ class userStore extends React.Component{
         if(this.state.storeProduct.length !== 0){
             var jsx = this.state.storeProduct.map((prd, i)=>{
                 if(i !== this.state.editnum){
-
                     return(
                         <tr>
                             <th scope="row">{i+1}</th>

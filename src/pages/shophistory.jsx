@@ -4,11 +4,17 @@ import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI } from '../redux/actions/types';
 import numeral from 'numeral'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
 class shophistory extends React.Component{
     state = {
-        data : []
+        data : [],
+        modalOpen : false,
+        totalprice : 0,
+        productcancel : 0,
+        productconfirm : 0,
+        productsuccess : 0
     }
 
     componentDidMount=()=>{
@@ -59,8 +65,24 @@ class shophistory extends React.Component{
     }
 
     renderData = () =>{
+        var totalprice = 0
+        var cancel = 0
+        var success = 0
+        var confirm = 0
         if(this.state.data.length !== 0 ){
+            
             var jsx = this.state.data.map((item, i)=>{
+                totalprice = totalprice + item.price
+                if(item.status === 'Success'){
+                    success++
+                }
+                else if(item.status === 'Confirmed'){
+                    confirm++ 
+                }
+                else if(item.status === 'Cancelled'){
+                    cancel++
+                }
+
                 return(
                     <tr className="text-secondary">
                         <td>{i+1}</td>
@@ -78,8 +100,30 @@ class shophistory extends React.Component{
                     </tr>
                 )
             })
+            if(totalprice !== this.state.totalprice ){
+                this.setState({
+                    totalprice,
+                    productcancel : cancel,
+                    productconfirm : confirm,
+                    productsuccess : success
+                })
+            }
         }
         return jsx
+    }
+
+    printTableSummary = () =>{
+       if(this.state.data.length !== 0){
+           return (
+            <div>
+                <div className="navbartext mb-3" style={{color : 'black', fontSize : '18px'}}>Product Success : {this.state.productsuccess}</div>
+                <div className="navbartext mb-3" style={{color : 'black', fontSize : '18px'}}>Product Confirmed : {this.state.productconfirm}</div>
+                <div className="navbartext mb-3" style={{color : 'black', fontSize : '18px'}}>Product Cancelled : {this.state.productcancel}</div>
+                <div className="navbartext mb-3" style={{color : 'black', fontSize : '18px'}}>Total Earning : {'Rp ' +numeral(this.state.totalprice).format(0,0)}</div>
+            </div>
+           )
+        
+       }
     }
 
     render(){
@@ -105,6 +149,23 @@ class shophistory extends React.Component{
                             {this.renderData()}
                         </tbody>
                     </Table>
+                
+                <div className='d-flex flex-row justify-content-center'>
+                    <input type="button" className="btn btn-info btn-lg mb-5" value="VIEW SUMMARY" onClick={()=>this.setState({ modalOpen : true})}/>
+                </div>
+
+                <Modal isOpen={this.state.modalOpen} toggle={()=>this.setState({modalOpen : false})} size="lg" style={{width: '1200px', position : 'absolute', top : '20%', left : '30%'}}>
+                    <ModalHeader>
+                        <h1>Summary</h1>
+                    </ModalHeader>
+                    <ModalBody >
+                        
+                        {this.printTableSummary()}
+                    </ModalBody>
+                    <ModalFooter className="d-flex flex-row justify-content-center">
+                        <input type="button" className="btn btn-danger btn-lg mb-5 navbartext" value="CLOSE SUMMARY" onClick={()=>this.setState({ modalOpen : false})} />
+                    </ModalFooter>
+                </Modal>
                 </div>
 
             </div>

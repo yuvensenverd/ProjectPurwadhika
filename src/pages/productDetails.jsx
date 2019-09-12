@@ -13,6 +13,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 import { Redirect } from 'react-router'
 import { isNull } from 'util';
+import Fade from 'react-reveal/Fade';
 import Carousel from './../components/carousel'
 import ReactLoading from 'react-loading';
 
@@ -101,7 +102,7 @@ class productDetails extends React.Component{
         })
         .catch((err)=>{
             this.setState({
-                message : "Product Loading Error..."
+                message : "Product Not Found ... "
             })
             console.log(err)
         })
@@ -244,9 +245,9 @@ class productDetails extends React.Component{
             var jsx = this.state.relatedproduct.map((item)=>{
                 return(
                 
-                <div className="col-md-2">
+                <div className="col-md-2 ">
                       <a href={"/productdetails?pid=" + item.id} style={{color : 'black', textDecoration : 'none'}}>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column p-2">
                     <img 
                         src={item.images ?
                         URLAPI+ item.images
@@ -272,7 +273,8 @@ class productDetails extends React.Component{
     printProductDetails = () =>{
         if(this.state.productdetail.length === 1 && this.state.finishloadrelated === true){ 
             return (
-                <div className="p-t-100">
+                <div>
+                <div className="p-t-100 mycontainer mb-5">
                     {/* <div>
                          <div  className="btn btn-danger badge badge-pill d-flex flex-row mb-4 p-2" onClick={()=>this.goBack()} style={{width : "150px"}}>
                           
@@ -285,10 +287,12 @@ class productDetails extends React.Component{
                         <div className="badge badge-pill badge-secondary mb-4" style={{fontSize : "30px"}}>{this.state.productdetail[0].shopname}</div>
                 <div className="row ">
                         
-                        <div className="col-md-5 border border-secondary" style={{padding : '0px', margin : '0px'}}>
+                        <div className="col-md-5" style={{padding : '0px', margin : '0px'}}>
                             {/* <img src={URLAPI+this.state.productdetail[0].images.split(',')[0]} alt="productimage" height="100%" width="100%" style={{padding : '0px', margin : '0px'}}/> */}
                             <Carousel slideheight={'600px'} 
-                            items={this.state.productdetail[0].images}/>
+                            items={this.state.productdetail[0].images}
+                            
+                            />
                            
                             
                         </div>
@@ -352,6 +356,8 @@ class productDetails extends React.Component{
                      </div>
                     </div>
                     </div>
+                    <Footer/>
+                    </div>
             )
         }else{
             return (
@@ -381,7 +387,7 @@ class productDetails extends React.Component{
      
         return(
             <div>
-            <div className="mycontainer mb-5">
+            <div>
                  <Modal isOpen={this.state.modalOpen} toggle={this.closeModal} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>
                         <ModalHeader>
                             <div className="subtitletext text-center p-l-90" style={{fontSize : "26px"}}>Item Added To Cart !</div>
@@ -403,9 +409,17 @@ class productDetails extends React.Component{
                 </Modal>
                 <div >
         
-
+                    <Fade clear>
                     {this.printProductDetails()}
-                    {this.state.productdetail.length === 0 ? <h1 className="row p-t-100">{this.state.message}</h1> : null}
+                    </Fade>
+                    {this.state.productdetail.length === 0 ? 
+                    <div className="d-flex flex-column row p-t-100 p-l-100">
+                    <h1 className="mb-5">{this.state.message}</h1>
+                    <Link to="/product?cat=Fashion">
+                    <input type="button" className="btn btn-success navbartext p-3 border border-radius" value="Browse Other Products"/>
+                    </Link>
+                    </div>
+                     : null}
         
                     {/* {console.log(JSON.stringify(this.props.usercart))}} */}
        
@@ -417,7 +431,7 @@ class productDetails extends React.Component{
                 </div>
                
             </div>
-            {this.state.productdetail.length !== 0 ?   <Footer/> : null}  
+    
            
              </div>
         )

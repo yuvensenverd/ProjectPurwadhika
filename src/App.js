@@ -12,6 +12,7 @@ import promoDetails from './pages/promoDetails'
 import createStore from './pages/createstore'
 import userStore from './pages/userstore'
 import shophistory from './pages/shophistory'
+import shopProfile from './pages/shopProfile'
 
 
 import editProfile from './pages/editprofile'
@@ -103,6 +104,7 @@ class App extends React.Component{
         <Route path='/notification' component={NotificationPage}></Route>
         <Route path='/waitingverification' component={WaitingVerification}></Route>
         <Route path='/verified' component={Verified}></Route>
+        <Route path='/profileshop' component={shopProfile}></Route>
         <Route path='/admin' component={AdminPage}></Route>
         <Route path='*' component={PageNotFound}></Route>
         </Switch>

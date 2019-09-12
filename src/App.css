@@ -218,7 +218,44 @@
   margin: auto;
   text-align: center;
   font-family: arial;
- 
+  opacity: 1;
+  transition: opacity .6s;
+
+}
+
+.card:hover {
+  opacity: 0.6;
+}
+
+.imagecat {
+  /* background: linear-gradient( rgba(0, 0, 0, 1), rgba(0, 0, 0, 1) ); */
+
+  position: relative;
+  margin: 0 auto;
+  background:grey; /* Black background with 0.5 opacity */
+  border : 1px solid white;
+  height: 100px;
+  border-radius: 15px;
+  opacity: 1;
+  transition: opacity .6s;
+}
+.imagecat:hover {
+  opacity: 0.6;
+
+}
+
+.content {
+  
+  
+   background: rgb(0, 0, 0); 
+   background: rgba(0, 0, 0, 0.5); 
+   border-radius: 10px; 
+  z-index: 100;
+  opacity: 1;
+  color: #f1f1f1; /* Grey text */
+  width: 100%; /* Full width */
+  padding: 2px
+  
 }
 
 .price {
@@ -240,7 +277,8 @@
 }
 
 .card button:hover {
-  opacity: 0.7;
+  opacity: 0.6;
+  
 }
 
 
@@ -253,7 +291,13 @@
   margin: auto;
   text-align: center;
   font-family: Montserrat-Bold;
+  opacity: 1;
+  transition: opacity .6s;
  
+}
+
+.cardpr:hover {
+  opacity: 0.6;
 }
 
 .pricepr {
@@ -281,11 +325,11 @@
 }
 
 .cardpr button:hover {
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 
-/* Coupon Card  */
+
 
 .cardcp {
 
@@ -348,19 +392,6 @@
   padding-left: 150px;
   padding-right: 150px;
 }
-
-/* .dv-star-rating i{
- font-size: 20px !important;
-}
-
-.star{
-  font-size: 20px !important;
-} */
-
-/* .widget-svg{
-  width: 20px !important;
-  height: 20px !important;
-} */
 
 .subtitletext {
   font-family: Montserrat-Bold;

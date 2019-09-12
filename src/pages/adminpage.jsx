@@ -20,10 +20,6 @@ class AdminPage extends React.Component{
         // 4 = show user 
     }
 
-    componentDidMount = () =>{
-
-    }
-
 
 
     adminGetUser = () =>{
@@ -583,6 +579,8 @@ class AdminPage extends React.Component{
                 editnum : null
             })
             // reset input
+            document.getElementById('imgpreview').src = ''
+            document.getElementById('imagefile').value = ''
             window.alert("Berhasil Add Banner")  
         })
         .catch((err)=>{

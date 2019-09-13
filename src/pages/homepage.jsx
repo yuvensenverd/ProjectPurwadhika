@@ -314,7 +314,7 @@ class Homepage extends React.Component{
                 <Fade>
                 <div className="container mt-5 mb-5" >
                     <div className="mt-5 mb-4">
-                        <input type="button" style={{height : "100px", fontWeight: "bolder", fontSize : "18px", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
+                        <input type="button" style={{height : "100px", fontWeight: "bolder", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
                     </div>
                 </div>
                

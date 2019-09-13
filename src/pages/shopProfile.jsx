@@ -1,14 +1,21 @@
 import React from 'react'
 import queryString from 'query-string'
 import Axios from 'axios'
-import { URLAPI } from '../redux/actions/types'
+import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types'
+import numeral from 'numeral'
+import Tab from './../components/tab'
+import { Link } from 'react-router-dom'
+import StarRatings from 'react-star-ratings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight, faProjectDiagram } from '@fortawesome/free-solid-svg-icons'
 
 class shopProfile extends React.Component{
     state = {
         shopinfo : [],
-        data : []
+        data : [],
+        catlist : [],
+        filtertext : '',
+        rating : []
     }
 
     componentDidMount(){
@@ -45,16 +52,102 @@ class shopProfile extends React.Component{
                 console.log(err)
             })
 
+            Axios.get(URLAPI + `/shop/getshoprating?shopid=${values.shopid}`, headers)
+            .then((res)=>{
+                this.setState({
+                    rating : res.data
+                })
+                console.log(this.state)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+
             
         }
     }
 
+    
+
+    renderProduct = () =>{
+        if(this.state.data.length !== 0){
+            // LIST CATEGORY 
+            var catlist = []
+            this.state.data.forEach(x => {
+                if(!catlist.includes(x.cat)){
+                    catlist.push(x.cat)
+                }
+            });
+      
+            var jsx = this.state.data
+            .filter((val)=>{
+                return val.cat.includes(this.state.filtertext)
+            })
+         
+            
+            
+            .map((product)=>{
+               
+                return(
+                    <div className="cardpr d-inline-block mr-3 mb-4" >
+                <img 
+                   src={product.images ?
+                    URLAPI+ product.images.split(',')[0]
+                    :
+                    URLAPI + PATHDEFAULTPRD
+                    } 
+                  alt="image" width="100%" height="200px"
+                  />
+                <div className="cardprtext p-3 mb-2" style={{height : "80px"}}>{product.name}</div>
+                <div className="pricepr mt-1 mb-3">
+                {/* {"Rp. " + numeral(product.name).format(0,0)} */}
+                {"Rp. " + numeral(product.price).format(0,0)}
+                </div>
+                <div className="d-flex flex-row justify-content-center mt-2">
+
+                    <StarRatings
+                        rating={product.avgrating ? product.avgrating : 0}
+                        starRatedColor="orange"
+                        // changeRating={this.changeRating}
+                        numberOfStars={5}
+                        starDimension="16px"
+                        name='rating'
+                    />
+                    <p className="pl-2" style={{fontSize : '16px'}}>{`(${product.ReviewCount})`}</p>
+                </div>
+                    
+                <Link to={"/productdetails?pid=" + product.id}> 
+                    <input type='text' value="View Product" className="form-control btn btn-dark navbartext pt-4 pb-4"/>
+                </Link>
+
+            
+            </div>
+                )
+           
+            }
+
+            
+           
+
+        
+            
+            )
+            if(this.state.catlist.length === 0){
+                this.setState({
+                    catlist
+                })
+            }
+        
+            return jsx
+        }
+    }
+
     renderShop = () =>{
-        if(this.state.shopinfo.length !== 0){
+        if(this.state.shopinfo.length !== 0 && this.state.rating.length !== 0){
             return(
-                <div className="storecard p-3 mb-5">
+                <div className="storecard p-3 mb-5 mr-3">
                     <div className="row">
-                        <div className="col-md-2 subtitletext  p-3">
+                        <div className="col-md-1 subtitletext  p-3">
                          
                         </div>
                         <div className="col-md-1 p-0" >
@@ -68,21 +161,52 @@ class shopProfile extends React.Component{
                                 <FontAwesomeIcon size="1x"  icon={faQuoteRight}/>
                             </div>
                         </div>
-                        <div className="col-md-2 subtitletext  p-4 text-center" style={{fontSize : '15px'}}>
-                            <div className="mb-4">Products</div>
-                            <div>Shop Rating</div>
+                        <div className="col-md-4 subtitletext  p-4 text-center" style={{fontSize : '15px'}}>
+                            <div className="mb-4">Products : {this.state.data.length}</div>
+                            <div>Shop Rating : 
+                            {this.state.rating[0].shopAvgRating ? this.state.rating[0].shopAvgRating + `( based on ${this.state.rating[0].shopReviewCount} Reviews)` : 'Not Reviewed Yet'}
+                            </div>
                         </div>
                        
-                        <div className="col-md-2 subtitletext  text-center p-3" style={{fontSize : '15px'}}>
-                         
-                        </div>
-                        <div className="col-md-2 subtitletext  text-center p-3" style={{fontSize : '15px'}}>
+                      
+                        <div className="col-md-3 subtitletext  text-center p-5">
+                                <StarRatings
+                                rating={this.state.rating[0].shopAvgRating ? this.state.rating[0].shopAvgRating : 0}
+                                starRatedColor="orange"
+                                // changeRating={this.changeRating}
+                                numberOfStars={5}
+                                starDimension="35px"
+                                name='rating'
+                            />
                         </div>
                       
                     </div>
                 </div>
             )
         }
+    }
+
+    renderGenreProduct  = () =>{
+        if(this.state.catlist.length !== 0){
+            var jsx = this.state.catlist.map((cat)=>{
+                return(
+
+
+                <input type="button" className="btn btn-secondary navbartext p-3 rounded-circle" value={cat} onClick={()=>this.filterProduct(cat)}/>
+       
+                )
+            })
+            return jsx
+        }
+      
+    }
+
+    filterProduct = (cat = '') =>{
+        console.log('filter')
+        console.log(cat)
+        this.setState({
+            filtertext : cat
+        })
     }
 
 
@@ -96,12 +220,27 @@ class shopProfile extends React.Component{
                     <div className="col-md-1">
 
                     </div>
-                    <div className="col-md-2">
-                        <h5>Category</h5>
+                </div>
+                <div className="row d-flex flex-row justify-content-center mb-4 ">
+                    <div className="badge badge-danger mb-4 subtitletext p-3" style={{fontSize : "30px", width : '500px',  backgroundColor : "#c02c3a"}}>Product Available</div>
+                </div>
+                <div className="row pl-5 mb-5 d-flex justify-content-between pr-5">
+                    
+                
+
+                    <input type="button" className="btn btn-secondary navbartext rounded-circle p-3 " value="All Products" onClick={()=>this.filterProduct()} />
+                    
+                
+                    {this.renderGenreProduct()}
+                  
+                    
+                </div>
+                <div className="row pl-5 pr-5 ">
+                    <div>
+                        {this.renderProduct()}
                     </div>
-                    <div className="col-md-9">
-                        <h5>Product List</h5>
-                    </div>
+                        
+                    
                 </div>
             </div>
         )

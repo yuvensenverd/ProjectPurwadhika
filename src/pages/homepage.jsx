@@ -231,7 +231,9 @@ class Homepage extends React.Component{
                 />
              <p className="pl-2" style={{fontSize : '16px'}}>{`(${val.ReviewCount})`}</p>
             </div>
+            <Link to={`/profileshop?shopid=${val.shopid}`}>
             <h5 className="mb-3 badge badge-dark">{val.shopname}</h5>
+            </Link>
             <Link to={"/productdetails?pid=" + val.id}> 
             <input type='text' value="View Product" className="form-control btn btn-dark navbartext pt-4 pb-4"/>
              

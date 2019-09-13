@@ -8,7 +8,7 @@ import Homepage from './pages/homepage'
 import LoginPage from './pages/loginpage'
 import RegisterPage from './pages/registerpage'
 import productPage from './pages/productpage'
-import promoDetails from './pages/promoDetails'
+
 import createStore from './pages/createstore'
 import userStore from './pages/userstore'
 import shophistory from './pages/shophistory'
@@ -90,7 +90,6 @@ class App extends React.Component{
         <Route path='/' exact component={Homepage}></Route>
         <Route path='/login'component={LoginPage}></Route>
         <Route path='/register'component={RegisterPage}></Route>
-        <Route path='/promo' component={promoDetails}></Route>
         <Route path='/product' component={productPage}></Route>
         <Route path='/createstore' component={createStore}></Route>
         <Route path='/userstore' component={userStore}></Route>

@@ -284,8 +284,10 @@ class productDetails extends React.Component{
                         
                         </div>
                 </div> */}
+                   <Link to={`/profileshop?shopid=${this.state.productdetail[0].shopid}`} className="navbartext">
                         <div className="badge badge-pill badge-secondary mb-4" style={{fontSize : "30px"}}>{this.state.productdetail[0].shopname}</div>
-                <div className="row ">
+                        </Link>
+                        <div className="row ">
                         
                         <div className="col-md-5" style={{padding : '0px', margin : '0px'}}>
                             {/* <img src={URLAPI+this.state.productdetail[0].images.split(',')[0]} alt="productimage" height="100%" width="100%" style={{padding : '0px', margin : '0px'}}/> */}

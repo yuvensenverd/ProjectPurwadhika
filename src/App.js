@@ -26,7 +26,7 @@ import SearchProduct from './pages/searchProduct'
 import cartPage from './pages/usercart'
 import AdminPage from './pages/adminpage'
 import { connect } from 'react-redux'
-import { loginToken } from './redux/actions/index'
+import { loginToken, logoutUser } from './redux/actions/index'
 import Axios from 'axios';
 import { URLAPI } from './redux/actions/types';
 import userhistory from './pages/userhistory';
@@ -43,6 +43,8 @@ class App extends React.Component{
     if(token){
 
       this.props.loginToken()
+    }else {
+      this.props.logoutUser()
     }
   }
 
@@ -117,4 +119,4 @@ class App extends React.Component{
   }
 }
 
-export default connect(null, {loginToken})(App) ;
+export default connect(null, {loginToken, logoutUser})(App) ;

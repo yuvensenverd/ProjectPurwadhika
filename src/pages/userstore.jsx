@@ -6,8 +6,9 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router'
 import Axios from 'axios';
-import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
+import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import numeral from 'numeral'
 import ReactLoading from 'react-loading';
 
@@ -29,7 +30,8 @@ class userStore extends React.Component{
         editpicnum : null,
         productidedit : null,
         modaladdPic : false,
-        productsold : 0
+        productsold : 0,
+        redirect : false
     }
 
     componentDidMount(){
@@ -38,14 +40,10 @@ class userStore extends React.Component{
         this.getStoreInfo()
         this.getProductSold()
         this.getProductStore()
+
     }
 
-    componentWillReceiveProps(){
-        // KETIKA RELOG f5
-        this.getStoreInfo()
-        this.getProductStore()
-        this.getProductSold()
-    }
+
 
     
     getCategoryList = () =>{
@@ -142,6 +140,14 @@ class userStore extends React.Component{
             editnum : null,
             modaladdPic : false
         })
+    }
+
+    componentWillReceiveProps(){
+        // KETIKA RELOG f5
+        this.getStoreInfo()
+        this.getProductStore()
+        this.getProductSold()
+     
     }
 
     
@@ -313,22 +319,39 @@ class userStore extends React.Component{
             })
             return jsx
         }else{
-            return(
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <center>
-                    <div className="p-t-100 d-flex flex-column align-items-center justify-content-center" >
-                        <h1 className="mb-5">Loading... Please Wait</h1>
-                        <ReactLoading type="spin" color="#afb9c9"  />
-                    </div>
-                    </center>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            return (
+             <tr>
+             <td></td>
+             <td></td>
+             <td></td>
+             <center>
+             <div className="p-t-100 text-center justify-content-center align-items-center">
+                <h1>There is currently no product.. </h1>
+                <input type="button" className="btn btn-success btn-lg navbartext mb-2 p-2" value=" + Add Product" onClick={()=>this.modalOpen()}/>
+                <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+            </div>
+             </center>
+             <td></td>
+             <td></td>
+             <td></td>
+             </tr>
             )
+            // return(
+                // <tr>
+                //     <td></td>
+                //     <td></td>
+                //     <td></td>
+                //     <center>
+                //     <div className="p-t-100 d-flex flex-column align-items-center justify-content-center" >
+                //         <h1 className="mb-5">Loading... Please Wait</h1>
+                //         <ReactLoading type="spin" color="#afb9c9"  />
+                //     </div>
+                //     </center>
+                //     <td></td>
+                //     <td></td>
+                //     <td></td>
+                // </tr>
+            // )
         }
     }
     previewEditFile = (index) =>{
@@ -684,6 +707,20 @@ class userStore extends React.Component{
 
 
     render(){
+        console.log(this.props.userdata)
+        if(this.props.userdata.CHECK && !this.props.userdata.HAVESHOP){
+            window.alert("You dont have a shop yet, please create a shop first!")
+            return ( 
+                <Redirect to="/"> </Redirect>
+            )
+        }
+        if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
+            console.log('masuk')
+            window.alert("Please Login to enter  shop !")
+            return ( 
+                <Redirect to="/"> </Redirect>
+            )
+        }
         return(
             <div>
                 <div className="storecontainer p-t-100">

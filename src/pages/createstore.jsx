@@ -3,6 +3,7 @@ import { Redirect } from 'react-router'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
 import Axios from 'axios';
+import { updateUser } from '../redux/actions/index'
 import { URLAPI } from '../redux/actions/types';
 
 
@@ -37,6 +38,8 @@ class CreateStore extends React.Component{
             Axios.post(URLAPI + '/shop/createshop', formData, headers)
             .then((res)=>{
                 console.log(res.data)
+                console.log("success")
+                this.props.updateUser(res.data[0])
                 this.setState({
                     redirect : true
                 })
@@ -75,19 +78,28 @@ class CreateStore extends React.Component{
       
 
     render(){
-        if(this.state.redirect === true || this.props.userdata.HAVESHOP === true){
+        console.log(this.props.userdata)
+        if(this.state.redirect === true || this.props.userdata.HAVESHOP ){
             return ( 
                 <Redirect to="/userstore"> </Redirect>
             )
         }
-        if(this.props.userdata.USERNAME === ""){
-            window.alert("please login first before proceed !")
-            return (
-                <Redirect to="/login"> </Redirect> 
+        if(this.props.userdata.HAVESHOP && this.props.userdata.CHECK){
+            return ( 
+                <Redirect to="/userstore"> </Redirect>
             )
         }
-        if(this.props.userdata.STATUS !== "Verified"){
-            window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
+    
+        if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
+            console.log('masuk')
+            window.alert("Please Login to enter  shop !")
+            return ( 
+                <Redirect to="/"> </Redirect>
+            )
+        }
+        
+        if(this.props.userdata.CHECK && this.props.userdata.STATUS !== "Verified"){
+            window.alert("Your Account is not verified yet")
             return (
                 <Redirect to="/"> </Redirect> 
             )
@@ -132,4 +144,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, null)(CreateStore);
+export default connect(mapStateToProps, {updateUser})(CreateStore);

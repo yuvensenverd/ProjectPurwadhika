@@ -23,14 +23,8 @@ class shopProfile extends React.Component{
         const values = queryString.parse(this.props.location.search)
         if(values.shopid){
 
-            const token = localStorage.getItem('token')
-            const headers = {
-                headers: {
-                    'Authorization' : `${token}`
-                }
-            }
             //-----------------------------------------------------------------
-            Axios.get(URLAPI + `/shop/getshopinfo/${values.shopid}`, headers)
+            Axios.get(URLAPI + `/shop/getshopinfo/${values.shopid}`)
             .then((res)=>{
                 this.setState({
                     shopinfo : res.data
@@ -41,7 +35,7 @@ class shopProfile extends React.Component{
                 console.log(err)
             })
 
-            Axios.get(URLAPI + `/shop/getproductshop/${values.shopid}`, headers)
+            Axios.get(URLAPI + `/shop/getproductshop/${values.shopid}`)
             .then((res)=>{
                 this.setState({
                     data : res.data
@@ -52,7 +46,7 @@ class shopProfile extends React.Component{
                 console.log(err)
             })
 
-            Axios.get(URLAPI + `/shop/getshoprating?shopid=${values.shopid}`, headers)
+            Axios.get(URLAPI + `/shop/getshoprating?shopid=${values.shopid}`)
             .then((res)=>{
                 this.setState({
                     rating : res.data

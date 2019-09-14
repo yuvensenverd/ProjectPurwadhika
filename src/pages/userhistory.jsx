@@ -2,6 +2,7 @@ import React from 'react'
 import { Table } from 'reactstrap'
 import Axios from 'axios';
 import { connect } from 'react-redux'
+import { Redirect} from 'react-router'
 import { URLAPI } from '../redux/actions/types';
 import numeral from 'numeral'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -149,6 +150,12 @@ class userhistory extends React.Component{
 
 
     render(){
+        // if(this.props.userdata.USERNAME === ""){
+        //     window.alert("please login first before proceed !")
+        //     return (
+        //         <Redirect to="/login"> </Redirect> 
+        //     )
+        // }
         return(
             <div className="p-t-65" >
                  <Modal isOpen={this.state.modalopen} toggle={()=>this.setState({modalopen : false})} size="lg" style={{maxWidth: '1500px'}}>

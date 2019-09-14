@@ -19,7 +19,8 @@ const Initial_state =
   STATUS : '',
   TOKEN : '',
   NOTIFLEN : 0, 
-  LOADING : false
+  LOADING : false,
+  CHECK : false
 }
 
 export default(state = Initial_state, action)=>{
@@ -32,11 +33,11 @@ export default(state = Initial_state, action)=>{
                     SALDO : parseInt(action.payload[0].saldo), PHONENUMBER : action.payload[0].phonenumber,
                      RESIDENCE : action.payload[0].residence, EMAIL : action.payload[0].email,
                       PROFILEIMG :action.payload[0].profileimg, STATUS : action.payload[0].status, TOKEN : action.payload[0].token,
-                      LOADING : false
+                      LOADING : false, CHECK : true
                     }
         case LOGOUT :
             localStorage.removeItem('token')
-            return Initial_state
+            return {...Initial_state, CHECK : true}
         case ADDITEM :
             // console.log("Masuk ADD Reducer")
             // console.log(action.payload)

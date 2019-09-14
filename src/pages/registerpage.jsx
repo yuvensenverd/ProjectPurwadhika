@@ -240,6 +240,11 @@ class registerPage extends React.Component{
           <Redirect to="/waitingverification"></Redirect>
         )
       }
+      if(this.props.userdata.USERNAME !== ''){
+        return(
+          <Redirect to="/"></Redirect>
+        )
+      }
         return(
          
         <div className="limiter p-t-20">
@@ -340,6 +345,7 @@ class registerPage extends React.Component{
 
 const mapStateToProps = (state) =>{
   return {
+      userdata : state.userdata,
       isloading : state.userdata.LOADING
   }
 }

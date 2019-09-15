@@ -173,7 +173,7 @@ class productDetails extends React.Component{
         });
         if(exist === false){
             newcart.push(item)
-            this.props.addItemCart(newcart)
+           
 
             // SQL INSERT (Coz New)
             const token = localStorage.getItem('token')
@@ -190,6 +190,7 @@ class productDetails extends React.Component{
             .then((res)=>{
               
                 // OPEN MODAL NOTIFICATION
+                this.props.addItemCart(newcart)
               
                 this.setState({
                     modalOpen : true
@@ -202,7 +203,7 @@ class productDetails extends React.Component{
 
             // SHOULD BE SQL UPDATE , WHERE USERID & PRODUCT ID 
         
-            this.props.addItemCart(newcart) // sama aja krn redux diupdate seluruh isi cart
+      
 
             //SQL UPDATE
             const token = localStorage.getItem('token')
@@ -218,6 +219,7 @@ class productDetails extends React.Component{
             }, headers)
             .then((res)=>{
                 console.log("Berhasil update cart")
+                this.props.addItemCart(newcart) // sama aja krn redux diupdate seluruh isi cart
                 this.setState({
                     modalOpen : true
                 })

@@ -11,3 +11,4 @@ export const PATHDEFAULTCARTEMPTY = "/post/image/appimage/shopping.png"
 export const ON_CHANGE_FILTER = 'CHANGE_FILTER_TEXT'
 export const LOADING = 'IS_LOADING'
 export const LOADINGFALSE = 'LOADING_FALSE'
+export const CHECKTRUE = 'CHECK_TRUE'

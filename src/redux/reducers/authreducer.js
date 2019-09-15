@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE } from "../actions/types";
+import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE } from "../actions/types";
 import { isNull } from "util";
 
 
@@ -68,8 +68,10 @@ export default(state = Initial_state, action)=>{
             return{
                 ...state, LOADING : false
             }
-    
-            
+        case CHECKTRUE:
+            return{
+                ...state, CHECK : true
+            }
         default : 
             return state
     }

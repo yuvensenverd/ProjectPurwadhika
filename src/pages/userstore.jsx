@@ -709,14 +709,13 @@ class userStore extends React.Component{
     render(){
         console.log(this.props.userdata)
         if(this.props.userdata.CHECK && !this.props.userdata.HAVESHOP){
-            window.alert("You dont have a shop yet, please create a shop first!")
+
             return ( 
                 <Redirect to="/"> </Redirect>
             )
         }
         if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
-            console.log('masuk')
-            window.alert("Please Login to enter  shop !")
+
             return ( 
                 <Redirect to="/"> </Redirect>
             )

@@ -689,11 +689,13 @@ class AdminPage extends React.Component{
     }
 
     render(){
-        if(this.props.userdata.ROLE !== 'Admin'){
+        if(this.props.userdata.CHECK && this.props.userdata.ROLE !== 'Admin'){
             console.log(this.props.userdata)
             return(
-            
+                <div>
                 <div className="p-t-100"> You Do not have Permission to access admin page</div>
+                <Link className="btn btn-success" to="/">Go Back</Link>
+                </div>
             )
         }
         return(

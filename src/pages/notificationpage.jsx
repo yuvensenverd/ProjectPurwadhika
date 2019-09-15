@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { Redirect } from 'react-router'
 import { updateNotification } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import StarRatings from 'react-star-ratings';
@@ -356,7 +357,12 @@ class NotificationPage extends React.Component{
 
 
     render(){
-        if(this.state.data.length === 0 && this.state.finishload === false){
+        if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
+            return(
+                <Redirect to="/"/>
+            )
+        }
+        if(this.state.data.length === 0 && this.state.finishload === false){ // fix later
             return(
                 <div className="p-t-100 d-flex flex-column align-items-center" >
                     <h1 className="mb-5">Loading... Please Wait</h1>
@@ -364,6 +370,7 @@ class NotificationPage extends React.Component{
                 </div>
             )
         }
+      
         return(
             <div className="mycontainer p-t-100">
                   <Modal isOpen={this.state.modalOpen} toggle={this.closeModal} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>

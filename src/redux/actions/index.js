@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE } from './types'
+import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE } from './types'
 import Axios from 'axios'
 
 
@@ -200,6 +200,9 @@ export const loginToken = () =>{
             dispatch({
                 type : LOADINGFALSE // LOADING TO FALSE
             })
+            dispatch({
+                type : CHECKTRUE 
+            })
             window.alert("User Token Not Authorized, Please Login via login page")
          
         })
@@ -214,5 +217,11 @@ export const loading = () =>{
 export const loadingFalse = () =>{
     return {
         type : LOADINGFALSE
+    }
+}
+
+export const checkTrue = () =>{
+    return {
+        type : CHECKTRUE
     }
 }

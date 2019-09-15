@@ -444,11 +444,11 @@ class UserCart extends React.Component{
 
 
     render(){
-        // if(this.state.redirect === true) {
-        //     return (
-        //         <Redirect to='/'/>
-        //     )
-        // }
+        if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
+            return(
+                <Redirect to="/"/>
+            )
+        }
         return(
             <div>
                 <Modal isOpen={this.state.modaltransaction} toggle={()=>this.setState({ modaltransaction : false, manualtransfer : false, imageFile : null})} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>

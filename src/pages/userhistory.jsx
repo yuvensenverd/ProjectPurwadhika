@@ -150,12 +150,11 @@ class userhistory extends React.Component{
 
 
     render(){
-        // if(this.props.userdata.USERNAME === ""){
-        //     window.alert("please login first before proceed !")
-        //     return (
-        //         <Redirect to="/login"> </Redirect> 
-        //     )
-        // }
+        if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
+            return(
+                <Redirect to="/"/>
+            )
+        }
         return(
             <div className="p-t-65" >
                  <Modal isOpen={this.state.modalopen} toggle={()=>this.setState({modalopen : false})} size="lg" style={{maxWidth: '1500px'}}>

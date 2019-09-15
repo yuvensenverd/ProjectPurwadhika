@@ -3,6 +3,7 @@ import { Table } from 'reactstrap'
 import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI } from '../redux/actions/types';
+import {  Redirect } from 'react-router'
 import numeral from 'numeral'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -127,6 +128,11 @@ class shophistory extends React.Component{
     }
 
     render(){
+        if(this.props.userdata.CHECK && (this.props.userdata.USERNAME === '' || !this.props.userdata.HAVESHOP)){
+            return(
+                <Redirect to="/"/>
+            )
+        }
         return(
             <div className="p-t-65" >
                 <div className="storecontainer navbartext mt-5">

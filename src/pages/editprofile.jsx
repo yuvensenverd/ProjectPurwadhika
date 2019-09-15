@@ -7,7 +7,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import numeral from 'numeral'
-import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { Redirect } from 'react-router'
 
 class editProfile extends React.Component{
     state = { 
@@ -271,6 +272,12 @@ class editProfile extends React.Component{
     }
       
     render(){
+        if(this.props.userdata.CHECK && this.props.userdata.USERNAME === ''){
+    
+            return ( 
+                <Redirect to="/"> </Redirect>
+            )
+        }
         return(
             <div>
                 {/* MODAL PASSWORD */}

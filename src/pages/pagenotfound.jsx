@@ -16,7 +16,7 @@ class PageNotFound extends React.Component{
                     </div>
                     <h1>oops!</h1>
                     <h2>Error 404 : Page Not Found</h2>
-                    <Link className="btn btn-sucess" to="/">Go Back</Link>
+                    <Link className="btn btn-success" to="/">Go Back</Link>
                     <div class="notfound-social">
                         {/* <a href="#"><i class="fa fa-facebook"></i></a>
                         <a href="#"><i class="fa fa-twitter"></i></a>

@@ -698,42 +698,46 @@ class AdminPage extends React.Component{
                 </div>
             )
         }
-        return(
-            <div className="p-t-100 p-l-3 p-r-3 ">
-                <div className="row mb-5 ml-5">
-                    <div className="col-md-2 text-center mr-2 ">
-                        <input type="button" className="btn btn-info navbartext" value="PRODUCTS" style={{width : "200px"}} onClick={()=>this.changeTable(1)}/>
+        if(this.props.userdata.CHECK && this.props.userdata.ROLE === 'Admin'){
+
+            return(
+                <div className="p-t-100 p-l-3 p-r-3 ">
+                    <div className="row mb-5 ml-5">
+                        <div className="col-md-2 text-center mr-2 ">
+                            <input type="button" className="btn btn-info navbartext" value="PRODUCTS" style={{width : "200px"}} onClick={()=>this.changeTable(1)}/>
+                        </div>
+                        <div className="col-md-2 text-center mr-2">
+                            <input type="button" className="btn btn-danger navbartext" value="BANNER" style={{width : "200px"}} onClick={()=>this.changeTable(2)}/>
+                        </div>
+                        <div className="col-md-2 text-center mr-2">
+                            <input type="button" className="btn btn-primary navbartext" value="CATEGORIES" style={{width : "200px"}} onClick={()=>this.changeTable(3)}/>
+                        </div>
+                        <div className="col-md-2 text-center mr-2">
+                            <input type="button" className="btn btn-success navbartext" value="USER" style={{width : "200px"}} onClick={()=>this.changeTable(4)}/>
+                        </div>
+                        <div className="col-md-2 text-center mr-2">
+                            <input type="button" className="btn btn-dark navbartext" value="CONFIRM TRANSACTION" style={{width : "350px"}} onClick={()=>this.changeTable(5)}/>
+                        </div>
                     </div>
-                    <div className="col-md-2 text-center mr-2">
-                        <input type="button" className="btn btn-danger navbartext" value="BANNER" style={{width : "200px"}} onClick={()=>this.changeTable(2)}/>
-                    </div>
-                    <div className="col-md-2 text-center mr-2">
-                        <input type="button" className="btn btn-primary navbartext" value="CATEGORIES" style={{width : "200px"}} onClick={()=>this.changeTable(3)}/>
-                    </div>
-                    <div className="col-md-2 text-center mr-2">
-                        <input type="button" className="btn btn-success navbartext" value="USER" style={{width : "200px"}} onClick={()=>this.changeTable(4)}/>
-                    </div>
-                    <div className="col-md-2 text-center mr-2">
-                        <input type="button" className="btn btn-dark navbartext" value="CONFIRM TRANSACTION" style={{width : "350px"}} onClick={()=>this.changeTable(5)}/>
+                    <div className="mycontainer p-l-80 p-r-80">
+                        <Table hover style={{fontSize : "15px"}}>
+                            <thead>
+                                {this.renderTableHead()}
+                            </thead>
+                            <tbody>
+                                
+                                {this.renderTableData()}
+                            </tbody>
+                            <tfoot>
+                                {this.renderTableFoot()}
+                            </tfoot>
+                        </Table>
+                       
                     </div>
                 </div>
-                <div className="mycontainer p-l-80 p-r-80">
-                    <Table hover style={{fontSize : "15px"}}>
-                        <thead>
-                            {this.renderTableHead()}
-                        </thead>
-                        <tbody>
-                            
-                            {this.renderTableData()}
-                        </tbody>
-                        <tfoot>
-                            {this.renderTableFoot()}
-                        </tfoot>
-                    </Table>
-                   
-                </div>
-            </div>
-        )
+            )
+        }
+        return <div/>
     }
 }
 

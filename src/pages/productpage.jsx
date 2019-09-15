@@ -118,9 +118,6 @@ class productPage extends React.Component{
 
     filterProduct = (filterby) =>{
         console.log(filterby)
-        // if(filterby === "No Filter"){
-        //     this.getProduct(this.props.location.search.replace("?cat=", ""))
-        // }
         if(filterby === "price low"){
             var sorted=  this.state.productlist.sort(function(a,b){
                 return a.price - b.price
@@ -148,6 +145,24 @@ class productPage extends React.Component{
         }
         if(filterby === "name z"){
             var sorted = this.state.productlist.sort((a, b) => b.name.localeCompare(a.name))
+            console.log(sorted)
+            this.setState({
+                productlist : sorted
+            })
+        }
+        if(filterby === "Rating High"){
+            var sorted=  this.state.productlist.sort(function(a,b){
+                return b.avgrating - a.avgrating
+            })
+            console.log(sorted)
+            this.setState({
+                productlist : sorted
+            })
+        }
+        if(filterby === "Rating Low"){
+            var sorted=  this.state.productlist.sort(function(a,b){
+                return a.avgrating - b.avgrating
+            })
             console.log(sorted)
             this.setState({
                 productlist : sorted
@@ -345,7 +360,8 @@ class productPage extends React.Component{
                                         <option value="price high">Price Highest to Lowest</option>
                                         <option value="name a">A to Z</option>
                                         <option value="name z">Z to A</option>
-                                        <option value="Rating">Rating</option>
+                                        <option value="Rating High">Highest Rating</option>
+                                        <option value="Rating Low">Lowest Rating</option>
                                         
                                     </select>
                                 </div>

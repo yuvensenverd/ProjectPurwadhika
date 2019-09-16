@@ -104,7 +104,6 @@ class NotificationPage extends React.Component{
     }
 
     getConfirmedOrder = () =>{
-        console.log("Masuk")
         const token = localStorage.getItem('token')
         const headers = {
             headers: {
@@ -159,9 +158,8 @@ class NotificationPage extends React.Component{
       }
 
     renderData = () =>{
+        console.log("MASDIJASI")
         if(this.state.finishload === true && this.state.datatype === 'Unconfirmed' && this.state.data.length !== 0){
-            console.log(this.state.data)
-
                 var jsx = this.state.data.map((item, i)=>{
                     return (
                         <div>
@@ -282,6 +280,36 @@ class NotificationPage extends React.Component{
                     )
                 })
                 return jsx
+        }
+        if(this.state.finishload === true && this.state.datatype === 'Unconfirmed' && this.state.data.length === 0){
+            return(
+                <center>
+                <div>
+                    <h1 className="m-t-120">Product Confirmation Empty </h1>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                </div>
+                </center>
+            )
+        }
+        if(this.state.finishload === true && this.state.datatype === 'Confirmed' && this.state.data.length === 0){
+            return(
+                <center>
+                <div>
+                    <h1 className="m-t-120">Product Confirmed Empty </h1>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                </div>
+                </center>
+            )
+        }
+        if(this.state.finishload === true && this.state.datatype === 'Cancelled' && this.state.data.length === 0){
+            return(
+                <center>
+                <div>
+                    <h1 className="m-t-120">Product Cancelled Empty </h1>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                </div>
+                </center>
+            )
         }
         
   
@@ -456,13 +484,7 @@ class NotificationPage extends React.Component{
                     </div>
                 </div>
                 <div>
-                    {this.state.finishload && this.state.data.length !== 0 ? this.renderData() : 
-        //                  <div className="p-t-100 text-center">
-        //     <h1>There is currently no product.. </h1>
-        //     <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
-        // </div>
-                        null
-    }
+                    {this.renderData()}
                     
                 </div>
             </div>

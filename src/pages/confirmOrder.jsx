@@ -18,12 +18,14 @@ class confirmOrder extends React.Component{
     }
 
     componentDidMount(){
-        this.getWaitingConfirmation()
+        if(this.props.userdata.userid){
+
+            this.getWaitingConfirmation()
+        }
     }
 
     componentWillReceiveProps(){
-        // KALAU DI refresh pagenya, redux balik jadi 0 , jadi tunggu userid terisi
-        if(this.props.userdata.userid !== 0){
+        if(this.props.userdata.userid){
             this.getWaitingConfirmation()
         }
         
@@ -45,6 +47,7 @@ class confirmOrder extends React.Component{
                 finishload : true,
                 datatype : 'Unconfirmed'
             })
+            console.log('selesai')
             console.log(this.state.data)
         })
         .catch((err)=>{
@@ -103,16 +106,11 @@ class confirmOrder extends React.Component{
     }
 
     renderData = () =>{
-        // if(this.state.finishload === true && this.state.data.length === 0){
-        //     return(
-    //         <div className="p-t-100 d-flex flex-column align-items-center" >
-        //         <h1 className="mb-5">Loading Product Please Wait</h1>
-        //         <ReactLoading type="spin" color="#afb9c9"  />
-        //     </div>
-        //     )
-        // }
-        if(this.state.finishload === true && this.state.datatype === 'Unconfirmed'){
-            if(this.state.data.length > 0){
+        console.log("renderdatafunc")
+        console.log(this.state)
+        if(this.state.finishload === true && this.state.datatype === 'Unconfirmed' && this.state.data.length !== 0){
+            console.log('1')
+           
 
                 var jsx = this.state.data.map((item, i)=>{
                     return (
@@ -153,28 +151,35 @@ class confirmOrder extends React.Component{
                     )
                 })
                 return jsx
-            }else{
-                    return(
-                    <div className="p-t-100 text-center">
-                        <h1>No Product to Confirm.. </h1>
+            
+        }
+      
+        if(this.state.finishload === true && this.state.datatype === 'Unconfirmed' && this.state.data.length === 0){
+            console.log('2')
+            return (
+                <center>
+                    <div>
+                        <h1 className="m-t-120">No Product to Confirm </h1>
                         <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
                     </div>
-                    )
-            }
+                </center>
+            )
         }
+      
+        
     }
 
 
 
     render(){
-        // if(this.state.data.length === 0 && this.state.finishload === false){
-        //     return(
-        //         <div className="p-t-100 d-flex flex-column align-items-center" >
-        //             <h1 className="mb-5">Loading... Please Wait</h1>
-        //             <ReactLoading type="spin" color="#afb9c9"  />
-        //         </div>
-        //     )
-        // }
+        if(this.state.data.length === 0 && this.state.finishload === false){ // fix later
+            return(
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
+                </div>
+            )
+        }
         return(
             <div className="mycontainer p-t-100">
                <div className="row mb-5 p-0 m-0">

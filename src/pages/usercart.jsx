@@ -462,7 +462,7 @@ class UserCart extends React.Component{
                             </center>
                     </ModalBody>
                     <ModalFooter>
-                            <Link to="/product">
+                            <Link to="/product?cat=Fashion">
                             <input type="button" value="Go Back to Shop" className="btn btn-danger btn-lg navbartext" />
                             </Link>
                             <Link to="/">

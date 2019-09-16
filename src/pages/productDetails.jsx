@@ -57,6 +57,7 @@ class productDetails extends React.Component{
     }
 
     componentDidUpdate = () =>{
+        // KALAU UDAH DAPET GENRENYA PAS PRINT
         if(this.state.genre !== '' && this.state.relatedproduct.length === 0 && this.state.productid){
             this.getRelatedProducts()
         }
@@ -75,7 +76,7 @@ class productDetails extends React.Component{
             jumlah : this.state.jumlah + 1,
             
         })
-        this.calculateTotal()
+
     }
 
     minQty = () => {
@@ -84,7 +85,6 @@ class productDetails extends React.Component{
                 jumlah : this.state.jumlah - 1,
                 
             })
-            this.calculateTotal()
         }
         
     }
@@ -97,8 +97,8 @@ class productDetails extends React.Component{
                 genre : res.data[0].category,
                 productid : res.data[0].id
             })
-            console.log(this.state.productdetail)
-            console.log(this.state.genre)
+            // console.log(this.state.productdetail)
+            // console.log(this.state.genre)
         })
         .catch((err)=>{
             this.setState({
@@ -145,16 +145,14 @@ class productDetails extends React.Component{
             return window.alert("Quantity must be atleast 1!")
         }
         if(this.props.userdata.USERNAME === ""){
-            this.setState({
-                redirect : true
-            })
+ 
             return window.alert("Login First before proceed to buy items")
         }
 
         var newcart = this.props.userdata.CART
 
-        // NAMBAH PROPERTY TOTALPRICE DAN QTY KEDALAM CART
-        item= {...item, totalprice : this.state.jumlah * this.state.productdetail[0].price, qty : this.state.jumlah}
+        // NAMBAH PROPERTY QTY KEDALAM CART
+        item= {...item, qty : this.state.jumlah}
         
 
         // COUNTING DUPLICATE ITEMS
@@ -167,12 +165,13 @@ class productDetails extends React.Component{
 
                 updatedqty = itemprop.qty // take the updated qty for update in sql
 
-                itemprop.totalprice = itemprop.totalprice + item.totalprice
                 exist = true
             }
         });
         if(exist === false){
             newcart.push(item)
+            console.log('newcart')
+            console.log(newcart)
            
 
             // SQL INSERT (Coz New)
@@ -190,6 +189,8 @@ class productDetails extends React.Component{
             .then((res)=>{
               
                 // OPEN MODAL NOTIFICATION
+                console.log('asd')
+                console.log(newcart)
                 this.props.addItemCart(newcart)
               
                 this.setState({
@@ -229,12 +230,6 @@ class productDetails extends React.Component{
             })
 
         }
-
-        // ADD TO SQL DATABASE CART
-     
-        
-
-        
 
     }
 

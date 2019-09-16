@@ -61,9 +61,9 @@ class searchProduct extends React.Component{
 
     }
 
-    componentDidUpdate(){
-        this.getProduct()
-    }
+    // componentDidUpdate(){
+    //     this.getProduct()
+    // }
 
     getProduct = () =>{
         if(this.state.finishloadproduct === false){
@@ -103,7 +103,7 @@ class searchProduct extends React.Component{
         
         // }
         if(!values.keyword){
-            values.keyword = ''
+            values.keyword = '' // GET ALL 
         }
         Axios.get(URLAPI + `/product/productcount?keyword=${values.keyword}`)
         .then((res)=>{
@@ -145,10 +145,10 @@ class searchProduct extends React.Component{
         return arr.join(" ")
     }
 
-    onButtonFilterClick = () =>{
-        console.log(this.state.filtertext)
+    // onButtonFilterClick = () =>{
+    //     console.log(this.state.filtertext)
         
-    }
+    // }
     
 
     printPaginationButton = () =>{
@@ -207,7 +207,7 @@ class searchProduct extends React.Component{
                 <p className="price">
                 {"Rp. " + numeral(val.price).format(0,0)}
                     </p>
-                <p>Some text about the Product.</p>
+                {/* <p>Some text about the Product.</p> */}
                 {/* <StarRatingComponent 
                        
                         name="rate1"  // RATING INDEX / PRODUCT ID

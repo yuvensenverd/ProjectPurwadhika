@@ -4,18 +4,14 @@ import Axios from 'axios'
 import Responsive from './../components/responsiveslider'
 import numeral from 'numeral'
 import Footer from './../components/footer';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import { Redirect } from 'react-router'
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import ReactLoading from 'react-loading';
 
 // REACT ANIMATIONS
-// import { fadeIn, bounce, flip } from 'react-animations'
-// import Radium, {StyleRoot} from 'radium';
 import Fade from 'react-reveal/Fade';
 
 
 // ROUTE 
-
 import { Link } from 'react-router-dom'
 
 // REDUX TEST
@@ -76,14 +72,11 @@ class Homepage extends React.Component{
             }
             Axios.get(URLAPI+`/product/getproduct?pagenumber=${values.pagenumber}`)
             .then((res)=>{
-                console.log(res.data)
                 this.setState({
                     productlist : res.data,
                     finishloadproduct : true
         
                 })
-             
-                console.log(this.state.productlist)
            
             })
             .catch((err)=>{
@@ -96,7 +89,6 @@ class Homepage extends React.Component{
     getBannerPath = () => {
         Axios.get(URLAPI + '/banner/getpathbanner')
         .then((res)=>{
-            console.log(res.data)
             this.setState({
                 bannerimgpath : res.data
             })
@@ -110,7 +102,6 @@ class Homepage extends React.Component{
     getNumberItem = () =>{
         Axios.get(URLAPI + `/product/productcount`)
         .then((res)=>{
-            console.log("ini count ")
             console.log(res.data)
             this.setState({
                 productcount : res.data[0].count
@@ -148,10 +139,10 @@ class Homepage extends React.Component{
         return arr.join(" ")
     }
 
-    onButtonFilterClick = () =>{
-        console.log(this.state.filtertext)
+    // onButtonFilterClick = () =>{
+    //     console.log(this.state.filtertext)
 
-    }
+    // }
     
 
     printPaginationButton = () =>{
@@ -170,12 +161,8 @@ class Homepage extends React.Component{
                 page ++ 
 
                 x = x-15 // 15 per page
-                // if(x === 0){
-                //     console.log("masuk")
-                //     break;
-                // }
             }
-            if(this.state.totalPage === 0){
+            if(this.state.totalPage === 0){ // biar gak setstate ulang, page
 
                 this.setState({
                     totalPage : page-1,
@@ -193,8 +180,6 @@ class Homepage extends React.Component{
   
 
     var output = this.state.productlist.map((val, index )=>{
-        // console.log(index)
-        // console.log(arr)
         return( 
  
         <div className="card d-inline-block m-r-21 m-b-25 border border-white"   >
@@ -209,16 +194,8 @@ class Homepage extends React.Component{
            
             <p className="price">
             {"Rp. " + numeral(val.price).format(0,0)}
-                </p>
+            </p>
   
-            {/* <StarRatingComponent 
-                   
-                    name="rate1"  // RATING INDEX / PRODUCT ID
-                    starCount={5}
-                    value={2} // PRODUCT RATING
-                    // onStarClick={()=> this.onStarClick()}
-                    
-                /> */}
            <div className="d-flex flex-row justify-content-center mt-2">
 
                 <StarRatings
@@ -256,20 +233,7 @@ class Homepage extends React.Component{
 
 
     render(){
-        // const { totalPage, currentPage } = this.state;
-        // if(this.state.finishload === true){
-
-        //     if(currentPage > totalPage){
-        //         return(
-        //             <Redirect to={`?pagenumber=${totalPage}`}/>
-        //         )
-        //     }
-        //     else if (currentPage < 0){
-        //         return(
-        //             <Redirect to={`/`}/>
-        //         )
-        //     }
-        // }
+        
         if(this.state.bannerimgpath.length === 0 || this.state.productlist.length === 0){
             return(
                 <div className="p-t-100 d-flex flex-column align-items-center" >

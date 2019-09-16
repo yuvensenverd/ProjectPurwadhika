@@ -83,13 +83,13 @@ class LoginPage extends React.Component{
 
 
     ValidateLogin = () => {
-      this.props.loading()
+      this.props.loading() // set loading true
       var username = this.refs.inputuser.value
       var password = this.refs.inputpassword.value
       
        
       if(username.replace(/\s/g, "") === "" || password.replace(/\s/g, "") === ""){
-        this.props.loadingFalse()
+        this.props.loadingFalse() // set loading false
         return (
           window.alert("Password dan Username harus diisi")
         )
@@ -100,6 +100,7 @@ class LoginPage extends React.Component{
           window.alert("Password dan Username minimal 8 karakter")
         )
       }
+      // validate pass
       this.log(username, password)
 
 
@@ -112,7 +113,7 @@ class LoginPage extends React.Component{
 
 
     render(){
-      if(this.props.userdata.USERNAME !== ''){
+      if(this.props.userdata.CHECK && this.props.userdata.USERNAME !== ''){
         return(
           <Redirect to="/"></Redirect>
         )

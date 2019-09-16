@@ -19,14 +19,15 @@ class userhistory extends React.Component{
     }
 
     componentWillReceiveProps(){
-       this.getTransactionData()
+        if(this.props.userdata.userid){
+            this.getTransactionData()
+        }
     }
     componentDidMount(){
        this.getTransactionData()
     }
 
     getTransactionData = () =>{
-        console.log(this.props.userdata.userid)
         const token = localStorage.getItem('token')
         const headers = {
             headers: {
@@ -39,7 +40,6 @@ class userhistory extends React.Component{
             this.setState({
                 data : res.data
             })
-            console.log(this.state.data)
         })
         .catch((err)=>{
             console.log(err)

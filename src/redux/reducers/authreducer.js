@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE } from "../actions/types";
+import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE, UPDATENOTIFICATION, UPDATEUSER } from "../actions/types";
 import { isNull } from "util";
 
 
@@ -46,13 +46,13 @@ export default(state = Initial_state, action)=>{
       
             
             return {...state,CARTLEN : action.payload.length, CART: action.payload}
-        case  "UPDATE_USER":
+        case  UPDATEUSER:
             return {...state, USERNAME : action.payload.username, PASSWORD : action.payload.password,
                 ROLE : action.payload.userrole, 
                  userid : action.payload.userid, HAVESHOP : !isNull(action.payload.shopname),
                 SALDO : parseInt(action.payload.saldo), PHONENUMBER : action.payload.phonenumber,
                  RESIDENCE : action.payload.residence, EMAIL : action.payload.email, PROFILEIMG :action.payload.profileimg}
-        case "UPDATE_NOTIFICATION" :
+        case UPDATENOTIFICATION :
             console.log("Masuk Auth Reeduce")
             console.log(action.payload)
             return {

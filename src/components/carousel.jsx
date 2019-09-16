@@ -41,9 +41,6 @@ class Slider extends Component {
     })
     console.log(this.state.items)
   }
-  componentWillReceiveProps = () =>{
-    
-  }
 
   onExiting() {
     this.animating = true;

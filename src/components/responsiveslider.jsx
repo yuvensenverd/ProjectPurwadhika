@@ -82,64 +82,7 @@ class Responsive extends Component {
     };
     return (
       <div > 
-
         <Slider {...settings}  >
-            {/* <div className="bg-light shadow" style={{width : "350px"}} >
-              <center>
-                <Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> CATEGORY</span>
-                </center>
-            </div>
-            <div className="bg-light shadow" style={{width : "350px"}} >
-            <center>
-                <Link to='/product'>
-                  <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                </Link>
-                <span className="caption"> CATEGORY</span>
-                </center>
-            </div>
-            <div className="bg-light shadow" style={{width : "350px"}}>
-                <center>
-                  <Link to='/product'>
-                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                  </Link>
-                  <span className="caption"> CATEGORY</span>
-                </center>
-            </div>
-            <div className="bg-light shadow" style={{width : "350px"}}>
-               <center>
-                  <Link to='/product'>
-                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                  </Link>
-                  <span className="caption"> CATEGORY</span>
-                </center>
-            </div>
-            <div className="bg-light shadow" style={{width : "350px"}}>
-               <center>
-                  <Link to='/product'>
-                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                  </Link>
-                  <span className="caption"> CATEGORY</span>
-                </center>
-            </div>
-            <div className="bg-light shadow" style={{width : "350px"}}>
-               <center>
-                  <Link to='/product'>
-                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                  </Link>
-                  <span className="caption"> CATEGORY</span>
-                </center>
-            </div>
-            <div className="bg-light shadow" style={{width : "350px"}} >
-                <center>
-                  <Link to='/product'>
-                    <img  className="p-0" src="https://www.electronicrecyclingassociation.ca/wp-content/uploads/2018/01/Electronics-Shop-4.png" height="75px"/>
-                  </Link>
-                  <span className="caption"> CATEGORY</span>
-                </center>
-            </div> */}
             {this.printCatList()}
         </Slider>
       </div>

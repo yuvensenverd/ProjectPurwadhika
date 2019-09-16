@@ -15,15 +15,18 @@ class shopProfile extends React.Component{
         data : [],
         catlist : [],
         filtertext : '',
-        rating : []
+        rating : [],
+        finishloading : false
     }
 
     componentDidMount(){
        
         const values = queryString.parse(this.props.location.search)
+        
         if(values.shopid){
 
             //-----------------------------------------------------------------
+            // IMAGE, NAME, DESCRIPTION
             Axios.get(URLAPI + `/shop/getshopinfo/${values.shopid}`)
             .then((res)=>{
                 this.setState({
@@ -35,10 +38,12 @@ class shopProfile extends React.Component{
                 console.log(err)
             })
 
+            // LIST PRODUCT IN SHOP
             Axios.get(URLAPI + `/shop/getproductshop/${values.shopid}`)
             .then((res)=>{
                 this.setState({
-                    data : res.data
+                    data : res.data,
+                    finishloading : true
                 })
                 console.log(this.state)
             })
@@ -46,6 +51,7 @@ class shopProfile extends React.Component{
                 console.log(err)
             })
 
+            // GET PRODUCT RATING AVG
             Axios.get(URLAPI + `/shop/getshoprating?shopid=${values.shopid}`)
             .then((res)=>{
                 this.setState({
@@ -58,6 +64,11 @@ class shopProfile extends React.Component{
             })
 
             
+        }else{
+            // set shop not found
+            this.setState({
+                finishloading : true
+            })
         }
     }
 
@@ -120,10 +131,6 @@ class shopProfile extends React.Component{
            
             }
 
-            
-           
-
-        
             
             )
             if(this.state.catlist.length === 0){
@@ -196,8 +203,6 @@ class shopProfile extends React.Component{
     }
 
     filterProduct = (cat = '') =>{
-        console.log('filter')
-        console.log(cat)
         this.setState({
             filtertext : cat
         })
@@ -205,7 +210,30 @@ class shopProfile extends React.Component{
 
 
     render(){
+        if(this.state.finishloading === true && this.state.shopinfo.length === 0){
+            return (
+                <div>
+                    <div className="mycontainer ">
+                        <div id="notfound">
+                     <div class="notfound">
+                    <div class="notfound-bg">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <h1>oops!</h1>
+                    <h2>Error 404 : SHOP Not Found</h2>
+                    <Link className="btn btn-success" to="/">Go Back</Link>
+                    <div class="notfound-social">
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            )
+        }
         return(
+        
             <div>
                 <div className="p-t-57  pl-3 pr-3">
                    {this.renderShop()}

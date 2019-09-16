@@ -144,9 +144,12 @@ class userStore extends React.Component{
 
     componentWillReceiveProps(){
         // KETIKA RELOG f5
-        this.getStoreInfo()
-        this.getProductStore()
-        this.getProductSold()
+        if(this.props.userdata.userid){
+
+            this.getStoreInfo()
+            this.getProductStore()
+            this.getProductSold()
+        }
      
     }
 

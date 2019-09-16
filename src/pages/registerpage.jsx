@@ -7,7 +7,6 @@ import { loginUser, loading, loadingFalse } from './../redux/actions/index'
 import { connect } from 'react-redux'
 import { GETTOKENURL, APIWILAYAHURL, URLAPI } from '../redux/actions/types';
 import ReactLoading from 'react-loading';
-import { isNull } from 'util';
 
 
 
@@ -30,7 +29,7 @@ class registerPage extends React.Component{
       
     }
 
-    // MAP, RETURN ITEM = {nama : val.nama}
+    // get data province dari RAJA-API
     getDataProvince = () =>{
       Axios.get(GETTOKENURL)
       .then((res)=>{
@@ -41,10 +40,9 @@ class registerPage extends React.Component{
           this.setState({
             province : res.data.data
           })
-          console.log(this.state.province)
         })
         .catch((err)=>{
-
+          console.log(err)
         })
       })
       .catch((err)=>{
@@ -55,7 +53,6 @@ class registerPage extends React.Component{
    
 
     checkDatabaseUser = () => {
-      console.log(this.props.isloading)
       this.props.loading()
      
     
@@ -72,7 +69,7 @@ class registerPage extends React.Component{
       
       // NEED VALIDATION
 
-      if (username.includes(" ")) {
+      if (username.includes(" ")) { // kalau ada BLANKSPACE
         this.props.loadingFalse()
         return (
           window.alert('username should have no spaces!')
@@ -138,7 +135,6 @@ class registerPage extends React.Component{
         email : email,
         status : 'Unverified'
       }
-      console.log(data)
 
       var checkuser = {
         name : username
@@ -148,15 +144,9 @@ class registerPage extends React.Component{
       .then((res)=>{
         console.log(res.data)
         if(res.data[0]){
-
-          // console.log(res.data)
-          // console.log(!res.data[0].username)
-          // console.log(res.data[0].username)
-          // console.log(res.data[0].cartlength)
-          // console.log(isNull(res.data[0].username))
           return window.alert("Username already exist !")
         }else{
-        
+          // SUKSES, GA ADA USERNAME YANG SAMA 
           return this.validateRegister(data)
         }
 
@@ -197,7 +187,6 @@ class registerPage extends React.Component{
       Axios.post(URLAPI+'/user/addUser',  data)
       .then((res)=>{
         // TEMPORARY
-        localStorage.setItem('password', data.password)
         console.log(res.data)
         window.alert("Register Success")
         // this.log(username, password)
@@ -227,6 +216,7 @@ class registerPage extends React.Component{
     }
 
     validateEmail = () => {
+      // DARI STACKOVERFLOW :) EMAIL VALIDATION INDICATOR
       var email = this.state.email.replace(/\s/g, "")
       var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
@@ -313,27 +303,10 @@ class registerPage extends React.Component{
                   <input className="input100" ref="inputpasswordconfirm" type="password"  onChange={()=>this.setState({conpassword : this.refs.inputpasswordconfirm.value})}/>
                   <span className="focus-input100" />
                 </div>
-                {/* <div className="flex-sb-m w-full p-b-48">
-                  <div className="contact100-form-checkbox">
-                    <input className="input-checkbox100" id="ckb1" type="checkbox" name="remember-me" />
-                    <label className="label-checkbox100" htmlFor="ckb1">
-                      Remember me
-                    </label>
-                  </div>
-                  <div>
-                    <a href="#" className="txt3">
-                      Forgot Password?
-                    </a>
-                  </div>
-                </div> */}
                 <div className="container-login100-form-btn mt-5 mb-3">
                   {this.props.isloading === true ?<span className="text-center" style={{fontSize : '25px', marginBottom : '10px'}}>Loading, Please Wait..<ReactLoading type="spin" color="#afb9c9"  /></span> : <input type="button" className="login100-form-btn btn-block" value="Sign Up Now!" onClick={() => this.checkDatabaseUser()}/>}
-                  
-                  
-                  
                 </div>
               </div>
-      
           </div>
         </div>
         <div id="dropDownSelect1" />

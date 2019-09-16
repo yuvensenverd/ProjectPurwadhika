@@ -39,18 +39,21 @@ class NotificationPage extends React.Component{
     
         const values = queryString.parse(this.props.location.search)
         console.log(values)
-        if(values.type){
-            if(values.type === "confirmation"){
-                this.getWaitingConfirmation()
-            }else if(values.type === "confirmed"){
-                this.getConfirmedOrder()
-            }else if(values.type === "cancelled"){
-                this.getCancelledOrder()
+        if(this.props.userdata.userid){
+
+            if(values.type){
+                if(values.type === "confirmation"){
+                    this.getWaitingConfirmation()
+                }else if(values.type === "confirmed"){
+                    this.getConfirmedOrder()
+                }else if(values.type === "cancelled"){
+                    this.getCancelledOrder()
+                }else{
+                    this.getWaitingConfirmation()
+                }
             }else{
                 this.getWaitingConfirmation()
             }
-        }else{
-            this.getWaitingConfirmation()
         }
         
     }
@@ -58,18 +61,21 @@ class NotificationPage extends React.Component{
     componentDidMount(){
         const values = queryString.parse(this.props.location.search)
         console.log(values)
-        if(values.type){
-            if(values.type === "confirmation"){
-                this.getWaitingConfirmation()
-            }else if(values.type === "confirmed"){
-                this.getConfirmedOrder()
-            }else if(values.type === "cancelled"){
-                this.getCancelledOrder()
+        if(this.props.userdata.userid){
+            if(values.type){
+                if(values.type === "confirmation"){
+                    this.getWaitingConfirmation()
+                }else if(values.type === "confirmed"){
+                    this.getConfirmedOrder()
+                }else if(values.type === "cancelled"){
+                    this.getCancelledOrder()
+                }else{
+                    this.getWaitingConfirmation()
+                }
             }else{
                 this.getWaitingConfirmation()
             }
-        }else{
-            this.getWaitingConfirmation()
+
         }
        
     }
@@ -277,6 +283,7 @@ class NotificationPage extends React.Component{
                 })
                 return jsx
         }
+        
   
         
     }

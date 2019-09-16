@@ -39,7 +39,7 @@ class CreateStore extends React.Component{
             .then((res)=>{
                 console.log(res.data)
                 console.log("success")
-                this.props.updateUser(res.data[0])
+                this.props.updateUser(res.data[0]) // update props, ubah di reducer HAVESHOP >> true
                 this.setState({
                     redirect : true
                 })
@@ -49,12 +49,6 @@ class CreateStore extends React.Component{
             })
         }
 
-        // axios get localhost1998 /createshop?user=enverdliem
-
-        // REDIRECT FALSE, USER INPUT ALL VALID
-        // this.setState({
-        //     redirect : true
-        // })
     }
 
      previewFile = () => {
@@ -78,7 +72,6 @@ class CreateStore extends React.Component{
       
 
     render(){
-        console.log(this.props.userdata)
         if(this.state.redirect === true || this.props.userdata.HAVESHOP ){
             return ( 
                 <Redirect to="/userstore"> </Redirect>
@@ -99,7 +92,7 @@ class CreateStore extends React.Component{
         }
         
         if(this.props.userdata.CHECK && this.props.userdata.STATUS !== "Verified"){
-            window.alert("Your Account is not verified yet")
+            window.alert("Your Account is not verified yet, Please Verify your account first ! ")
             return (
                 <Redirect to="/"> </Redirect> 
             )

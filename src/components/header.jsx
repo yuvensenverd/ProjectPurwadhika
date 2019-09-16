@@ -200,7 +200,7 @@ import Axios from 'axios';
                             <div className="btn bg-primary form-control"><Link to="/userhistory" className="navbartext " style={{color : "white", border : "none"}}>Transaction History   </Link></div>
                             </DropdownItem>
                             <DropdownItem  style={{padding : "0px", margin : "0px"}}>
-                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><Link to="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </Link></div>
+                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><a href="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </a></div>
                             </DropdownItem>
                             
                         </div>

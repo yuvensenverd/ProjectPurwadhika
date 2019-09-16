@@ -11,9 +11,8 @@ import ReactLoading from 'react-loading';
 import queryString from 'query-string'
 
 // ANIMATIONS 
-import { fadeIn, bounce, flip } from 'react-animations'
-import Radium, {StyleRoot} from 'radium';
 import Fade from 'react-reveal/Fade';
+
 // import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 // Star 
@@ -61,26 +60,7 @@ class productPage extends React.Component{
   
     }
 
-    // componentDidUpdate (){
-    //     if(this.state.reload === true){
-
-    //         console.log("Update")
-    //         var currentgenre = this.state.currentgenre
-    //         console.log(currentgenre)
-    //         if(!currentgenre){
-    
-    //             this.getProduct()
-    //         }
-    //         else{
-            
-    //             this.getProduct(currentgenre.cat)
-    //         }
-    //     }
-      
-
-        
-    // }
-    getBannerPath = () => {
+    getBannerPath = () => { // CAROUSEL
         Axios.get(URLAPI + '/banner/getpathbanner')
         .then((res)=>{
             console.log(res.data)
@@ -95,16 +75,17 @@ class productPage extends React.Component{
     }
 
     getProduct = (category) =>{
-       
-
+        
+        console.log(category)
         Axios.get(URLAPI+'/product/getproduct?cat=' + category + '&pagenumber=all') // get all no limit
         .then((res)=>{
             
             this.setState({
-            productlist : res.data,
-            reload : false,
-            finishload : true
+                productlist : res.data,
+                reload : false,
+                finishload : true
             })
+            
             var select_box = document.getElementById("catlist");
             select_box.selectedIndex = 0;
      

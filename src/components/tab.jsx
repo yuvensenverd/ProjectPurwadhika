@@ -19,7 +19,7 @@ export default class Example extends React.Component {
       };
     }
     componentDidMount(){
-      console.log(this.props.datatabone)
+      // GET REVIEW
       Axios.get(URLAPI + '/product/getreview/' + this.props.productid)
       .then((res)=>{
         console.log(res.data)

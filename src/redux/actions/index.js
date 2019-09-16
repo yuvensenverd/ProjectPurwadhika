@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE } from './types'
+import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE, ISICATEGORYLIST, UPDATENOTIFICATION, UPDATEUSER } from './types'
 import Axios from 'axios'
 
 
@@ -50,7 +50,7 @@ export const loginUser = (value) =>{
                 console.log("Masuk SElesai Notif")
                 console.log(result.data)
                 dispatch({
-                    type : "UPDATE_NOTIFICATION",
+                    type : UPDATENOTIFICATION,
                     payload : result.data[0].NOTIFLEN
                 })
                 
@@ -89,7 +89,7 @@ export const getListCategory = () => {
         .then((res)=>{
         
             dispatch({
-                type : 'ISI_CATEGORY_LIST',
+                type : ISICATEGORYLIST,
                 payload : res.data
             })
         })
@@ -111,20 +111,15 @@ export const addItemCart = (item) =>{
 
 export const updateNotification = (val) =>{
     return{
-        type : "UPDATE_NOTIFICATION",
+        type : UPDATENOTIFICATION,
         payload : val //this.props.userdata.NOTIFLEN - 1 dsbdbsdbs
     }
 }
-export const updateShopNotification = (val) =>{
-    return{
-        type : "UPDATE_SHOP_NOTIFICATION",
-        payload : val //this.props.userdata.SHOPNOTIF - 1 dsbdbsdbs
-    }
-}
+
 
 export const updateUser = (data) =>{
     return {
-        type : "UPDATE_USER",
+        type : UPDATEUSER,
         payload : data
     }
 }
@@ -182,7 +177,7 @@ export const loginToken = () =>{
                 console.log("Masuk SElesai Notif")
                 console.log(result.data)
                 dispatch({
-                    type : "UPDATE_NOTIFICATION",
+                    type : UPDATENOTIFICATION,
                     payload : result.data[0].NOTIFLEN
                 })
                 

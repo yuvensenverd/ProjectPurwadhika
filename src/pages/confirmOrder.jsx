@@ -22,22 +22,22 @@ class confirmOrder extends React.Component{
     }
 
     componentWillReceiveProps(){
-    
-        this.getWaitingConfirmation()
+        // KALAU DI refresh pagenya, redux balik jadi 0 , jadi tunggu userid terisi
+        if(this.props.userdata.userid !== 0){
+            this.getWaitingConfirmation()
+        }
         
     }
     
        
     getWaitingConfirmation = () =>{
         // axios from transaction 
-        console.log("Masuk")
         const token = localStorage.getItem('token')
         const headers = {
             headers: {
                 'Authorization' : `${token}`
             }
         }
-        console.log(this.props.userdata.userid)
         Axios.get(URLAPI + '/transaction/getunconfirmedshop/' + this.props.userdata.userid, headers)
         .then((res)=>{
             this.setState({
@@ -60,7 +60,7 @@ class confirmOrder extends React.Component{
                 'Authorization' : `${token}`
             }
         }
-        Axios.get(URLAPI + '/transaction/confirmproduct/' + id, headers)
+        Axios.get(URLAPI + '/transaction/confirmproduct/' + id, headers) // set status product to confirmed
         .then((res)=>{
             window.alert("Confirm Product Success")
             this.setState({
@@ -105,7 +105,7 @@ class confirmOrder extends React.Component{
     renderData = () =>{
         // if(this.state.finishload === true && this.state.data.length === 0){
         //     return(
-        //         <div className="p-t-100 d-flex flex-column align-items-center" >
+    //         <div className="p-t-100 d-flex flex-column align-items-center" >
         //         <h1 className="mb-5">Loading Product Please Wait</h1>
         //         <ReactLoading type="spin" color="#afb9c9"  />
         //     </div>
@@ -167,14 +167,14 @@ class confirmOrder extends React.Component{
 
 
     render(){
-        if(this.state.data.length === 0 && this.state.finishload === false){
-            return(
-                <div className="p-t-100 d-flex flex-column align-items-center" >
-                    <h1 className="mb-5">Loading... Please Wait</h1>
-                    <ReactLoading type="spin" color="#afb9c9"  />
-                </div>
-            )
-        }
+        // if(this.state.data.length === 0 && this.state.finishload === false){
+        //     return(
+        //         <div className="p-t-100 d-flex flex-column align-items-center" >
+        //             <h1 className="mb-5">Loading... Please Wait</h1>
+        //             <ReactLoading type="spin" color="#afb9c9"  />
+        //         </div>
+        //     )
+        // }
         return(
             <div className="mycontainer p-t-100">
                <div className="row mb-5 p-0 m-0">
@@ -197,7 +197,7 @@ class confirmOrder extends React.Component{
 
 const mapStateToProps= (state)=>{
     return{ 
-      userdata : state.userdata,
+      userdata : state.userdata
     }
 }
 

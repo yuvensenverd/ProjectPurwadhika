@@ -13,7 +13,6 @@ import { Redirect } from 'react-router'
 class editProfile extends React.Component{
     state = { 
         modalOpen : false,
-        //Change Residence
         modalOpenResidence : false,
         province : [],
         imageFile : null,
@@ -35,10 +34,9 @@ class editProfile extends React.Component{
             this.setState({
               province : res.data.data
             })
-            console.log(this.state.province)
           })
           .catch((err)=>{
-  
+            console.log(err)
           })
         })
         .catch((err)=>{
@@ -46,26 +44,6 @@ class editProfile extends React.Component{
         })
       }
 
-    // getProfile = () => {
-
-    //     // if(this.props.userdata.username !== "" & this.state.loading === false){
-    //     //     console.log("Masuk")
-    //     //     Axios.post(URLAPI + '/user/getprofile', {
-    //     //         id : this.props.userdata.userid
-    //     //     })
-    //     //     .then((res)=>{
-    //     //         console.log("Selesai gEt")
-    //     //         this.setState({
-    //     //             userprofile : res.data,
-    //     //             loading : true
-    //     //         })
-    //     //         console.log(res.data)
-    //     //     })
-    //     //     .catch((err)=>{
-    //     //         console.log(err)
-    //     //     })
-    //     // }
-    // }
 
     closeModal = () =>{
         this.setState({
@@ -137,7 +115,8 @@ class editProfile extends React.Component{
     }
 
     printProfile = () => {
-        if(this.props.userdata.USERNAME !== ""){
+        // AMBIL DATA DARI REDUX
+        if(this.props.userdata.USERNAME !== "" && this.props.userdata.CHECK){
         
                 return(
     

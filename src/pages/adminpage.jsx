@@ -18,16 +18,17 @@ class AdminPage extends React.Component{
         // 2 = show banner (carousel)
         // 3 = show category
         // 4 = show user 
+        // 5 = show transaction (manual saja)
     }
 
 
 
     adminGetUser = () =>{
 
-    if(this.state.change === true){
+    if(this.state.change === true){ // untuk trigger function
         Axios.get(URLAPI + '/user/adminuser')
         .then((res)=>{
-            console.log(res.data)
+            console.log('get user')
             this.setState({
                 data : res.data,
                 change : false
@@ -42,7 +43,7 @@ class AdminPage extends React.Component{
     }
 
     adminGetCategories = () =>{
-       if(this.state.change === true){
+       if(this.state.change === true){ // untuk trigger function
 
            Axios.get(URLAPI + '/category/getcategory')
            .then((res)=>{
@@ -60,7 +61,7 @@ class AdminPage extends React.Component{
     }
 
     adminGetBanner = () => {
-        if(this.state.change === true){
+        if(this.state.change === true){ // untuk trigger function
 
             Axios.get(URLAPI + '/banner/getbanner')
             .then((res)=>{
@@ -78,7 +79,7 @@ class AdminPage extends React.Component{
     }
 
     adminGetTransfer = () =>{
-        if(this.state.change === true){
+        if(this.state.change === true){ // untuk trigger function
             const token = localStorage.getItem('token')
             const headers = {
                 headers: {
@@ -101,7 +102,7 @@ class AdminPage extends React.Component{
     }
 
     adminGetProduct = () =>{
-        if(this.state.change === true){
+        if(this.state.change === true){ // untuk trigger function
 
             Axios.get(URLAPI + '/product/getproduct?pagenumber=all')
             .then((res)=>{
@@ -119,7 +120,6 @@ class AdminPage extends React.Component{
     }
 
     onDeleteProduct = (id) =>{
-        console.log(id)
         var confirm = window.confirm("Are you sure you want to delete this item from your store ?")
         if(confirm){
             const token = localStorage.getItem('token')
@@ -129,14 +129,13 @@ class AdminPage extends React.Component{
                 }
             }
 
-            Axios.get(URLAPI + '/product/deleteproduct/' + id, headers)
+            Axios.get(URLAPI + '/product/deleteproduct/' + id, headers) // set isdeleted product = 1
             .then((res)=>{
-                console.log(res.data)
+       
                 this.setState({
-                    change : true
+                    change : true // supaya re-get product
                 })
                 window.alert("Delete Product Success!")
-                this.adminGetProduct()
             })
             .catch((err)=>{
                 console.log(err)
@@ -147,10 +146,6 @@ class AdminPage extends React.Component{
     renderTableData = () =>{
         if(this.state.showTable === 1){
             this.adminGetProduct()
-            // setstate loading === true
-            // Function Axios , then setstate data and loading === false
-            // if loading === false , then state.data di map
-            // Option 2 , bikin rendertabledata for header jg 
             var jsx =  this.state.data.map((prd, i)=>{
                 return (
                     <tr>
@@ -186,7 +181,6 @@ class AdminPage extends React.Component{
         }
         if(this.state.showTable === 2){
                 this.adminGetBanner()
-                console.log("masuk")
                 var jsx =  this.state.data.map((banner, i)=>{
                     return (
                         <tr>
@@ -206,7 +200,6 @@ class AdminPage extends React.Component{
         if(this.state.showTable === 3){
                 
                 this.adminGetCategories()
-                console.log("masuk category")
                 var jsx =  this.state.data.map((cat, i)=>{
                     if(i === this.state.editnum){
 
@@ -229,16 +222,15 @@ class AdminPage extends React.Component{
                     }
                     return (
                         <tr>
-                                <td>{i+1}</td>
-                                <td>{cat.name}</td>
-                                <td>
-                                    <img src={URLAPI + cat.image} id="idimagecat" alt="image" width="100px"/>
-                                </td>
-                                <td>
-                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete"  style={{width : "95px"}}/>
-                                    <input type="button" className="btn btn-primary navbartext" value="edit" onClick={()=>this.setState({editnum : i})} style={{width : "95px"}}/>
-                                </td>
-                            </tr>
+                            <td>{i+1}</td>
+                            <td>{cat.name}</td>
+                            <td>
+                                <img src={URLAPI + cat.image} id="idimagecat" alt="image" width="100px"/>
+                            </td>
+                            <td>
+                                <input type="button" className="btn btn-primary navbartext" value="edit" onClick={()=>this.setState({editnum : i})} style={{width : "95px"}}/>
+                            </td>
+                        </tr>
                     )
                 })
               
@@ -248,7 +240,6 @@ class AdminPage extends React.Component{
         if(this.state.showTable === 4){
         
                 this.adminGetUser()
-                console.log("masuk")
                 return this.state.data.map((user, i)=>{
                     if(i !== this.state.editnum){
 
@@ -300,7 +291,6 @@ class AdminPage extends React.Component{
                 )}
         if(this.state.showTable === 5){
             this.adminGetTransfer()
-            console.log("masuk")
             var jsx =  this.state.data.map((trx, i)=>{
                 return (
                     <tr>
@@ -327,7 +317,7 @@ class AdminPage extends React.Component{
     }
 
     renderTableHead = () =>{
-        // NANTI JGN DDITEMBAK LANGSUNG COLUMNYA
+        // PRINT HEAD SESUAI DENGAN DATA YANG DIAMBIL
         if(this.state.showTable === 1){
     
             return(
@@ -425,19 +415,20 @@ class AdminPage extends React.Component{
                 </tr>
             )
         }
-
+        // YANG GAK PUNYA FOOTER 
         return (
             <div></div>
         )
     }
 
     previewFile = () => {
+
+        // UNTUK PREVIEW IMAGE SEBELUM DISUBMIT
         var preview = document.getElementById('imgpreview');
         var file    = document.getElementById('imagefile').files[0];
   
        
         var reader  = new FileReader();
-        console.log(reader)
       
         reader.onloadend = function () {
           preview.src = reader.result;
@@ -453,6 +444,7 @@ class AdminPage extends React.Component{
 
 
     changeTable = (i) => {
+        // UNTUK MENTRIGGER FUNCTION GET()
         if(i !== this.state.showTable){
             this.setState({
                 change : true,
@@ -465,7 +457,6 @@ class AdminPage extends React.Component{
 
     onClickSaveEditCategory = (catid) =>{
     
-        console.log("Masuk Edit")
         var formData = new FormData()
         var headers ={
             headers : 
@@ -506,18 +497,17 @@ class AdminPage extends React.Component{
     onClickAddCategory = () => {
 
         if(document.getElementById('imagefile').files[0]){
-            console.log("Masuk")
             var formData = new FormData()
             var headers ={
                 headers : 
                 {'Content-Type' : 'multipart/form-data'}
             }
-            console.log(document.getElementById('imagefile').files[0])
+    
 
             var data = { 
                 name : this.refs.catinput.value
             }
-            console.log(data)
+     
 
             formData.append('image', document.getElementById('imagefile').files[0]) 
             formData.append('data', JSON.stringify(data))
@@ -529,15 +519,15 @@ class AdminPage extends React.Component{
                 console.log("Berhasil update")
                 console.log(res.data) // array of object
                 this.setState({
-                   change : true, // otomatis refresh, get data baru
+                   change : true // otomatis refresh, get data baru
                 //    data : res.data
                 })
                 // reset input
                 window.alert("Berhasil Add Category")
                 document.getElementById('primg').src = ""
                 document.getElementById('cattextid').value =""
-                document.getElementById('imagefile').files[0]=null
-                document.getElementById('imagefile').value=null
+                document.getElementById('imgpreview').src = ''
+                document.getElementById('imagefile').value = ''
 
                
 

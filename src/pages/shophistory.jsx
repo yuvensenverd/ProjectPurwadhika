@@ -23,7 +23,10 @@ class shophistory extends React.Component{
 
     }
     componentWillReceiveProps=()=>{
-        this.getShopHistory()
+        if(this.props.userdata.userid){
+
+            this.getShopHistory()
+        }
     }
 
     getShopHistory = () =>{

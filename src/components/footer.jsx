@@ -16,7 +16,7 @@ const FooterPage = () => {
               content.
             </div>
           </MDBCol>
-          <MDBCol md="6" className ="pl-5">
+          <MDBCol md="3" className ="pl-5">
             <h5 className="navbartext pt-3">Links</h5>
             <ul>
               <li className="list-unstyled pt-2">
@@ -32,6 +32,9 @@ const FooterPage = () => {
                <div className="mt-2 footertext">Link 4</div>
               </li>
             </ul>
+          </MDBCol>
+          <MDBCol md="3">
+            <h5 className="navbartext pt-3 pb-3">By Yuvens Enverd Liem Jc-09</h5>
           </MDBCol>
         </MDBRow>
       </MDBContainer>

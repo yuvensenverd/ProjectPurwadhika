@@ -144,6 +144,7 @@ class registerPage extends React.Component{
       .then((res)=>{
         console.log(res.data)
         if(res.data[0]){
+          this.props.loadingFalse()
           return window.alert("Username already exist !")
         }else{
           // SUKSES, GA ADA USERNAME YANG SAMA 
@@ -152,6 +153,7 @@ class registerPage extends React.Component{
 
       })
       .catch((err)=>{
+        this.props.loadingFalse()
         console.log(err)
       })
     }

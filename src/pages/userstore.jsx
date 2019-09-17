@@ -4,6 +4,7 @@ import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft
 import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
+import {loading, loadingFalse} from '../redux/actions/index'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
@@ -31,7 +32,8 @@ class userStore extends React.Component{
         productidedit : null,
         modaladdPic : false,
         productsold : 0,
-        redirect : false
+        redirect : false,
+        finishload : false
     }
 
     componentDidMount(){
@@ -115,7 +117,8 @@ class userStore extends React.Component{
             .then((res)=>{
                 console.log(res.data)
                 this.setState({
-                    storeProduct : res.data
+                    storeProduct : res.data,
+                    finishload : true
                 })
             })
             .catch((err)=>{
@@ -251,110 +254,114 @@ class userStore extends React.Component{
 
     renderProductTable = () =>{
     
-        console.log(this.state.storeProduct.length)
-        if(this.state.storeProduct.length !== 0){
-            var jsx = this.state.storeProduct.map((prd, i)=>{
-                if(i !== this.state.editnum){
-                    return(
-                        <tr>
-                            <th scope="row">{i+1}</th>
-                            <td>
-                              
-                                <img
-                                 src={prd.images ?
-                                    URLAPI+ prd.images.split(',')[0]
-                                    :
-                                    URLAPI + PATHDEFAULTPRD
-                                    } 
-                                 
-                                 alt="" width='100px'></img>
-                             
-                            </td>
-                            <td>{this.printProductName(prd.name)}</td>
-                            <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
-                            <td>{prd.cat}</td>
-                            <td>
-                            {prd.avgrating ? `${prd.avgrating}/5  (${prd.ReviewCount} Reviews)` : 'Not Reviewed Yet '}
-                            </td>
-                            
-                            <td>
-                                <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
-                                <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}} onClick={()=>this.setState({editnum : i, productidedit : prd.id})}/>
-                            </td>
-                        </tr>
-                    )
-                }else {
-                    return (
-                        <tr>
-                            <th scope="row">{i+1}</th>
-                            <td>
-                                <div className="d-flex flex-column">
+        if(this.state.finishload){
+
+            if(this.state.storeProduct.length !== 0){
+                var jsx = this.state.storeProduct.map((prd, i)=>{
+                    if(i !== this.state.editnum){
+                        return(
+                            <tr>
+                                <th scope="row">{i+1}</th>
+                                <td>
+                                  
                                     <img
-                                    src={prd.images ?
+                                     src={prd.images ?
                                         URLAPI+ prd.images.split(',')[0]
                                         :
                                         URLAPI + PATHDEFAULTPRD
                                         } 
-                                    
-                                    alt="" width='100px'>
-                                    </img>
-                                    <input type="button" className="btn btn-danger mr-3 mt-3" value="Add" onClick={()=>this.openAddImage(i, prd.id)}  />
-                                    <input type="button" className="btn btn-success mr-3 mt-3" value="Edit" onClick={()=>this.openEditImage(i, prd.id)} />
-                                </div>
-                            </td>
-                            <td><input type="text" className="form-control" defaultValue={prd.name} ref="editnameproduct" /></td>
-                            <td><input type="number" className="form-control" defaultValue={prd.price} ref="editpriceproduct" /> </td>
-                            <td className="d-flex flex-column">
-                                <h5>Product Description</h5>
-                                <textarea  defaultValue={prd.description} ref="editdescproduct" rows="6" />
-                            </td>
-                            <td>
-                            {prd.avgrating ? `${prd.avgrating}/5  (${prd.ReviewCount} Reviews)` : 'Not Reviewed Yet '}
-                            </td>
-                          
-                            <td>
-                                <input type="button" className="btn btn-info mr-3 navbartext" value="Save" style={{width : "95px"}} onClick={()=>this.editProduct()}/>
-                                <input type="button" className="btn btn-danger navbartext" value="Cancel" style={{width : "95px"}} onClick={()=>this.setState({editnum : null, productidedit : null})}/>
-                            </td>
-                        </tr>
-                    )
-                }
-            })
-            return jsx
+                                     
+                                     alt="" width='100px'></img>
+                                 
+                                </td>
+                                <td>{this.printProductName(prd.name)}</td>
+                                <td>{"Rp  " + numeral(prd.price).format(0,0)}</td>
+                                <td>{prd.cat}</td>
+                                <td>
+                                {prd.avgrating ? <div><span className="font-weight-bold">{parseFloat(prd.avgrating).toFixed(2)}</span>{` (${prd.ReviewCount} Reviews)`}</div> : 'Not Reviewed Yet '}
+                                </td>
+                                
+                                <td>
+                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" onClick={()=>this.onDeleteProduct(prd.id)} style={{width : "95px"}}/>
+                                    <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}} onClick={()=>this.setState({editnum : i, productidedit : prd.id})}/>
+                                </td>
+                            </tr>
+                        )
+                    }else {
+                        return (
+                            <tr>
+                                <th scope="row">{i+1}</th>
+                                <td>
+                                    <div className="d-flex flex-column">
+                                        <img
+                                        src={prd.images ?
+                                            URLAPI+ prd.images.split(',')[0]
+                                            :
+                                            URLAPI + PATHDEFAULTPRD
+                                            } 
+                                        
+                                        alt="" width='100px'>
+                                        </img>
+                                        <input type="button" className="btn btn-danger mr-3 mt-3" value="Add" onClick={()=>this.openAddImage(i, prd.id)}  />
+                                        <input type="button" className="btn btn-success mr-3 mt-3" value="Edit" onClick={()=>this.openEditImage(i, prd.id)} />
+                                    </div>
+                                </td>
+                                <td><input type="text" className="form-control" defaultValue={prd.name} ref="editnameproduct" /></td>
+                                <td><input type="number" className="form-control" defaultValue={prd.price} ref="editpriceproduct" /> </td>
+                                <td className="d-flex flex-column">
+                                    <h5>Product Description</h5>
+                                    <textarea  defaultValue={prd.description} ref="editdescproduct" rows="6" />
+                                </td>
+                                <td>
+                                {prd.avgrating ? `${prd.avgrating}/5  (${prd.ReviewCount} Reviews)` : 'Not Reviewed Yet '}
+                                </td>
+                              
+                                <td>
+                                    <input type="button" className="btn btn-info mr-3 navbartext" value="Save" style={{width : "95px"}} onClick={()=>this.editProduct()}/>
+                                    <input type="button" className="btn btn-danger navbartext" value="Cancel" style={{width : "95px"}} onClick={()=>this.setState({editnum : null, productidedit : null})}/>
+                                </td>
+                            </tr>
+                        )
+                    }
+                })
+                return jsx
+            }else{
+                return (
+                 <tr>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 <center>
+                 <div className="p-t-100 text-center justify-content-center align-items-center">
+                    <h1>There is currently no product.. </h1>
+                    <input type="button" className="btn btn-success btn-lg navbartext mb-2 p-2" value=" + Add Product" onClick={()=>this.modalOpen()}/>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                </div>
+                 </center>
+                 <td></td>
+                 <td></td>
+                 <td></td>
+                 </tr>
+                )
+               
+            }
         }else{
-            return (
-             <tr>
-             <td></td>
-             <td></td>
-             <td></td>
-             <center>
-             <div className="p-t-100 text-center justify-content-center align-items-center">
-                <h1>There is currently no product.. </h1>
-                <input type="button" className="btn btn-success btn-lg navbartext mb-2 p-2" value=" + Add Product" onClick={()=>this.modalOpen()}/>
-                <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
-            </div>
-             </center>
-             <td></td>
-             <td></td>
-             <td></td>
-             </tr>
+            return(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <center>
+                    <div className="p-t-100 d-flex flex-column align-items-center justify-content-center" >
+                        <h1 className="mb-5">Loading... Please Wait</h1>
+                        <ReactLoading type="spin" color="#afb9c9"  />
+                    </div>
+                    </center>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             )
-            // return(
-                // <tr>
-                //     <td></td>
-                //     <td></td>
-                //     <td></td>
-                //     <center>
-                //     <div className="p-t-100 d-flex flex-column align-items-center justify-content-center" >
-                //         <h1 className="mb-5">Loading... Please Wait</h1>
-                //         <ReactLoading type="spin" color="#afb9c9"  />
-                //     </div>
-                //     </center>
-                //     <td></td>
-                //     <td></td>
-                //     <td></td>
-                // </tr>
-            // )
         }
     }
     previewEditFile = (index) =>{
@@ -431,6 +438,7 @@ class userStore extends React.Component{
     }
 
     onClickAddProduct = () =>{
+        this.props.loading()
         var name = this.refs.prdname.value
         var price = this.refs.prdprice.value
         var description = this.refs.prddesc.value
@@ -446,15 +454,7 @@ class userStore extends React.Component{
 
             }
         }
-        // var image = document.getElementById('productimage1').files[0]
-        // console.log(image)
-        // console.log(name, price, description, cat_name, shop_id)
-         // console.log(image)
-        // IMG TO BE CONTINUED
-
-       // yang harus di push
        
-        
         var data = {
             name,
             price,
@@ -486,6 +486,7 @@ class userStore extends React.Component{
             Axios.post(URLAPI + '/product/addproduct', formData, headers)
             .then((res)=>{
                 console.log(res.data)
+                this.props.loadingFalse()
                 this.closeModal()
                 Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid, headers)
                 .then((res)=>{
@@ -501,6 +502,7 @@ class userStore extends React.Component{
                 return window.alert("Add Product Berhasil")
             })
             .catch((err)=>{
+                this.props.loadingFalse()
                 console.log(err)
             })
         }
@@ -636,17 +638,20 @@ class userStore extends React.Component{
     }
 
     printaddPic = () =>{
-        // var index = this.state.editpicnum
-        // var images = []
-        // var data = {
-        //     id : this.state.productidedit
-        // }
         var index = this.state.editpicnum
         var array = []
         
-        var imgproduct = this.state.storeProduct[index].images.split(',').length
-        for(var i = 5; i> imgproduct; i--){
+        var imgproduct = this.state.storeProduct[index].images.split(',').length // jumlah image
+        for(var i = 5; i> imgproduct; i--){ // max image = 5
             array.push(true)
+        }
+        if(array.length === 0){
+       
+            return (
+                <div>
+                    <h1>You have reached max number of picture for product (5) </h1>
+                </div>
+            )
         }
         console.log(array)
         var output = array.map((val, index)=>{
@@ -761,25 +766,25 @@ class userStore extends React.Component{
 
                                 {this.printInputFile()}
                             </div>
-                            {/* {this.state.imagenum.length === 1 
-                            ?
-                            <div>
-                                <div>
-                                <input type="file" id={`productimage${1}`} className="form-control form-control-lg mb-3 " onChange={() => this.previewFile()}/>
-                                </div>
-                                <img id={`primg${1}`} src="#" alt="image preview" height="200" />    
-                            </div>
-                            :
-                            null
-                            } */}
+                      
                         </ModalBody>
                         <ModalFooter>
 
                             <input type="button" className="btn btn-lg btn-danger navbartext mb-2 p-2" value=" - Cancel" onClick={()=>this.closeModal()}/>
+                            {this.props.userdata.LOADING 
+                            ?
+                            <button className="btn btn-lg btn-success navbartext mb-2 p-2">
+                                <div class="spinner-border text-secondary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </button>
+                            :
                             <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Submit Product" onClick={()=>this.onClickAddProduct()}/>
+                            }
+                           
                         </ModalFooter>
                     </Modal>
-                    <Modal isOpen={this.state.modaleditPic} toggle={this.closeModal} size="lg" style={{maxWidth: '1600px', width: '80%'}}>
+                    <Modal isOpen={this.state.modaleditPic} toggle={this.closeModal} size="lg" style={{maxWidth: '1800px', width: '90%'}}>
                         <ModalHeader>
                                 <h1>Edit Product Images</h1>
                         </ModalHeader>
@@ -906,4 +911,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, null)(userStore);
+export default connect(mapStateToProps, {loading, loadingFalse})(userStore);

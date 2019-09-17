@@ -5,7 +5,7 @@ import StarRatings from 'react-star-ratings';
 import { Link } from 'react-router-dom'
 import Axios from 'axios';
 import { connect } from 'react-redux'
-import { addItemCart } from './../redux/actions/index'
+import { addItemCart, loading, loadingFalse } from './../redux/actions/index'
 import Footer from './../components/footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
@@ -132,9 +132,10 @@ class productDetails extends React.Component{
 
 
     addToCart = (item) =>{
+        this.props.loading()
         
         if(this.props.userdata.USERNAME === ""){
-            
+            this.props.loadingFalse() // set loading false
             return window.alert("You have to login first! Please log in !")
         }
 
@@ -142,10 +143,11 @@ class productDetails extends React.Component{
         // INSERT INTO TABLE CART 
         // USERNAME = THIS.props.userdata.username
         if(this.state.jumlah === 0){
+            this.props.loadingFalse() // set loading false
             return window.alert("Quantity must be atleast 1!")
         }
         if(this.props.userdata.USERNAME === ""){
- 
+            this.props.loadingFalse() // set loading false
             return window.alert("Login First before proceed to buy items")
         }
 
@@ -192,7 +194,7 @@ class productDetails extends React.Component{
                 console.log('asd')
                 console.log(newcart)
                 this.props.addItemCart(newcart)
-              
+                this.props.loadingFalse() // set loading false
                 this.setState({
                     modalOpen : true
                 })
@@ -221,6 +223,7 @@ class productDetails extends React.Component{
             .then((res)=>{
                 console.log("Berhasil update cart")
                 this.props.addItemCart(newcart) // sama aja krn redux diupdate seluruh isi cart
+                this.props.loadingFalse() // set loading false
                 this.setState({
                     modalOpen : true
                 })
@@ -235,6 +238,19 @@ class productDetails extends React.Component{
 
     goBack = () => {
         window.history.back();
+    }
+    renderName = (text) => {
+        var judul = text.split(" ")
+        var arr = []
+        
+        for(var i = 0; i<4; i++){
+            arr.push(judul[i])
+            
+        }
+        if(judul.length >= 4){
+            arr.push("...")
+        }
+        return arr.join(" ")
     }
 
     printRecommended = () =>{
@@ -252,7 +268,7 @@ class productDetails extends React.Component{
                         URLAPI + PATHDEFAULTPRD
                         }  
                     alt="item image" width="100%" height='135px'/>
-                    <div style={{height : '50px'}}> {item.name} </div>
+                    <div style={{height : '50px'}}> {this.renderName(item.name)} </div>
                     <div className="text text-warning font-weight-bold"> {"Rp. " + numeral(item.price).format(0,0)}</div>
                     
                     </div>
@@ -298,7 +314,9 @@ class productDetails extends React.Component{
                         <div className="col-md-7 pl-5">
                             
                             <h1 className="mb-4">{this.state.productdetail[0].name}</h1>
+                            <Link to={`/product?cat=${this.state.productdetail[0].category}`}>
                             <div className="badge badge-pill badge-danger mb-4" style={{fontSize : "20px"}}> {this.state.productdetail[0].category}</div>
+                            </Link>
                             <h3 className="mb-3">Quantity</h3>
                            
                            
@@ -309,7 +327,18 @@ class productDetails extends React.Component{
                             <input type="button" className="btn btn-success rounded-circle ml-3" value="+" onClick={() => this.addQty()}/>
                             </div>
                             <div className="mb-5 ">
-                            <h3 className="">Product Rating</h3>
+                            <h3 className="">
+
+                            
+                                Product Rating
+                                {this.state.productdetail[0].avgrating 
+                                ?
+                                <span className='badge badge-pill badge-warning ml-3'> {parseFloat(this.state.productdetail[0].avgrating).toFixed(2)} </span>
+                            :
+                            null
+                            }
+                                
+                            </h3>
                             <div>
                             <div className="d-flex flex-column mb-2">
 
@@ -328,7 +357,15 @@ class productDetails extends React.Component{
                             <h3 className="mb-3">Total Price</h3>
                             <input type="text"  className="form-control d-inline mb-5" style={{width :"250px", fontWeight : "bolder", fontSize : "23px"}} value={"Rp. " + numeral(this.state.productdetail[0].price * this.state.jumlah).format(0,0)} readOnly/>
                             <div>
-                                <input type="button" value="PROCEED" className="btn btn-dark btn-lg navbartext" style={{width : "350px"}} onClick={()=>this.addToCart(this.state.productdetail[0])} />
+                                {this.props.userdata.LOADING ? 
+                                <button className="btn btn-dark btn-lg navbartext">
+                                <div class="spinner-border text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                                </div>
+                                </button>
+                                :
+                                <input type="button" value="PROCEED" className="btn btn-dark btn-lg navbartext" style={{width : "350px"}} onClick={()=>this.addToCart(this.state.productdetail[0])} />}
+                                
                             </div>
                             
 
@@ -398,7 +435,7 @@ class productDetails extends React.Component{
                                 </center>
                         </ModalBody>
                         <ModalFooter>
-                                <Link to="/product">
+                                <Link to="/product?cat=Fashion">
                                 <input type="button" value="Go Back to Shop" className="btn btn-danger btn-lg navbartext" />
                                 </Link>
                                 <Link to="/usercart">
@@ -444,4 +481,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, {addItemCart})(productDetails);
+export default connect(mapStateToProps, {addItemCart, loading, loadingFalse})(productDetails);

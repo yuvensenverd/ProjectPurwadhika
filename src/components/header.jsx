@@ -98,6 +98,7 @@ import Axios from 'axios';
     }
     return (
       <div className="navbarheader d-flex flex-column">
+
          <Modal isOpen={this.state.modalOpen} toggle={()=>this.setState({modalOpen : false})} size="lg" style={{width: '1000px', position : 'absolute', top : '20%', left : '30%'}}>
                         <ModalHeader>
                             <div className="subtitletext" style={{fontSize : "26px"}}>ADD BALANCES</div>
@@ -120,11 +121,11 @@ import Axios from 'axios';
                 </Modal>
         <div>
         <Navbar  style={{backgroundColor : "#1f2533"}}  fixed dark expand="md">
-          <Link to="/" className="navbartext">
+          <a href="/" className="navbartext">
           <NavbarBrand  className="navbartext mr-5">
             home
           </NavbarBrand>
-          </Link>
+          </a>
           <NavbarToggler onClick={this.toggle} />
        
         

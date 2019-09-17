@@ -2,6 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import queryString from 'query-string'
 import { URLAPI } from '../redux/actions/types';
+import { verify } from '../redux/actions/index'
+import { connect } from 'react-redux'
 
 
 class Verified extends React.Component{
@@ -19,6 +21,7 @@ class Verified extends React.Component{
         })
         .then((res)=>{
             console.log(res.data)
+            this.props.verify()
             this.setState({
                 status : 'Berhasil'
             })
@@ -58,4 +61,4 @@ class Verified extends React.Component{
     }
 }
 
-export default Verified
+export default connect(null,{ verify })(Verified);

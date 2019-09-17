@@ -2,6 +2,7 @@ import React from 'react'
 import numeral from 'numeral'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
+import { loading, loadingFalse} from '../redux/actions/index'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ReactLoading from 'react-loading'
@@ -14,7 +15,8 @@ class confirmOrder extends React.Component{
         data : [],
         finishload : false,
         status : '',
-        datatype : ''
+        datatype : '',
+        transid : null
     }
 
     componentDidMount(){
@@ -55,20 +57,28 @@ class confirmOrder extends React.Component{
         })
     }
 
-    onConfirmProductClick = (id) =>{
+    onConfirmProductClick = (id, price) =>{
+        this.props.loading()
+        this.setState({
+            transid : id
+        })
         console.log(id)
+        console.log(price)
         const token = localStorage.getItem('token')
         const headers = {
             headers: {
                 'Authorization' : `${token}`
             }
         }
-        Axios.get(URLAPI + '/transaction/confirmproduct/' + id, headers) // set status product to confirmed
+
+        Axios.get(URLAPI + `/transaction/confirmproduct/${id}/${price}/${this.props.userdata.userid}`, headers) // set status product to confirmed
         .then((res)=>{
+            this.props.loadingFalse()
             window.alert("Confirm Product Success")
             this.setState({
                 finishload : false,
-                datatype : 'Unconfirmed'
+                datatype : 'Unconfirmed',
+                transid : null
             })
 
             this.getWaitingConfirmation()
@@ -78,8 +88,12 @@ class confirmOrder extends React.Component{
         })
     }
 
-    onCancelProductClick = (id) =>{
-        console.log(id)
+    onCancelProductClick = (id, price, buyerid) =>{
+     
+        this.props.loading()
+        this.setState({
+            transid : id
+        })
         var confirm = window.confirm('Are you sure to cancel this order ?')
         if(confirm){
 
@@ -89,12 +103,14 @@ class confirmOrder extends React.Component{
                     'Authorization' : `${token}`
                 }
             }
-            Axios.get(URLAPI + '/transaction/cancelproduct/' + id, headers)
+            Axios.get(URLAPI + `/transaction/cancelproduct/${id}/${price}/${buyerid}`, headers)
             .then((res)=>{
+                this.props.loadingFalse()
                 window.alert("Product Has Been Cancelled")
                 this.setState({
                     finishload : false,
-                    datatype : 'Unconfirmed'
+                    datatype : 'Unconfirmed',
+                    transid : null
                 })
 
                 this.getWaitingConfirmation()
@@ -141,8 +157,19 @@ class confirmOrder extends React.Component{
                                         <h5>{item.transactiondate.split('T')[0]}</h5>
                                     </div>
                                     <div className="col-md-3 subtitletext  text-center d-flex flex-row  ">
-                                        <input type="button" className="btn btn-dark mr-3" value="CONFIRM" onClick={()=>this.onConfirmProductClick(item.transactionid)}/>
-                                        <input type="button" className="btn btn-danger " value="CANCEL" onClick={()=>this.onCancelProductClick(item.transactionid)} />
+                                        {this.props.userdata.LOADING && (item.transactionid === this.state.transid)
+                                        ?
+                                        <div className="d-flex flex-column align-items-center" >
+                                            <p className="mb-1">Loading...</p>
+                                            <ReactLoading type="spin" color="#afb9c9" height='15px' />
+                                        </div>
+                                    :
+                                    <div className="pt-4">
+                                        <input type="button" className="btn btn-dark mr-3" value="CONFIRM" onClick={()=>this.onConfirmProductClick(item.transactionid, item.qty*item.price)}/>
+                                        <input type="button" className="btn btn-danger " value="CANCEL" onClick={()=>this.onCancelProductClick(item.transactionid, item.qty*item.price, item.userid)} />
+                                        </div>
+                                    }
+                                        
     
                                     </div>
                                 </div>
@@ -206,4 +233,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, null)(confirmOrder);
+export default connect(mapStateToProps, {loading, loadingFalse})(confirmOrder);

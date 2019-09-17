@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Card, Button,  CardText, Row,  } from 'reactstrap';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { addItemCart, updateNotification, updateUser } from './../redux/actions/index'
+import { addItemCart, updateNotification, updateUser, loadingFalse, loading } from './../redux/actions/index'
 import Footer from '../components/footer'
 import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -336,8 +336,14 @@ class UserCart extends React.Component{
     }
 
     onPayClick = () =>{
+        this.props.loading()
         if(this.props.userdata.STATUS === 'Unverified'){
+            this.props.loadingFalse()
             return window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
+        }
+        if(this.props.userdata.CART.length === 0){
+            this.props.loadingFalse()
+            return window.alert("Please buy an item before proceed!")
         }
         var data = {
             userid : this.props.userdata.userid,
@@ -369,6 +375,7 @@ class UserCart extends React.Component{
                 this.props.updateUser(res.data[0])
                 this.props.addItemCart([]) // set cart empty in redux
                 this.props.updateNotification(this.props.userdata.NOTIFLEN + arr.length)
+                this.props.loadingFalse()
                 this.setState({
                     modaltransaction : true,
                     cart_user : []
@@ -376,17 +383,21 @@ class UserCart extends React.Component{
               
               })
               .catch((err)=>{
+                this.props.loadingFalse()
                 console.log(err)
               })
 
         })
         .catch((err)=>{
-
+            this.props.loadingFalse()
+            console.log(err)
         })
     }
 
     onPayManualClick = () =>{
+        this.props.loading()
         if(this.props.userdata.STATUS === 'Unverified'){
+            this.props.loadingFalse()
             return window.alert("Your account has not been verified yet, please verify your account with the link sent to email")
         }
         if(this.state.imageFile){
@@ -418,12 +429,14 @@ class UserCart extends React.Component{
             .then((res)=>{
                 this.props.addItemCart([]) // set cart empty in redux
                 this.props.updateNotification(this.props.userdata.NOTIFLEN + arr.length)
+                this.props.loadingFalse()
                 this.setState({
                     modaltransaction : true,
                     cart_user : []
                 })
             })
             .catch((err)=>{
+                this.props.loadingFalse()
                 console.log(err)
             })
          
@@ -499,8 +512,17 @@ class UserCart extends React.Component{
                                     ?
                                     <input type="button" className="btn btn-secondary navbartext ml-5" value="GOPAY" disabled/>
                                     :
+                                    this.props.userdata.LOADING 
+                                    ?
+                                    <button className="btn btn-success navbartext ml-5">
+                                        <div className="spinner-border text-secondary" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div>
+                                    </button>
+                                    :
                                     <input type="button" className="btn btn-success navbartext ml-5" value="GOPAY" onClick={()=>this.onPayClick()}/>
                                 } 
+
                                 <input type="button" className="btn btn-info navbartext ml-5 mr-2" value="MANUAL TRANSFER" onClick={()=>this.setState({ manualtransfer : true})} />
                             </div>
                             {this.state.manualtransfer === true ?
@@ -512,7 +534,17 @@ class UserCart extends React.Component{
 
                                     
                                 <input type="file" className="mt-5 mb-5 btn " id="imgtransferinput" style={{ color : "white", backgroundColor : "black"}} onChange={this.previewFile}></input>
+                                {this.props.userdata.LOADING 
+                                ?
+                                <button  className="btn btn-primary navbartext ml-5 mr-3">
+                                     <div className="spinner-border text-secondary" role="status">
+                                        <span className="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                :
                                 <input type="button" className="btn btn-primary navbartext ml-5 mr-3" value="SUBMIT MANUAL TRANSFER" onClick={()=>this.onPayManualClick()} />
+                                }
+                                
                             </div>
 
                              : null}
@@ -565,4 +597,4 @@ const mapStateToProps= (state)=>{
 }
 
 
-export default connect(mapStateToProps, {addItemCart, updateNotification, updateUser})(UserCart)
+export default connect(mapStateToProps, {addItemCart, updateNotification, updateUser, loading, loadingFalse})(UserCart)

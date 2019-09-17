@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI, GETTOKENURL, APIWILAYAHURL, PATHDEFAULTPICT } from '../redux/actions/types';
-import { updateUser } from '../redux/actions/index'
+import { updateUser, loading, loadingFalse } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -82,6 +82,7 @@ class editProfile extends React.Component{
 
     onClickSaveImage = () => {
         if(this.state.imageFile){
+            this.props.loading()
             var formData = new FormData()
             var headers ={
                 headers : 
@@ -104,12 +105,14 @@ class editProfile extends React.Component{
                 console.log(res.data) // array of object
                 
                 this.props.updateUser(res.data[0]) // UPDATE DATA TERBARU
+                this.props.loadingFalse()
                 this.setState({
                     avatarChangeModal : true
                 })
             })
             .catch((err)=>{
-                console.log(err)
+                this.props.loadingFalse()
+                window.alert(err)
             })
         }
     }
@@ -138,7 +141,16 @@ class editProfile extends React.Component{
 
                         
                         <input type="file" className="mt-5 mb-5 btn " id="imgprofileinput" style={{ color : "white", backgroundColor : "black"}} onChange={this.previewFile}></input>
+                        {this.props.userdata.LOADING 
+                        ?
+                        <button className="btn btn-success navbartext form-control">
+                        <div class="spinner-border text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                        </div>
+                        </button>
+                        :
                         <input type="button" className="btn btn-success navbartext form-control" value="SAVE AVATAR" onClick={()=>this.onClickSaveImage()}/>
+                        }
                     </div>
                     <div className="col-md-9 pl-5 pt-2">
                         
@@ -348,4 +360,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, {updateUser})(editProfile);
+export default connect(mapStateToProps, {updateUser, loading, loadingFalse})(editProfile);

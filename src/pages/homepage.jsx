@@ -13,6 +13,7 @@ import Fade from 'react-reveal/Fade';
 
 // ROUTE 
 import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router'
 
 // REDUX TEST
 
@@ -58,9 +59,12 @@ class Homepage extends React.Component{
 
     }
 
-    componentDidUpdate(){
-        this.getProduct()
-    }
+    // componentDidUpdate(){
+    //     if(this.state.currentPage){
+
+    //         this.getProduct()
+    //     }
+    // }
 
     getProduct = () =>{
         if(this.state.finishloadproduct === false){
@@ -139,10 +143,7 @@ class Homepage extends React.Component{
         return arr.join(" ")
     }
 
-    // onButtonFilterClick = () =>{
-    //     console.log(this.state.filtertext)
-
-    // }
+ 
     
 
     printPaginationButton = () =>{
@@ -233,6 +234,20 @@ class Homepage extends React.Component{
 
 
     render(){
+       
+        // if(this.state.finishload){
+        //     console.log("hooome")
+        //     console.log(this.state)
+
+        //     if(this.state.totalPage < this.state.currentPage){
+        //         console.log('hhome in')
+        //         return(
+        //             <Redirect to='/'/>
+        //         )
+        //     }
+        // }
+        
+        
         
         if(this.state.bannerimgpath.length === 0 || this.state.productlist.length === 0){
             return(
@@ -276,11 +291,15 @@ class Homepage extends React.Component{
 
                 {/* BANNER */}
                 <Fade>
-                <div className="container mt-5 mb-5" >
-                    <div className="mt-5 mb-4">
-                        <input type="button" style={{height : "100px", fontWeight: "bolder", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
+
+                <Link to="/product?cat=Fashion" className="navbartext" style={{ textDecoration: 'none', fontWeight : 'bolder' }}>
+                    <div className="container mt-5 mb-5" >
+                        <div className="mt-5 mb-4">
+                            <input type="button" style={{height : "100px", fontWeight: "bolder", backgroundColor : "#c02c3a", color : "white", fontSize : "35px"}}className="btn btn-block" value="ON SALE"  />
+                        </div>
                     </div>
-                </div>
+                </Link>
+                
                
                 
                 <div className="d-flex flex-row justify-content-center p-5" >
@@ -356,16 +375,6 @@ class Homepage extends React.Component{
     }
 }
 
-// const styles = {
-//     fadeIn: {
-//       animation: 'x 1s',
-//       animationName: Radium.keyframes(fadeIn, 'fadeIn')
-//     },
-//     flip: {
-//         animation: 'x 2s',
-//         animationName: Radium.keyframes(flip, 'flip')
-//     }
-//   }
 
 
 

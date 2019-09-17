@@ -3,7 +3,7 @@ import { Redirect } from 'react-router'
 import Footer from './../components/footer';
 import { connect } from 'react-redux'
 import Axios from 'axios';
-import { updateUser } from '../redux/actions/index'
+import { updateUser, loading, loadingFalse } from '../redux/actions/index'
 import { URLAPI } from '../redux/actions/types';
 
 
@@ -13,7 +13,13 @@ class CreateStore extends React.Component{
     }
 
     checkValidate =() =>{
+        this.props.loading()
+  
         var name = this.refs.storename.value
+        if(name.length < 6){
+            this.props.loadingFalse()
+            return window.alert('shop name at least 6 characters length')
+        }
         var description = this.refs.storedesc.value
         var image = document.getElementById('inputfile').files[0]
         
@@ -40,12 +46,14 @@ class CreateStore extends React.Component{
                 console.log(res.data)
                 console.log("success")
                 this.props.updateUser(res.data[0]) // update props, ubah di reducer HAVESHOP >> true
+                this.props.loadingFalse()
                 this.setState({
                     redirect : true
                 })
             })
             .catch((err)=>{
-                console.log(err)
+                this.props.loadingFalse()
+                window.alert(err)
             })
         }
 
@@ -118,8 +126,17 @@ class CreateStore extends React.Component{
                     </div>
                     <input type='file' id="inputfile" ref="inputimage "className="mb-5" onChange={() => this.previewFile()}/>
                     <div><img id="blah" src="#" alt="image preview" height="200" /></div>
-                 
+                    {this.props.userdata.LOADING 
+                    ?
+                    <button className="form-control form-control-lg btn btn-success navbartext  mb-5 mt-5">
+                        <div class="spinner-border text-secondary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </button>
+                    :
                     <input type="button" className="form-control form-control-lg btn btn-success navbartext  mb-5 mt-5" value="CREATE STORE" onClick={()=>this.checkValidate()}/>
+                    }
+                    
 
 
 
@@ -137,4 +154,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, {updateUser})(CreateStore);
+export default connect(mapStateToProps, {updateUser, loading, loadingFalse})(CreateStore);

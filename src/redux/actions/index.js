@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE, ISICATEGORYLIST, UPDATENOTIFICATION, UPDATEUSER } from './types'
+import { LOGIN, LOGOUT, URLAPI, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE, ISICATEGORYLIST, UPDATENOTIFICATION, UPDATEUSER, VERIFY } from './types'
 import Axios from 'axios'
 
 
@@ -218,5 +218,10 @@ export const loadingFalse = () =>{
 export const checkTrue = () =>{
     return {
         type : CHECKTRUE
+    }
+}
+export const verify = () =>{
+    return {
+        type : VERIFY
     }
 }

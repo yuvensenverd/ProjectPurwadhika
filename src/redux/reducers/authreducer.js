@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE, UPDATENOTIFICATION, UPDATEUSER } from "../actions/types";
+import { LOGIN, LOGOUT, ADDITEM, LOADING, LOADINGFALSE, CHECKTRUE, UPDATENOTIFICATION, UPDATEUSER, VERIFY } from "../actions/types";
 import { isNull } from "util";
 
 
@@ -70,6 +70,11 @@ export default(state = Initial_state, action)=>{
         case CHECKTRUE:
             return{
                 ...state, CHECK : true
+            }
+        case VERIFY:
+            console.log('verifysuccess')
+            return{
+                ...state, STATUS : 'Verified'
             }
             
         default : 

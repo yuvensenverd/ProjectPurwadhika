@@ -252,7 +252,6 @@ class AdminPage extends React.Component{
                                 <td>{user.saldo}</td>
                                 <td>{user.status}</td>
                                 <td>
-                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
                                     <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}  onClick={()=>this.setState({editnum : i})}/>
                                 </td>
                             </tr>

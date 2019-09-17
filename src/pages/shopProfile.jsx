@@ -164,8 +164,8 @@ class shopProfile extends React.Component{
                         </div>
                         <div className="col-md-4 subtitletext  p-4 text-center" style={{fontSize : '15px'}}>
                             <div className="mb-4">Products : {this.state.data.length}</div>
-                            <div>Shop Rating : 
-                            {this.state.rating[0].shopAvgRating ? this.state.rating[0].shopAvgRating + `( based on ${this.state.rating[0].shopReviewCount} Reviews)` : 'Not Reviewed Yet'}
+                            <div>{`Shop Rating :  `}
+                            {this.state.rating[0].shopAvgRating ? parseFloat(this.state.rating[0].shopAvgRating).toFixed(2) + ` (based on ${this.state.rating[0].shopReviewCount} Reviews)` : 'Not Reviewed Yet'}
                             </div>
                         </div>
                        

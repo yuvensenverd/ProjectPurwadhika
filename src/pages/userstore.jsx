@@ -11,6 +11,7 @@ import Axios from 'axios';
 import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import numeral from 'numeral'
 import ReactLoading from 'react-loading';
+import SweetAlert from 'react-bootstrap-sweetalert'
 
 // NANTI KALAU ADD PRODUCT DI LOOPING 
 
@@ -32,7 +33,8 @@ class userStore extends React.Component{
         modaladdPic : false,
         productsold : 0,
         redirect : false,
-        finishload : false
+        finishload : false,
+        show : false
     }
 
     componentDidMount(){
@@ -82,7 +84,7 @@ class userStore extends React.Component{
     getStoreInfo = () => {
         
         if(this.props.userdata.userid){
-            console.log(this.props.userdata.userid)
+  
             const token = localStorage.getItem('token')
             const headers = {
                 headers: {
@@ -91,7 +93,7 @@ class userStore extends React.Component{
             }
             Axios.get(URLAPI+'/shop/getshopinfo/'+this.props.userdata.userid, headers)
             .then((res)=>{
-                console.log(res.data)
+               
                 this.setState({
                     userStore : res.data
                 })
@@ -104,8 +106,7 @@ class userStore extends React.Component{
     getProductStore = () => {
         
         if(this.props.userdata.userid){
-            console.log("GETPRODUCTSTORE")
-            console.log(this.props.userdata.userid)
+        
             const token = localStorage.getItem('token')
             const headers = {
                 headers: {
@@ -114,7 +115,7 @@ class userStore extends React.Component{
             }
             Axios.get(URLAPI+'/shop/getproductshop/'+this.props.userdata.userid, headers)
             .then((res)=>{
-                console.log(res.data)
+             
                 this.setState({
                     storeProduct : res.data,
                     finishload : true
@@ -491,14 +492,15 @@ class userStore extends React.Component{
                 .then((res)=>{
                     console.log(res.data)
                     this.setState({
-                        storeProduct : res.data
+                        storeProduct : res.data,
+                        show : true
                     })
                 })
                 .catch((err)=>{
                     console.log(err)
                 })
                 
-                return window.alert("Add Product Berhasil")
+                // return window.alert("Add Product Berhasil")
             })
             .catch((err)=>{
                 this.props.loadingFalse()
@@ -724,7 +726,7 @@ class userStore extends React.Component{
 
 
     render(){
-        console.log(this.props.userdata)
+    
         if(this.props.userdata.CHECK && !this.props.userdata.HAVESHOP){
 
             return ( 
@@ -739,6 +741,9 @@ class userStore extends React.Component{
         }
         return(
             <div>
+                <SweetAlert success title="Success!" onConfirm={()=>this.setState({ show : false})} show={this.state.show}>
+                    Add Product Success !
+                </SweetAlert>
                 <div className="storecontainer p-t-100">
                     <Modal isOpen={this.state.modalOpen} toggle={this.closeModal} size="lg" style={{maxWidth: '1600px', width: '80%'}}>
                         <ModalHeader>

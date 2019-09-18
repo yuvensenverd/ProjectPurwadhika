@@ -68,12 +68,12 @@ class UserCart extends React.Component{
         console.log(this.props.userdata.userid)
         var statecart = this.state.cart_user
         var updatecart = this.state.updatedproduct
-        console.log(statecart)
+       
         for(var i = 0; i<updatecart.length; i++){
             if(updatecart[i].value !== 0){
                 var updatedqty = statecart[i].qty 
-                console.log("updatedqty menjadi " + updatedqty)
-                console.log("Masuk ubah produk " + updatecart[i].productid + "qty menjadi " + updatedqty)
+                // console.log("updatedqty menjadi " + updatedqty)
+                // console.log("Masuk ubah produk " + updatecart[i].productid + "qty menjadi " + updatedqty)
                 const token = localStorage.getItem('token')
                 const headers = {
                     headers: {
@@ -92,13 +92,8 @@ class UserCart extends React.Component{
                 .catch((err)=>{
                     console.log(err)
                 })
-                // {
-                //     qtyupdated : updatedqty,
-                //     userid : this.props.userdata.userid ,
-                //     productid : this.props.location.search.replace("?pid=", "")
-                // }
             }else{
-                console.log("Gak ada perubahan")
+                console.log("No Changes Detected")
             }
         }
 

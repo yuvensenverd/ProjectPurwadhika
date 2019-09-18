@@ -21,6 +21,7 @@
     "radium": "^0.26.0",
     "react": "^16.8.6",
     "react-animations": "^1.0.0",
+    "react-bootstrap-sweetalert": "^4.4.1",
     "react-dom": "^16.8.6",
     "react-fade-opacity": "^2.0.0",
     "react-items-carousel": "^2.3.7",

@@ -37,7 +37,7 @@ export default class Example extends React.Component {
       if(this.state.data.length !== 0){
         var review = false
         var jsx = this.state.data.map((item)=>{
-          if(item.description !== 'No Description'){
+          if(item.description){
             review = true
             
             return(

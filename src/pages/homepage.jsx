@@ -10,7 +10,6 @@ import ReactLoading from 'react-loading';
 // REACT ANIMATIONS
 import Fade from 'react-reveal/Fade';
 
-
 // ROUTE 
 import { Link } from 'react-router-dom'
 import { Redirect } from 'react-router'

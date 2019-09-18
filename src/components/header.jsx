@@ -123,11 +123,11 @@ import Axios from 'axios';
                 </Modal>
         <div>
         <Navbar  style={{backgroundColor : "#1f2533"}}  fixed dark expand="md">
-          <a href="/" className="navbartext">
+          <Link to="/" className="navbartext">
           <NavbarBrand  className="navbartext mr-5">
             home
           </NavbarBrand>
-          </a>
+          </Link>
           <NavbarToggler onClick={this.toggle} />
        
         
@@ -203,7 +203,7 @@ import Axios from 'axios';
                             <div className="btn bg-primary form-control"><Link to="/userhistory" className="navbartext " style={{color : "white", border : "none"}}>Transaction History   </Link></div>
                             </DropdownItem>
                             <DropdownItem  style={{padding : "0px", margin : "0px"}}>
-                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><Link to="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </Link></div>
+                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><a href="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </a></div>
                             </DropdownItem>
                             
                         </div>

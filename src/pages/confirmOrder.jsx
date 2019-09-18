@@ -6,6 +6,7 @@ import { loading, loadingFalse} from '../redux/actions/index'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ReactLoading from 'react-loading'
+import SweetAlert from 'react-bootstrap-sweetalert'
 
 
 
@@ -16,7 +17,9 @@ class confirmOrder extends React.Component{
         finishload : false,
         status : '',
         datatype : '',
-        transid : null
+        transid : null,
+        show : false,
+        showCancel : false
     }
 
     componentDidMount(){
@@ -74,11 +77,11 @@ class confirmOrder extends React.Component{
         Axios.get(URLAPI + `/transaction/confirmproduct/${id}/${price}/${this.props.userdata.userid}`, headers) // set status product to confirmed
         .then((res)=>{
             this.props.loadingFalse()
-            window.alert("Confirm Product Success")
             this.setState({
                 finishload : false,
                 datatype : 'Unconfirmed',
-                transid : null
+                transid : null,
+                show : true
             })
 
             this.getWaitingConfirmation()
@@ -106,11 +109,12 @@ class confirmOrder extends React.Component{
             Axios.get(URLAPI + `/transaction/cancelproduct/${id}/${price}/${buyerid}`, headers)
             .then((res)=>{
                 this.props.loadingFalse()
-                window.alert("Product Has Been Cancelled")
+                
                 this.setState({
                     finishload : false,
                     datatype : 'Unconfirmed',
-                    transid : null
+                    transid : null,
+                    showCancel : true
                 })
 
                 this.getWaitingConfirmation()
@@ -208,7 +212,14 @@ class confirmOrder extends React.Component{
             )
         }
         return(
+      
             <div className="mycontainer p-t-100">
+                <SweetAlert success title="Success!" onConfirm={()=>this.setState({ show : false})} show={this.state.show}>
+                    Product Has Been Confirmed!
+                </SweetAlert>
+                <SweetAlert danger title="Cancelled!" onConfirm={()=>this.setState({ showCancel : false})} show={this.state.showCancel}>
+                    Product Has Been Cancelled!
+                </SweetAlert>
                <div className="row mb-5 p-0 m-0">
                     <div className="col-md-6 text-center p-0 ">
                         <input type="button" className="btn btn-dark navbartext form-control" value="Unconfirmed Orders" onClick={()=>this.getWaitingConfirmation()} />

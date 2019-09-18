@@ -13,6 +13,7 @@ import StarRatings from 'react-star-ratings';
 import ReactLoading from 'react-loading'
 import queryString from 'query-string'
 import { isNull } from "util";
+import SweetAlert from 'react-bootstrap-sweetalert'
 
 
 
@@ -24,7 +25,8 @@ class NotificationPage extends React.Component{
         modalOpen : false,
         itemindex : null,
         starrating : 0,
-        idproductSelected : null
+        idproductSelected : null,
+        show : false
     }
 
     closeModal = () =>{
@@ -342,7 +344,7 @@ class NotificationPage extends React.Component{
     }
 
     onSubmitButtonClick = (id) =>{
-        console.log(id)
+
         this.props.loading()
         const token = localStorage.getItem('token')
         const headers = {
@@ -350,26 +352,34 @@ class NotificationPage extends React.Component{
                 'Authorization' : `${token}`
             }
         }
-        console.log(this.state.starrating)
-        var description = this.refs.reviewref.value
-        if(this.state.starrating !== 0){
-
-            if(description.replace(/\s+/, "") === ""){
-                description = 'No Description'
-            }
-        }else{
-            description = null
+ 
+   
+        if(this.refs.reviewref.value.replace(/\s+/, "") !== ""){
+          
+            var description = this.refs.reviewref.value // if user write a review
         }
+     
+
+     
+        // if(this.state.starrating !== 0){
+
+        //     if(description.replace(/\s+/, "") === ""){
+        //         description = 'No Description'
+        //     }
+        // }else{
+        //     description = null
+        // }
         var userid = this.props.userdata.userid
         var rating = this.state.starrating
         var productid = this.state.idproductSelected
         var data = {
             userid,
             productid,
-            description,
+            description : description ? description : null,
             rating
         }
-        console.log(data)
+
+     
         Axios.post(URLAPI + '/transaction/successproduct/' + id,data, headers)
         .then((res)=>{
             console.log('asduhaushduas')
@@ -378,7 +388,8 @@ class NotificationPage extends React.Component{
                 starrating : 0,
                 itemindex : null,
                 finishload : true,
-                datatype : 'Unconfirmed'
+                datatype : 'Unconfirmed',
+                show : true
             })
             this.props.updateNotification(this.props.userdata.NOTIFLEN - 1)
             this.props.loadingFalse()
@@ -410,6 +421,9 @@ class NotificationPage extends React.Component{
       
         return(
             <div className="mycontainer p-t-100">
+                <SweetAlert success title="Success!" onConfirm={()=>this.setState({ show : false})} show={this.state.show}>
+                    Thank you for shopping with us!
+                </SweetAlert>
                   <Modal isOpen={this.state.modalOpen} toggle={this.closeModal} size="lg" style={{maxWidth: '600px', position : 'absolute', top : '20%', left : '40%'}}>
                         <ModalHeader>
                             <div className="subtitletext p-l-50" style={{fontSize : "26px"}}>Thank you for shopping !</div>

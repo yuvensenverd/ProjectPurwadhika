@@ -98,7 +98,6 @@ class productPage extends React.Component{
         }
 
     filterProduct = (filterby) =>{
-        console.log(filterby)
         if(filterby === "price low"){
             var sorted=  this.state.productlist.sort(function(a,b){
                 return a.price - b.price

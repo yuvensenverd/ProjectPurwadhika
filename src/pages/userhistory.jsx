@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import { Redirect} from 'react-router'
 import { URLAPI } from '../redux/actions/types';
 import numeral from 'numeral'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import header from '../components/header';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 
 
@@ -119,7 +118,7 @@ class userhistory extends React.Component{
                     <div className="row mb-2">
                         <div className="col-md-2 d-flex flex-row justify-content-center">
                         
-                            <img src={URLAPI + trx.images.split(',')[0]}  height="75px" />
+                            <img src={URLAPI + trx.images.split(',')[0]}  height="75px" alt='transactionphoto' />
                         </div>
                         <div className="col-md-2">
                             <div>{trx.name}</div>

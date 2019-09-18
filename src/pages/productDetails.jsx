@@ -27,7 +27,7 @@ class productDetails extends React.Component{
         productdetail : [],
         relatedproduct : [],
         message : "",
-
+        finishloading : false,
         modalOpen : false,
         finishloadrelated : false,
         redirect : false,
@@ -95,7 +95,8 @@ class productDetails extends React.Component{
             this.setState({
                 productdetail : res.data,
                 genre : res.data[0].category,
-                productid : res.data[0].id
+                productid : res.data[0].id,
+                finishloading : true
             })
             // console.log(this.state.productdetail)
             // console.log(this.state.genre)
@@ -420,6 +421,14 @@ class productDetails extends React.Component{
             )
     
         }
+        if(!this.state.finishloading && this.state.productdetail.length === 0){
+            return(
+                <div className="p-t-100 d-flex flex-column align-items-center" >
+                    <h1 className="mb-5">Loading... Please Wait</h1>
+                    <ReactLoading type="spin" color="#afb9c9"  />
+                </div>
+            )
+        }
      
         return(
             <div>
@@ -448,14 +457,16 @@ class productDetails extends React.Component{
                     <Fade clear>
                     {this.printProductDetails()}
                     </Fade>
-                    {this.state.productdetail.length === 0 ? 
+                    {this.state.productdetail.length === 0 && this.state.finishloading? 
                     <div className="d-flex flex-column row p-t-100 p-l-100">
                     <h1 className="mb-5">{this.state.message}</h1>
                     <Link to="/product?cat=Fashion">
                     <input type="button" className="btn btn-success navbartext p-3 border border-radius" value="Browse Other Products"/>
                     </Link>
                     </div>
-                     : null}
+                     : 
+                  null
+                     }
         
                     {/* {console.log(JSON.stringify(this.props.usercart))}} */}
        

@@ -165,7 +165,7 @@ class AdminPage extends React.Component{
                         </td>
                         <td>{prd.category}</td>
                         <td>{prd.shopname}</td>
-                        <td>{prd.avgrating ? prd.avgrating+"/5" : 'Not Reviewed Yet'}</td>
+                        <td>{prd.avgrating ? parseFloat(prd.avgrating).toFixed(2)+ ' / 5' : 'Not Reviewed Yet'}</td>
                         <td>{prd.ReviewCount}</td>
                  
                         

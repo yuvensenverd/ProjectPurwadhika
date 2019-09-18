@@ -1,11 +1,10 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight, faProjectDiagram } from '@fortawesome/free-solid-svg-icons'
+import {  faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
 import { Table } from 'reactstrap'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import {loading, loadingFalse} from '../redux/actions/index'
-import Footer from './../components/footer';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
 import Axios from 'axios';
@@ -335,7 +334,7 @@ class userStore extends React.Component{
                  <div className="p-t-100 text-center justify-content-center align-items-center">
                     <h1>There is currently no product.. </h1>
                     <input type="button" className="btn btn-success btn-lg navbartext mb-2 p-2" value=" + Add Product" onClick={()=>this.modalOpen()}/>
-                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                    <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px" alt='itemempty'/>
                 </div>
                  </center>
                  <td></td>
@@ -417,7 +416,7 @@ class userStore extends React.Component{
             return (
                 <div className="col-md-2" >
                     <div className="d-flex flex-column justify-content-center"> 
-                        <img id={`primg${index + 1}`} src="#" alt="image preview" height="250" />   
+                        <img id={`primg${index + 1}`} src="#" alt="preview" height="250" />   
                         <div>
                             <input type="file" id={`productimage${index + 1}`} ref={"prdimg"+(index+1)} className="form-control form-control-lg mb-3 " onChange={() => this.previewFile(index+1)}/>
                         </div> 
@@ -556,6 +555,7 @@ class userStore extends React.Component{
     }
 
     editSavedImage = () =>{
+        this.props.loading()
         var index = this.state.editpicnum
         var images = []
         var data = {
@@ -572,7 +572,7 @@ class userStore extends React.Component{
                 images.push(null)
             }
         }
-        console.log(images)
+        
        
         var formData = new FormData()
         const token = localStorage.getItem('token')
@@ -587,19 +587,22 @@ class userStore extends React.Component{
             formData.append('image', images[y]) 
         }
         // Data 
-        console.log(data)
+   
         formData.append('data', JSON.stringify(data))
 
-        console.log(formData)
+  
         Axios.post(URLAPI + '/product/editimage', formData, headers)
         .then((res)=>{
             console.log(res.data)
+            this.props.loadingFalse()
             window.alert("Berhasil Edit Product Image")
+        
             this.closeModal()
             this.getProductStore()
         })
         .catch((err)=>{
-            console.log(err)
+            this.props.loadingFalse()
+            window.alert(err)
         })
     
     }
@@ -671,6 +674,7 @@ class userStore extends React.Component{
     }
 
     addProductImage = () =>{
+        this.props.loading()
         var id = this.state.productidedit
         var data = {
             id 
@@ -684,6 +688,10 @@ class userStore extends React.Component{
                 'Content-Type' : 'multipart/form-data',
                 'Authorization' : `${token}`
             }
+        }
+        if(this.state.storeProduct[this.state.editpicnum].images.split(',').length === 5){
+            this.props.loadingFalse()
+            return window.alert('You have reached maximum image for a product (up to 5)')
         }
         for(var i = 0; i<5-this.state.storeProduct[this.state.editpicnum].images.split(',').length; i++){
             if(document.getElementById(`editimage${i}`).files[0]){
@@ -699,12 +707,13 @@ class userStore extends React.Component{
 
         Axios.post(URLAPI + '/product/addimage', formData, headers)
         .then((res)=>{
-            console.log(res.data)
+            this.props.loadingFalse()
             window.alert('Add Image Success')
             this.closeModal()
             this.getProductStore()
         })
         .catch((err)=>{
+            this.props.loadingFalse()
             console.log(err)
         })
 
@@ -744,7 +753,7 @@ class userStore extends React.Component{
                             <div className="subtitletext mb-3">
                                 Product Genre
                             </div>
-                            <select  className="mb-5" required id = "myList" ref="prdgenre" className="form-control mb-2" placeholder="Genre">
+                            <select required id = "myList" ref="prdgenre" className="form-control mb-2" placeholder="Genre">
                                     <option value="" disabled selected hidden>Choose Genre</option>
                                     {this.renderCategoryList()}
                                     
@@ -801,7 +810,16 @@ class userStore extends React.Component{
                         <ModalFooter>
 
                             <input type="button" className="btn btn-lg btn-danger navbartext mb-2 p-2" value=" - Cancel" onClick={()=>this.closeModal()}/>
+                            {this.props.userdata.LOADING ?
+                             <button className="btn btn-lg btn-success navbartext mb-2 p-2">
+                             <div class="spinner-border text-secondary" role="status">
+                                 <span class="sr-only">Loading...</span>
+                             </div>
+                         </button>
+                         :
+                         
                             <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Finsih Edit Image" onClick={()=>this.editSavedImage()} />
+                         }
                         </ModalFooter>
                     </Modal>
                     <Modal isOpen={this.state.modaladdPic} toggle={this.closeModal} size="lg" style={{maxWidth: '1600px', width: '80%'}}>
@@ -824,7 +842,16 @@ class userStore extends React.Component{
                         <ModalFooter>
 
                             <input type="button" className="btn btn-lg btn-danger navbartext mb-2 p-2" value=" - Cancel" onClick={()=>this.closeModal()}/>
-                            <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Finish Edit Image" onClick={()=>this.addProductImage()} />
+                            {this.props.userdata.LOADING ? 
+                              <button className="btn btn-lg btn-success navbartext mb-2 p-2">
+                              <div class="spinner-border text-secondary" role="status">
+                                  <span class="sr-only">Loading...</span>
+                              </div>
+                          </button>
+                          :
+                          <input type="button" className="btn btn-lg btn-success navbartext mb-2 p-2" value=" + Finish ADD Image" onClick={()=>this.addProductImage()} />
+                          
+                          }
                         </ModalFooter>
                     </Modal>
                    
@@ -850,53 +877,10 @@ class userStore extends React.Component{
                             <tbody>
                            
                             {this.renderProductTable()}
-                            {/* <tr>
-                                <th scope="row">1</th>
-                                <td>
-                                    <img src="" alt=""></img>
-                                </td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                         
-                                <td>
-                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
-                                    <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>
-                                    <img src="" alt=""></img>
-                                </td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                   
-                                <td>
-                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
-                                    <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>
-                                    <img src="" alt=""></img>
-                                </td>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                           
-                                <td>
-                                    <input type="button" className="btn btn-danger mr-3 navbartext" value="delete" style={{width : "95px"}}/>
-                                    <input type="button" className="btn btn-primary navbartext" value="edit" style={{width : "95px"}}/>
-                                </td>
-                            </tr> */}
                             </tbody>
                         </Table>
                         </div>
-                        {/* <div className="d-flex flex-column justify-content-center align-items-center">
-                                <div><h1> No Product Yet ! </h1></div>
-                                <img src="https://cdn.shopify.com/s/files/1/1061/1924/products/Frowning_Emoji_Icon_30260b4f-d601-45f5-9bb3-836f607cacbc_large.png?v=1542446803" height="200" width="200" className="mb-3"></img>
-                                <input type="button" className="btn  btn-success navbartext mb-2 p-2 form-control" value=" + Add Product" style={{width : "400px", fontSize : "30px"}}/>
-                        </div> */}
+                  
                     </div>
                 </div>
                 {/* <Footer /> */}

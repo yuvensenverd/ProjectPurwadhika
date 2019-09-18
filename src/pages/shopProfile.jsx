@@ -3,11 +3,10 @@ import queryString from 'query-string'
 import Axios from 'axios'
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types'
 import numeral from 'numeral'
-import Tab from './../components/tab'
 import { Link } from 'react-router-dom'
 import StarRatings from 'react-star-ratings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt, faStoreAlt, faLuggageCart, faHourglassHalf, faQuoteLeft, faQuoteRight, faProjectDiagram } from '@fortawesome/free-solid-svg-icons'
+import { faQuoteLeft, faQuoteRight } from '@fortawesome/free-solid-svg-icons'
 
 class shopProfile extends React.Component{
     state = {
@@ -101,7 +100,7 @@ class shopProfile extends React.Component{
                     :
                     URLAPI + PATHDEFAULTPRD
                     } 
-                  alt="image" width="100%" height="200px"
+                  alt="itemproduct" width="100%" height="200px"
                   />
                 <div className="cardprtext p-3 mb-2" style={{height : "80px"}}>{product.name}</div>
                 <div className="pricepr mt-1 mb-3">

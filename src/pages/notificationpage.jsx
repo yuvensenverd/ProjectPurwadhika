@@ -3,15 +3,16 @@ import numeral from 'numeral'
 import Axios from 'axios';
 import { URLAPI, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+// import { Link } from 'react-router-dom'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faBackward, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { Redirect } from 'react-router'
-import { updateNotification } from '../redux/actions/index'
+import { updateNotification, loadingFalse, loading } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import StarRatings from 'react-star-ratings';
 import ReactLoading from 'react-loading'
 import queryString from 'query-string'
+import { isNull } from "util";
 
 
 
@@ -38,8 +39,7 @@ class NotificationPage extends React.Component{
     componentWillReceiveProps(){
     
         const values = queryString.parse(this.props.location.search)
-        console.log(values)
-        if(this.props.userdata.userid){
+        if(this.props.userdata.userid && !this.props.userdata.finishload){
 
             if(values.type){
                 if(values.type === "confirmation"){
@@ -94,7 +94,8 @@ class NotificationPage extends React.Component{
             this.setState({
                 data : res.data,
                 finishload : true,
-                datatype : 'Cancelled'
+                datatype : 'Cancelled',
+                itemindex : null
             })
             console.log(this.state.data)
         })
@@ -110,15 +111,15 @@ class NotificationPage extends React.Component{
                 'Authorization' : `${token}`
             }
         }
-        console.log(this.props.userdata.userid)
         Axios.get(URLAPI + '/transaction/getconfirmed/' + this.props.userdata.userid, headers)
         .then((res)=>{
             this.setState({
                 data : res.data,
                 finishload : true,
-                datatype : 'Confirmed'
+                datatype : 'Confirmed',
+                itemindex : null
+
             })
-            console.log(this.state.data)
         })
         .catch((err)=>{
             console.log(err)
@@ -141,7 +142,8 @@ class NotificationPage extends React.Component{
             this.setState({
                 data : res.data,
                 finishload : true,
-                datatype : 'Unconfirmed'
+                datatype : 'Unconfirmed',
+                itemindex : null
             })
             console.log(this.state.data)
         })
@@ -158,7 +160,6 @@ class NotificationPage extends React.Component{
       }
 
     renderData = () =>{
-        console.log("MASDIJASI")
         if(this.state.finishload === true && this.state.datatype === 'Unconfirmed' && this.state.data.length !== 0){
                 var jsx = this.state.data.map((item, i)=>{
                     return (
@@ -266,7 +267,7 @@ class NotificationPage extends React.Component{
                                         <p>{"transaction date"}</p>
                                         <h5>{item.transactiondate.split('T')[0]}</h5>
                                     </div>
-                                    <div className="col-md-2 subtitletext  text-center  d-flex flex-column pt-3">
+                                    <div className="col-md-2 subtitletext  text-center  d-flex flex-column pt-4">
                                      
                                        
                                         <input type="button" className="btn btn-danger mr-3" value="OK" onClick={()=>this.onDeleteCancelled(item.transactionid)}/>
@@ -316,7 +317,7 @@ class NotificationPage extends React.Component{
         
     }
     onDeleteCancelled = (id) =>{
-        var confirm = window.confirm("Delete this item?")
+        var confirm = window.confirm("Delete ?")
         if(confirm){
             const token = localStorage.getItem('token')
             const headers = {
@@ -342,6 +343,7 @@ class NotificationPage extends React.Component{
 
     onSubmitButtonClick = (id) =>{
         console.log(id)
+        this.props.loading()
         const token = localStorage.getItem('token')
         const headers = {
             headers: {
@@ -349,17 +351,14 @@ class NotificationPage extends React.Component{
             }
         }
         console.log(this.state.starrating)
+        var description = this.refs.reviewref.value
         if(this.state.starrating !== 0){
 
-            var description = this.refs.reviewref.value
-            
             if(description.replace(/\s+/, "") === ""){
                 description = 'No Description'
             }
-           
-            
         }else{
-           var description = null
+            description = null
         }
         var userid = this.props.userdata.userid
         var rating = this.state.starrating
@@ -373,6 +372,7 @@ class NotificationPage extends React.Component{
         console.log(data)
         Axios.post(URLAPI + '/transaction/successproduct/' + id,data, headers)
         .then((res)=>{
+            console.log('asduhaushduas')
             this.setState({
                 modalOpen : false,
                 starrating : 0,
@@ -381,9 +381,11 @@ class NotificationPage extends React.Component{
                 datatype : 'Unconfirmed'
             })
             this.props.updateNotification(this.props.userdata.NOTIFLEN - 1)
+            this.props.loadingFalse()
             this.getConfirmedOrder()
         })
         .catch((err)=>{
+            this.props.loadingFalse()
             console.log(err)
         })
 
@@ -413,11 +415,11 @@ class NotificationPage extends React.Component{
                             <div className="subtitletext p-l-50" style={{fontSize : "26px"}}>Thank you for shopping !</div>
                         </ModalHeader>
                         <ModalBody >
+                        
                             <h5 className="text-center">Please Rate Our Product</h5>
-                            {this.state.itemindex || this.state.itemindex === 0 ?
+                            {!isNull(this.state.itemindex) ?
                             <div className="m-b-50">
                             <center>
-                                 {console.log(this.state.data[this.state.itemindex].images.split(',')[0])}
                             <img src={URLAPI + this.state.data[this.state.itemindex].images.split(',')[0]} width="200px" height="200px"/>
                             </center>
                             </div>
@@ -457,8 +459,20 @@ class NotificationPage extends React.Component{
                         <ModalFooter>
                             <center>
                             <div className="align-item-center p-r-135">
-                                 <input type="button" value="Submit" className="btn btn-dark btn-lg navbartext form-control" style={{width : "200px"}}
-                                  onClick={()=>this.onSubmitButtonClick(this.state.data[this.state.itemindex].transactionid)}/>
+                                {this.props.userdata.LOADING 
+                                ?
+                                <center>
+                                <button className="btn btn-dark btn-lg navbartext form-control">
+                                <div class="spinner-border text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                                </div>
+                                </button>
+                                </center>
+                                :
+                                <input type="button" value="Submit" className="btn btn-dark btn-lg navbartext form-control" style={{width : "200px"}}
+                                onClick={()=>this.onSubmitButtonClick(this.state.data[this.state.itemindex].transactionid)}/>
+                                }
+                                 
                             </div>
                             </center>
                         </ModalFooter>
@@ -498,4 +512,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, {updateNotification})(NotificationPage);
+export default connect(mapStateToProps, {updateNotification, loading, loadingFalse})(NotificationPage);

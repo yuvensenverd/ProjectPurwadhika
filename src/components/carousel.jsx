@@ -3,8 +3,7 @@ import {
   Carousel,
   CarouselItem,
   CarouselControl,
-  CarouselIndicators,
-  CarouselCaption
+  CarouselIndicators
 } from 'reactstrap';
 import { URLAPI, PATHDEFAULTPRD } from '../redux/actions/types';
 
@@ -26,11 +25,12 @@ class Slider extends Component {
   componentDidMount = () => {
     console.log("Masuk Carousel")
     console.log(this.props.items)
+    var array = []
     if(this.props.items){
-      var array = this.props.items.split(',')
+       array = this.props.items.split(',')
 
     }else{
-      var array = [PATHDEFAULTPRD]
+       array = [PATHDEFAULTPRD]
     }
     console.log(array)
     for(var i = 0; i<array.length; i++){

@@ -5,8 +5,8 @@ import { loginUser,  loading, loadingFalse } from './../redux/actions/index'
 import ReactLoading from 'react-loading';
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
-import Axios from 'axios';
-import { URLAPI } from '../redux/actions/types';
+// import Axios from 'axios';
+// import { URLAPI } from '../redux/actions/types';
 
 
 
@@ -43,33 +43,6 @@ class LoginPage extends React.Component{
         }
       });
     }
-
-
-    // onEnterClick= (event) => {
-    //     if (event.keyCode === 13) {
-    //     // Cancel the default action, if needed
-    //     event.preventDefault();
-    //     // Trigger the button element with a click
-    //     document.getElementById("buttonlog").click()
-    //     }
-    //   }
-    
-    //  checkDatabaseUser = (username, password) => {
-      
-    //   var data = {
-    //     name : username,
-    //     pass : password
-    //   }
-
-    //   Axios.post(URLAPI+'/user/getuser', data)
-    //   .then((res)=>{
-    //       return this.log(username, password)
-        
-    //   })
-    //   .catch((err)=>{
-    //     window.alert(err.response.data.err)
-    //   })
-    // }
     
 
     log = (username, password) => {

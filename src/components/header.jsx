@@ -6,7 +6,6 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -15,7 +14,6 @@ import {Link} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logoutUser, updateUser } from '../redux/actions/index'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faShoppingCart, faBell, faStore} from '@fortawesome/free-solid-svg-icons'
 import { URLAPI, PATHDEFAULTPICT } from '../redux/actions/types';
 import numeral from 'numeral'
@@ -24,24 +22,15 @@ import Axios from 'axios';
 
 
 
+
  class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.closeNav = this.closeNav.bind(this);
-    this.toggle = this.toggle.bind(this);
-    this.onMouseEnter = this.onMouseEnter.bind(this);
-    this.onMouseLeave = this.onMouseLeave.bind(this);
-    this.state = {
-      isOpen: false,
-      modalOpen : false
-    };
+  state = {
+    isOpen: false,
+    modalOpen : false,
+    dropdownOpen : false
   }
-  toggle() {
-    console.log("Masuk")
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
+  
+ 
 
   onMouseEnter() {
     this.setState({dropdownOpen: true});
@@ -90,6 +79,19 @@ import Axios from 'axios';
       isOpen : false
     })
   }
+
+  // SUPAYA WAKTU LOGIN, DROPDOWNNYA TUTUP
+  componentWillReceiveProps(newprops){
+
+    if(this.props.username !== newprops.username){
+
+      this.setState({
+        dropdownOpen : false
+      })
+    }
+  }
+
+
   render() {
     if(this.props.userdata.LOADING === true){
       return(
@@ -97,7 +99,7 @@ import Axios from 'axios';
       )
     }
     return (
-      <div className="navbarheader d-flex flex-column">
+      <div className="navbarheader">
 
          <Modal isOpen={this.state.modalOpen} toggle={()=>this.setState({modalOpen : false})} size="lg" style={{width: '1000px', position : 'absolute', top : '20%', left : '30%'}}>
                         <ModalHeader>
@@ -137,7 +139,7 @@ import Axios from 'axios';
               null
             :
               <div className="p-0">
-              <UncontrolledDropdown  onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} isOpen={this.state.dropdownOpen} toggle={this.toggle} nav inNavbar >
+              <UncontrolledDropdown  onMouseOver={()=>this.onMouseEnter()} onMouseLeave={()=>this.onMouseLeave()} isOpen={this.state.dropdownOpen}  nav inNavbar >
              
                 <DropdownToggle className="navbartext pt-1 mr-3" style={{fontWeight : "bolder", fontSize : '15px'}} nav caret>
 
@@ -147,7 +149,7 @@ import Axios from 'axios';
 
                 <div className="fixednav p-0">
                 <DropdownMenu className="navbartext pt-1 "  style={{backgroundColor : "transparent", color : "black", width : "600px", border:"none"}} right> 
-                {/* CODE DIATAS MASIH KACAU  */}
+             
                   <div className="row p-3 boxshadow" style={{backgroundColor : "#3A3D42", height : "100%", width : "100%"}}> 
                     
                   
@@ -201,7 +203,7 @@ import Axios from 'axios';
                             <div className="btn bg-primary form-control"><Link to="/userhistory" className="navbartext " style={{color : "white", border : "none"}}>Transaction History   </Link></div>
                             </DropdownItem>
                             <DropdownItem  style={{padding : "0px", margin : "0px"}}>
-                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><a href="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </a></div>
+                            <div  onClick={()=>this.props.logoutUser()} className="btn bg-secondary form-control " ><Link to="/" className="navbartext" style={{color : "white", border : "none"}}>Logout </Link></div>
                             </DropdownItem>
                             
                         </div>
@@ -277,7 +279,6 @@ import Axios from 'axios';
           
            
            <div className="navbartext">
-              {console.log(this.props.userdata)}
              <Link to='/usercart'>
              <div className="cartnum">{this.props.usercartlen}</div>
              <FontAwesomeIcon size="2x"  icon={faShoppingCart} style={{color : "#c02c3a"}}>

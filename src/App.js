@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/header';
 
-import { Route , Link, Switch } from 'react-router-dom'
+import { Route , Switch } from 'react-router-dom'
 import Homepage from './pages/homepage'
 import LoginPage from './pages/loginpage'
 import RegisterPage from './pages/registerpage'
@@ -22,13 +22,13 @@ import WaitingVerification from './pages/waitingverification'
 import confirmOrder from './pages/confirmOrder'
 import NotificationPage from './pages/notificationpage'
 import Verified from './pages/verified'
-import SearchProduct from './pages/searchProduct'
+// import SearchProduct from './pages/searchProduct'
 import cartPage from './pages/usercart'
 import AdminPage from './pages/adminpage'
 import { connect } from 'react-redux'
 import { loginToken, logoutUser } from './redux/actions/index'
-import Axios from 'axios';
-import { URLAPI } from './redux/actions/types';
+// import Axios from 'axios';
+// import { URLAPI } from './redux/actions/types';
 import userhistory from './pages/userhistory';
 import searchProduct from './pages/searchProduct';
 

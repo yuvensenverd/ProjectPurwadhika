@@ -89,6 +89,10 @@ class registerPage extends React.Component{
         this.props.loadingFalse()
         return window.alert("contact number should have no spaces!")
       }
+      if(confirm !== password){
+        this.props.loadingFalse()
+        return window.alert("confirm password does not match with your password")
+      }
        
       if(username.replace(/\s/g, "").length < 8  || username.replace(/\s/g, "").length > 12){
         this.props.loadingFalse()

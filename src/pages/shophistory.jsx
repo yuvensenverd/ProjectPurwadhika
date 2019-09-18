@@ -76,7 +76,10 @@ class shophistory extends React.Component{
         if(this.state.data.length !== 0 ){
             
             var jsx = this.state.data.map((item, i)=>{
-                totalprice = totalprice + item.price
+                if(item.status === 'Success' || item.status === 'Confirmed'){
+                    totalprice = totalprice + (item.price * item.qty)
+                }
+
                 if(item.status === 'Success'){
                     success++
                 }
@@ -91,7 +94,7 @@ class shophistory extends React.Component{
                     <tr className="text-secondary">
                         <td>{i+1}</td>
                         <td>{item.transactiondate.split('T')[0]}</td>
-                        <td><img src={URLAPI + item.images.split(',')[0]} height="60px"/></td>
+                        <td><img src={URLAPI + item.images.split(',')[0]} height="60px" alt='item'/></td>
                         <td>{item.name}</td>
                         <td>{'Rp ' +numeral(item.price).format(0,0)}</td>
                         <td>{item.qty}</td>

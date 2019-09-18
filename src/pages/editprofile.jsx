@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Axios from 'axios';
 import { URLAPI, GETTOKENURL, APIWILAYAHURL, PATHDEFAULTPICT } from '../redux/actions/types';
-import { updateUser, loading, loadingFalse } from '../redux/actions/index'
+import { updateUser, loading, loadingFalse, logoutUser } from '../redux/actions/index'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -160,27 +160,19 @@ class editProfile extends React.Component{
                         <input type="number" className="form-control form-control-lg mb-3" ref="phone" value={this.props.userdata.PHONENUMBER} readOnly></input>
                         {/* <div className="subtitletext mb-3"> Your Email Address <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE"/></div> */}
                         <input type="text" className="form-control form-control-lg mb-3" ref="email" value={this.props.userdata.EMAIL} readOnly></input>
+                        <div className="subtitletext mb-3"> Account Status</div>
+                        <input type="text" className="form-control form-control-lg mb-5" ref="location" value={this.props.userdata.STATUS} readOnly></input>
                         <div className="subtitletext mb-3"> Your Location <input type="button" className="btn badge-pill badge-danger navbartext ml-3" style={{fontSize : "10px"}} value="CHANGE" onClick={()=>this.setState({modalOpenResidence : true})}/></div>
                         <input type="text" className="form-control form-control-lg mb-5" ref="location" value={this.props.userdata.RESIDENCE} readOnly></input>
                         <div className="subtitletext mb-3 "> Saldo </div>
                         <input type="text" className="form-control form-control-lg mb-3" value={"Rp  " + numeral(this.props.userdata.SALDO).format(0,0)} readOnly></input>
                         <div className="d-flex flex-row justify-content-center mb-5">
-                            {/* <input type="button" className="btn btn-success navbartext mr-5" onClick={()=>this.setState({isEdit : true})} value="EDIT PROFILE"/> */}
                             <input type="button" className="btn btn-info navbartext mr-5 mt-3" value="CHANGE PASSWORD" onClick={()=>this.setState({modalOpen : true})}/>
-                            
-                        
-    
                         </div>
-                        
-    
                     </div>
-    
-    
                 </div>
             </div>
                 )
-            
-           
         }
     }
 
@@ -221,8 +213,9 @@ class editProfile extends React.Component{
             Axios.put(URLAPI+'/user/onchangepass', data, headers)
             .then((res)=>{
                 console.log(res.data)
-                window.alert("Update Password Success")
-                this.props.updateUser(res.data[0])
+                window.alert("Update Password Success, Please Log In again")
+                // this.props.updateUser(res.data[0])
+                this.props.logoutUser()
                 this.closeModal()
             })
             .catch((err)=>{
@@ -278,11 +271,11 @@ class editProfile extends React.Component{
                         </ModalHeader>
                         <ModalBody >
                             <div className="subtitletext mb-2 mt-2"> Old Password  </div>  
-                            <input type="text" className="form-control" ref="oldpw" placeholder="type old password..." />
+                            <input type="password" className="form-control" ref="oldpw" placeholder="type old password..." />
                             <div className="subtitletext mb-2 mt-2"> New Password  </div>  
-                            <input type="text" className="form-control" ref="newpw" placeholder="type new password..." />
+                            <input type="password" className="form-control" ref="newpw" placeholder="type new password..." />
                             <div className="subtitletext mb-2 mt-2"> Confirm New Password  </div>  
-                            <input type="text" className="form-control" ref="confirmnewpw" placeholder="confirm new password..." />
+                            <input type="password" className="form-control" ref="confirmnewpw" placeholder="confirm new password..." />
                               
                         </ModalBody>
                         <ModalFooter>
@@ -360,4 +353,4 @@ const mapStateToProps= (state)=>{
     }
 }
 
-export default connect(mapStateToProps, {updateUser, loading, loadingFalse})(editProfile);
+export default connect(mapStateToProps, {updateUser, loading, loadingFalse, logoutUser})(editProfile);

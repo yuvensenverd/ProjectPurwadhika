@@ -5,10 +5,9 @@ import Axios from 'axios'
 import numeral from 'numeral'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { Card, Button,  CardText, Row,  } from 'reactstrap';
+import { Card, CardText, Row,  } from 'reactstrap';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { addItemCart, updateNotification, updateUser, loadingFalse, loading } from './../redux/actions/index'
-import Footer from '../components/footer'
 import { URLAPI, PATHDEFAULTPRD, PATHDEFAULTCARTEMPTY } from '../redux/actions/types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {Link} from 'react-router-dom'
@@ -33,6 +32,8 @@ class UserCart extends React.Component{
             this.updateItemCart()
         }
     }
+
+    
 
     previewFile = (event) => {
         var preview = document.getElementById('imgpreview')
@@ -255,7 +256,7 @@ class UserCart extends React.Component{
                                             :
                                             URLAPI + PATHDEFAULTPRD
                                             }  
-                                        alt="item image" width="100%" height="100%"/>
+                                        alt="item" width="100%" height="100%"/>
                                     </div>
                                     <div className="col-md-9">
                                         <div className="row">
@@ -298,7 +299,7 @@ class UserCart extends React.Component{
                             <input type="button" value="Start Shopping" className="btn btn-danger btn-lg navbartext"/>
                             </Link>   
                          
-                            <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px"/>
+                            <img src={URLAPI + PATHDEFAULTCARTEMPTY} width="200px" height="200px" alt='cartempty'/>
                           
                         </div>
                     )
@@ -316,7 +317,10 @@ class UserCart extends React.Component{
         if(this.state.finishload === true){
             var total = 0 
             this.state.cart_user.map((item)=>{
-                total = total + (item.qty * item.price)
+                return(
+
+                    total = total + (item.qty * item.price)
+                )
             })
             if(total !== this.state.totalprice){ // SUPAYA GAK REACH MAXIMUM DEPTH DLL
                 this.setState({

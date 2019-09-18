@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Slider from "./../slider/Slider"
 import { Link } from 'react-router-dom'
-import Axios from 'axios'
 import { URLAPI } from "../redux/actions/types";
 import { connect } from "react-redux";
 import { getListCategory } from "./../redux/actions/index"
@@ -13,9 +12,9 @@ class Responsive extends Component {
 
 
   componentDidMount = () => {
-    this.props.getListCategory()
-    
+    this.props.getListCategory() 
   }
+  
   printCatList = () => {
     if(this.props.listcategory.length > 0){
      console.log(this.props.listcategory)
@@ -25,7 +24,7 @@ class Responsive extends Component {
               <center>
                 <Link to={'/product?cat=' + val.name} > 
                 {/* Lanjut */}
-                  <img  className="p-0" src={URLAPI + val.image} height="75px"/>
+                  <img  className="p-0" src={URLAPI + val.image} height="75px" alt="gambar"/>
               
                 <span className="caption"> {val.name}</span>
                 </Link>
@@ -50,12 +49,12 @@ class Responsive extends Component {
         {
           breakpoint: 1024,
           settings: {
-            dots: true,
+            dots: false,
             slidesToShow: 3,
             slidesToScroll: 3,
             infinite: true,
             variableWidth : true,
-            dots: false
+            
           }
         },
         {
